@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "watch": "sass --watch styles/sass:public/css"
   },
   "dependencies": {
     "next": "12.1.0",
@@ -20,6 +21,8 @@
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
     "postcss": "^8.4.12",
+    "postcss-import": "^14.1.0",
+    "sass": "^1.49.9",
     "tailwindcss": "^3.0.23",
     "typescript": "4.6.2"
   }
