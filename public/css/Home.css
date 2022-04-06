@@ -2,4 +2,31 @@
   color: red;
 }
 
+.grid {
+  max-width: 1200px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mt--2 {
+  margin-top: -10rem;
+}
+
+.section-title {
+  text-align: center;
+}
+
+.city-container:hover {
+  cursor: pointer;
+}
+.city-container:hover p {
+  text-decoration: underline;
+}
+
+.seperate-line {
+  margin-left: auto;
+  margin-right: auto;
+  height: 10px;
+}
+
 /*# sourceMappingURL=Home.css.map */
