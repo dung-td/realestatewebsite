@@ -1,21 +1,41 @@
+import {useState} from 'react'
 import type { NextPage } from "next"
-import ImageCarousel from '../../components/Carousel'
-import TitleSection from "../../components/TitleSection"
+import ImageCarousel from '../../components/ImageCarousel'
 import DetailBox from "../../components/DetailBox"
-import { HeartIcon } from "@heroicons/react/outline"
+import CollapseDescription from '../../components/CollapseDescription'
+import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
+import { PhoneIcon } from '@heroicons/react/solid'
 import {Unit} from '../../Enum'
+
+interface TitleSectionProps{
+    title: string,
+    issuedDate?: string,
+    address?: string
+}
 
 const Separator: React.FC = ()=>{
     return (
         <div className="my-3 border-b border-y-black container"></div>
     )
 }
+const TitleSection = (props: TitleSectionProps)=>{
+    return (
+        <div>
+            <h1 className="text-2xl font-bold text-black uppercase">{props.title}</h1>
+            {props?.issuedDate && <div className='mt-3'><ClockIcon className='w-5 h-5 inline-block'/> {`Ngày đăng: ${props.issuedDate}`}</div>}
+            {props?.address && <div className='mt-1'><HomeIcon className='w-5 h-5 inline-block'/> {`Địa chỉ: ${props.address}`}</div>}
+            <div className="my-3 border-b border-y-black container"></div>
+        </div>
+    )
+}
+
 const images = ["https://file4.batdongsan.com.vn/2022/01/25/20220125103335-9e40_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-d128_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-c7fe_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-d128_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-36dc_wm.jpg",]
 const EstateDetail: NextPage = ()=>{
+    const [showLess, setShowLess] = useState(false)
     return (    
         <div className="container mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
             <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
@@ -46,14 +66,14 @@ const EstateDetail: NextPage = ()=>{
                     </div>
                     <Separator/>
                     <h1 className="mt-3 font-bold">Thông tin mô tả</h1>
-                    <div className="relative max-h-[200px] overflow-hidden border-b-black mb-5">
+                    <CollapseDescription>
                         <p>Bán nhà mặt ngõ 622 Minh Khai, lô góc, kinh doanh.</p>
                         <p>+ Mặt ngõ chính rộng 13,5m, 02 ô tô đỗ cửa ngày đêm, 2 mặt thoáng.</p>
                         <p>+ Diện tích nhỏ xinh 34,7m2 thực tế sử dụng gần 45m2, phù hợp ở kết hợp kinh doanh, đầu tư giữ tiền cho thuê.</p>
                         <p>+ Vị trí đắc địa cạnh timecity, dân trí cao, dân cư đông đúc, tiện ích đầy đủ, đúng tiêu chí buôn có bạn, bán có phường.</p>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum saepe animi qui optio veritatis ullam temporibus error! Recusandae a, aliquid error magnam facere eligendi, illum blanditiis sint veniam ex eveniet explicabo similique eius ipsam distinctio sunt ipsa aspernatur reprehenderit vero totam inventore quisquam! Velit accusantium cupiditate nobis harum aspernatur natus exercitationem nostrum a in, distinctio impedit illo facilis veniam. Quae nesciunt ex perferendis beatae sunt sed, adipisci corrupti voluptate fugit sequi itaque corporis accusantium molestiae, reprehenderit cupiditate inventore impedit deserunt, quasi ad obcaecati? Laboriosam illum tenetur nam repudiandae iste, neque voluptatibus ducimus quisquam est sint, maxime quas labore. Architecto tempore aspernatur dignissimos a earum. Repellat vel quisquam voluptatem sapiente in assumenda perspiciatis, voluptatum doloribus mollitia corporis quod blanditiis tempore debitis voluptas aut sint error molestias autem unde dicta et iste? Modi, nobis temporibus. Culpa, rerum quod esse ad minus quaerat dolores? Veritatis, officia dolores repudiandae ex ea reprehenderit sint, deserunt corporis vero repellendus id at rem adipisci quisquam? Voluptatum inventore minima dolorem numquam commodi sit molestiae harum aperiam autem molestias dolor error ab sapiente reprehenderit, saepe eaque eveniet nemo exercitationem eligendi quae a aspernatur explicabo. Aliquid quos nam nostrum architecto, culpa cum nemo facilis. Quod quam modi dolor, non quas dignissimos sint nemo sunt impedit laboriosam vitae ullam sequi quisquam accusamus, aspernatur velit, dolorum eos repudiandae tempore obcaecati in ex? Consequuntur, tempore sapiente! Non neque, corporis consectetur porro sunt labore eum maxime accusamus tempore facilis mollitia vero, quas reprehenderit? Dolore cumque omnis rerum facere repudiandae debitis. Illo mollitia dolore assumenda dolorem dicta molestiae soluta dignissimos id voluptas, recusandae consectetur dolores ipsam vel perferendis? Quisquam cumque facere, inventore sit distinctio quam? Ipsa assumenda, voluptas eos quaerat aut voluptates omnis eligendi nihil tenetur. Ducimus tempore, officiis adipisci beatae accusamus voluptas excepturi eligendi amet at ullam sit placeat neque distinctio cum asperiores reiciendis in deserunt. Sequi eius minus dicta ut sapiente, consectetur id. Soluta earum quibusdam magnam officia ipsam illo assumenda! At dolorem aliquid repellat ratione illum ad, consectetur optio perferendis amet vero obcaecati. Ipsam molestiae eveniet culpa at voluptatem dolor officiis repellendus praesentium iste. Fugiat in nam beatae quasi, voluptate nesciunt nulla quisquam tempora? Culpa nihil cum adipisci quia eum magni fugiat, vel perferendis inventore repellendus rerum velit numquam doloremque nostrum repellat provident error quam repudiandae atque nam at explicabo hic quibusdam laudantium? Eum voluptas id laudantium sed repudiandae, delectus ab debitis eaque reiciendis repellat mollitia recusandae odit maiores, distinctio asperiores vitae deleniti. Iusto consequuntur praesentium repellendus, nisi incidunt ipsum est ex numquam cumque similique harum assumenda distinctio, odit quos maxime non corrupti qui nostrum molestiae minus, explicabo ab itaque. Ea temporibus, repellendus sit enim soluta doloremque aliquid est facilis sapiente odio iusto necessitatibus consectetur vitae omnis labore reiciendis totam assumenda magnam nihil molestiae animi suscipit ad commodi? Nisi excepturi vitae distinctio veniam perferendis quasi expedita quisquam quaerat veritatis, debitis tenetur deleniti? Quia quos blanditiis tenetur, atque quibusdam, consequuntur optio aliquid odit temporibus aut quaerat repellat corrupti praesentium, quisquam dignissimos doloribus veritatis laboriosam rerum. Ut doloremque expedita architecto cumque. Repellat, deleniti quam!</p>
-                        <button>See more</button>
-                    </div>
+                    </CollapseDescription>
+
                     <div className="mt-3 font-bold">Đặc điểm bất động sản</div>
                     <DetailBox
                         estateType="Nhà riêng"
@@ -63,11 +83,11 @@ const EstateDetail: NextPage = ()=>{
                 </div>            
             </div>
             <div className="container flex sm:border-black sm:w-1/4 sm:h-[50vh] sm:flex-col sm:justify-center items-center justify-around" id="sideContent">
-                <img className="w-20 h-20 rounded-full bg-emerald-400"
+                <img className="w-20 h-20 rounded-full bg-cyan-500"
                 src="https://cdn.pixabay.com/photo/2017/01/08/13/58/cube-1963036__340.jpg"/>
                 <p className="my-1">Nguyễn Văn A</p>
                 <a className="italic cursor-pointer">Xem thêm bài đăng khác</a>
-                <a href="tel:0000000000" className="z-50 mt-3 fixed bg-emerald-400 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static">Phone: 000000000</a>
+                <a href="tel:0000000000" className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static"><PhoneIcon className='inline h-5 w-5'/> 0989 898 989</a>
             </div>
             <br/>
             <br/>

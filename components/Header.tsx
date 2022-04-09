@@ -7,7 +7,7 @@ const Header: NextPage = () => {
     <div className="bg-white">
       {/* Nav Hidden */}
       <div
-        className="fixed inset-0 flex z-40 hidden"
+        className="fixed inset-0 flex z-40"
         role="dialog"
         aria-modal="true"
       >
