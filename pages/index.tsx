@@ -1,10 +1,14 @@
 import type { NextPage } from "next"
-import SearchBar from "../components/SearchBar"
+import Filter from "../components/User/Filter"
+import Item from "../components/User/Item"
+import Tab from "../components/User/Tab"
+
+
 
 const Home: NextPage = () => {
   return (
     <>
-      <SearchBar />
+      <Tab />
     </>
   )
 }
