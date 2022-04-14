@@ -1,41 +1,15 @@
 import { NextPage } from "next"
+import Script from "next/script"
+import Head from "next/head"
+
+import { useState } from "react"
 
 const SearchBar: NextPage = () => {
-  // const tabElements = [
-  //   {
-  //     id: "profile",
-  //     triggerEl: document.querySelector("#profile-tab-example"),
-  //     targetEl: document.querySelector("#profile-example"),
-  //   },
-  //   {
-  //     id: "dashboard",
-  //     triggerEl: document.querySelector("#dashboard-tab-example"),
-  //     targetEl: document.querySelector("#dashboard-example"),
-  //   },
-  //   {
-  //     id: "settings",
-  //     triggerEl: document.querySelector("#settings-tab-example"),
-  //     targetEl: document.querySelector("#settings-example"),
-  //   },
-  //   {
-  //     id: "contacts",
-  //     triggerEl: document.querySelector("#contacts-tab-example"),
-  //     targetEl: document.querySelector("#contacts-example"),
-  //   },
-  // ]
+  const [SearchExpand, setSearchExpand] = useState(false)
 
-  // const options = {
-  //   defaultTabId: "settings",
-  //   activeClasses:
-  //     "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 border-blue-600 dark:border-blue-500",
-  //   inactiveClasses:
-  //     "text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300",
-  //   onShow: () => {
-  //     console.log("tab is shown")
-  //   },
-  // }
-
-  
+  const expandSearch = () => {
+    setSearchExpand(!SearchExpand)
+  }
 
   return (
     <div className="grid">
@@ -56,7 +30,7 @@ const SearchBar: NextPage = () => {
               aria-controls="profile"
               aria-selected="false"
             >
-              Profile
+              Nhà đất cho thuê
             </button>
           </li>
           <li className="mr-2" role="presentation">
@@ -69,7 +43,7 @@ const SearchBar: NextPage = () => {
               aria-controls="dashboard"
               aria-selected="false"
             >
-              Dashboard
+              Nhà đất bán
             </button>
           </li>
           <li className="mr-2" role="presentation">
@@ -82,7 +56,7 @@ const SearchBar: NextPage = () => {
               aria-controls="settings"
               aria-selected="false"
             >
-              Settings
+              Sang nhượng
             </button>
           </li>
           <li role="presentation">
@@ -95,76 +69,120 @@ const SearchBar: NextPage = () => {
               aria-controls="contacts"
               aria-selected="false"
             >
-              Contacts
+              Dự án
             </button>
           </li>
         </ul>
       </div>
 
       <div id="myTabContent">
+        {/* Profile */}
         <div
-          className="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800"
+          className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
           id="profile"
           role="tabpanel"
           aria-labelledby="profile-tab"
         >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            This is some placeholder content the{" "}
-            <strong className="font-medium text-gray-800 dark:text-white">
-              Profile tabs associated content
-            </strong>
-            . Clicking another tab will toggle the visibility of this one for
-            the next. The tab JavaScript swaps classes to control the content
-            visibility and styling.
-          </p>
-        </div>
-        <div
-          className="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800"
-          id="dashboard"
-          role="tabpanel"
-          aria-labelledby="dashboard-tab"
-        >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            This is some placeholder content the{" "}
-            <strong className="font-medium text-gray-800 dark:text-white">
-              Dashboard tabs associated content
-            </strong>
-            . Clicking another tab will toggle the visibility of this one for
-            the next. The tab JavaScript swaps classes to control the content
-            visibility and styling.
-          </p>
-        </div>
-        <div
-          className="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800"
-          id="settings"
-          role="tabpanel"
-          aria-labelledby="settings-tab"
-        >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            This is some placeholder content the{" "}
-            <strong className="font-medium text-gray-800 dark:text-white">
-              Settings tabs associated content
-            </strong>
-            . Clicking another tab will toggle the visibility of this one for
-            the next. The tab JavaScript swaps classes to control the content
-            visibility and styling.
-          </p>
-        </div>
-        <div
-          className="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800"
-          id="contacts"
-          role="tabpanel"
-          aria-labelledby="contacts-tab"
-        >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            This is some placeholder content the{" "}
-            <strong className="font-medium text-gray-800 dark:text-white">
-              Contacts tabs associated content
-            </strong>
-            . Clicking another tab will toggle the visibility of this one for
-            the next. The tab JavaScript swaps classes to control the content
-            visibility and styling.
-          </p>
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-7 order-2 sm:col-span-3 sm:order-1 lg:col-span-2">
+              <button
+                id="dropdownTypeSearch"
+                data-dropdown-toggle="dropdown"
+                className="text-white w-full h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+              >
+                <span className="material-icons mr-2">home</span>
+                <p className="text-xs md:text-sm xl:text-base">Loại nhà đất</p>
+                <span className="material-icons">arrow_drop_down</span>
+              </button>
+            </div>
+            <div className="relative col-span-12 order-1 sm:col-span-9 lg:col-span-8 ">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <span className="material-icons">search</span>
+              </div>
+              <input
+                type="text"
+                id="table-search"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block h-full w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Bạn tìm kiếm gì hôm nay?"
+              />
+            </div>
+            <div className="col-span-5 order-3 lg:col-span-2 sm:col-span-12">
+              <button
+                type="button"
+                className="text-white h-full w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                Tìm kiếm
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-12 gap-4 mt-4 sm:p-8">
+            {[
+              ["home", "Tỉnh/ thành phố"],
+              ["attach_money", "Khoảng giá"],
+              ["crop_square", "Diện tích"],
+            ].map(([icon, title]) => (
+              <div
+                key={title}
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+              >
+                <button
+                  id="dropdownTypeSearch"
+                  data-dropdown-toggle="dropdown"
+                  className="justify-center w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                  type="button"
+                >
+                  <span className="material-icons mr-2 text-sm sm:text-base md:text-xl">
+                    {icon}
+                  </span>
+                  <p className="text-xs sm:text-sm md:text-base">{title}</p>
+                  <span className="material-icons">arrow_drop_down</span>
+                </button>
+              </div>
+            ))}
+
+            <div className="inline-flex justify-center items-center col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+              <button
+                id="dropdownTypeSearch"
+                className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center bg-white focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                type="button"
+                onClick={expandSearch}
+              >
+                <p>Mở rộng tìm kiếm</p>
+                <span className="material-icons">arrow_drop_down</span>
+              </button>
+            </div>
+          </div>
+
+          {SearchExpand ? (
+            <div className=" grid grid-cols-12 gap-4 mt-4 sm:p-8">
+              {[
+                "Quận/ huyện/ thành phố",
+                "Phường/ xã/ thị trấn",
+                "Đường/ phố",
+                "Dự án",
+                "Số phòng ngủ",
+                "Hướng nhà",
+                "Đường rộng",
+                "Mặt tiền",
+              ].map((title) => (
+                <div
+                  key={title}
+                  className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+                >
+                  <button
+                    id="dropdownTypeSearch"
+                    className="justify-center w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    type="button"
+                  >
+                    <p className="text-xs sm:text-sm md:text-base">{title}</p>
+                    <span className="material-icons">arrow_drop_down</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
