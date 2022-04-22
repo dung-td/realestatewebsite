@@ -130,7 +130,14 @@
   "resolved" "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz"
   "version" "15.7.4"
 
-"@types/react@17.0.41":
+"@types/react-dom@^18.0.1":
+  "integrity" "sha512-jCwTXvHtRLiyVvKm9aEdHXs8rflVOGd5Sl913JZrPshfXjn8NYsTNZOz70bCsA31IR0TOqwi3ad+X4tSCBoMTw=="
+  "resolved" "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.0.1.tgz"
+  "version" "18.0.1"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*", "@types/react@17.0.41":
   "integrity" "sha512-chYZ9ogWUodyC7VUTRBfblysKLjnohhFY9bGLwvnUFFy48+vB9DikmB3lW0qTFmBcKSzmdglcvkHK71IioOlDA=="
   "resolved" "https://registry.npmjs.org/@types/react/-/react-17.0.41.tgz"
   "version" "17.0.41"
@@ -1634,6 +1641,11 @@
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   "version" "16.13.1"
+
+"react-verify-code@^1.0.3":
+  "integrity" "sha1-3HKbhhDC3rRchEuh0/vCCyZHqic="
+  "resolved" "https://registry.npmjs.org/react-verify-code/-/react-verify-code-1.0.3.tgz"
+  "version" "1.0.3"
 
 "react@^16.8.0 || ^17.0.0", "react@^17.0.2", "react@^17.0.2 || ^18.0.0-0", "react@>= 16.8.0 || 17.x.x || 18.x.x", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
