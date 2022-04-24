@@ -86,7 +86,7 @@ const ListEstate: NextPage = () => {
                     {/* Pagination */}
                     <div className="text-center mt-8">
                         <nav className="mt-4 relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <a href="#" className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-black hover:bg-black hover:text-white">
+                            <a href="#" className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-black hover:bg-blue-500 hover:text-white">
                                 <span className="sr-only">Previous</span>
                                 
                                 <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -94,14 +94,14 @@ const ListEstate: NextPage = () => {
                                 </svg>
                             </a>
                             
-                            <a href="#" aria-current="page" className="bg-black border-gray-300 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 1 </a>
-                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-black hover:text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 2 </a>
-                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-black hover:text-white hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"> 3 </a>
+                            <a href="#" aria-current="page" className="bg-blue-500 border-gray-300 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 1 </a>
+                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-blue-500 hover:text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 2 </a>
+                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-blue-500 hover:text-white hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"> 3 </a>
                             <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"> ... </span>
-                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-black hover:text-white hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"> 8 </a>
-                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-black hover:text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 9 </a>
-                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-black hover:text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 10 </a>
-                            <a href="#" className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-black hover:bg-black hover:text-white">
+                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-blue-500 hover:text-white hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"> 8 </a>
+                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-blue-500 hover:text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 9 </a>
+                            <a href="#" className="bg-white border-gray-300 text-black hover:bg-blue-500 hover:text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 10 </a>
+                            <a href="#" className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-black hover:bg-blue-500 hover:text-white">
                                 <span className="sr-only">Next</span>
                                 
                                 <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

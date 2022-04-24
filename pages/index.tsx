@@ -13,7 +13,7 @@ import UploadPost from "../components/UploadPost"
 const Home: NextPage = () => {
   return (
     <>
-      <UploadPost/>
+      <UploadPost post_type="normal"/>
     </>
   )
 }
