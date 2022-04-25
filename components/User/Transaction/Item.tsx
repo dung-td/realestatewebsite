@@ -20,73 +20,45 @@ const Item: NextPage = () => {
 
   return (
     <div className="p-4 grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
-      <div className="col-span-3">
+      <div className="col-span-12 text-center md:col-span-3 md:text-left">
         <p className="font-bold text-xl text-[#004E7F]">NẠP TIỀN</p>
         <p className="text-lg">Tài khoản chính</p>
       </div>
 
-      <div className="col-span-2">
+      <div className="col-span-6 md:col-span-2">
         <p>Trạng thái</p>
         <p className="w-max text-white bg-yellow-400 font-medium rounded-md text-xs p-0.5">
           Chờ duyệt
         </p>
       </div>
-      <div className="col-span-2">
+      <div className="col-span-6 md:col-span-2">
         <p>Mã tin</p>
         <p className="font-bold">30041975</p>
       </div>
-      <div className="col-span-2">
+      <div className="col-span-6 md:col-span-2">
         <p>Ngày đăng</p>
         <p className="font-bold">22/02/2022</p>
       </div>
-      <div className="col-span-2">
+      <div className="col-span-6 md:col-span-2">
         <p>Ngày hết hạn</p>
         <p className="font-bold">22/02/2022</p>
       </div>
 
       <div className="col-span-12 md:col-span-6 mt-4"></div>
-      <div className="w-full col-span-12 md:col-span-6 mt-4 grid grid-cols-4 gap-1">
-        <div className="col-span-4 md:col-span-1">
-          <button
-            type="button"
-            className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Chi tiết
-          </button>
-        </div>
-
-        <div className="col-span-2 md:col-span-1">
-          <button
-            type="button"
-            className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Sửa tin
-          </button>
-        </div>
-
-        <div className="col-span-2 md:col-span-1">
-          <button
-            type="button"
-            className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Thao tác
-          </button>
-        </div>
-        <div className="col-span-4 md:col-span-1">
-          <button
-            onClick={expand}
-            className="center text-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-          >
-            Mở rộng
-            <span className="material-icons">arrow_drop_down</span>
-          </button>
-        </div>
+      <div className="text-center col-span-12 md:text-right">
+        <button
+          onClick={expand}
+          className="center text-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+        >
+          Mở rộng
+          <span className="material-icons">arrow_drop_down</span>
+        </button>
       </div>
 
       {expandDetail ? (
         <>
-          <div className="col-span-6 mt-4">
-            <p className="text-center font-bold text-lg">TÀI KHOẢN CHÍNH</p>
+          <div className="col-span-12 md:col-span-6 mt-4">
+            <p className="text-md text-center font-bold md:text-lg">TÀI KHOẢN CHÍNH</p>
             <div className="grid grid-cols-2 text-center">
               <div>
                 <p>Số dư</p>
@@ -115,8 +87,8 @@ const Item: NextPage = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-6 mt-4">
-            <p className="text-center font-bold text-lg">
+          <div className="col-span-12 md:col-span-6 mt-4">
+            <p className="text-md text-center font-bold md:text-lg">
               TÀI KHOẢN KHUYẾN MÃI
             </p>
             <div className="grid grid-cols-2 text-center">
