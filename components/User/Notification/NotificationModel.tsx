@@ -6,6 +6,7 @@ import Image from "next/image"
 import MoneyFormat from "../../../util/MoneyFormat"
 
 const NotificationModel: NextPage = () => {
+  
   return (
     <div className="p-4 relative grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
       <div className=" col-span-12">
