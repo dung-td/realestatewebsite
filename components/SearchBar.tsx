@@ -12,8 +12,8 @@ const SearchBar: NextPage = () => {
   }
 
   return (
-    <div className="grid">
-      <div className="mb-4 border-b border-gray-200">
+    <div className="grid bg-white rounded-md">
+      <div className="hidden-md md:visible md:mb-4 border-b border-gray-200">
         <ul
           className="flex flex-wrap -mb-px text-sm font-medium text-center"
           id="myTab"
@@ -22,7 +22,7 @@ const SearchBar: NextPage = () => {
         >
           <li className="mr-2" role="presentation">
             <button
-              className="inline-block p-4 rounded-t-lg border-b-2"
+              className="inline-block p-1 md:p-4 rounded-t-lg border-b-2"
               id="profile-tab"
               data-tabs-target="#profile"
               type="button"
@@ -35,7 +35,7 @@ const SearchBar: NextPage = () => {
           </li>
           <li className="mr-2" role="presentation">
             <button
-              className="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              className="inline-block p-1 md:p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
               id="dashboard-tab"
               data-tabs-target="#dashboard"
               type="button"
@@ -48,7 +48,7 @@ const SearchBar: NextPage = () => {
           </li>
           <li className="mr-2" role="presentation">
             <button
-              className="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              className="inline-block p-1 md:p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
               id="settings-tab"
               data-tabs-target="#settings"
               type="button"
@@ -61,7 +61,7 @@ const SearchBar: NextPage = () => {
           </li>
           <li role="presentation">
             <button
-              className="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              className="inline-block p-1 md:p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
               id="contacts-tab"
               data-tabs-target="#contacts"
               type="button"
@@ -78,13 +78,24 @@ const SearchBar: NextPage = () => {
       <div id="myTabContent">
         {/* Profile */}
         <div
-          className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+          className="md:p-6"
           id="profile"
           role="tabpanel"
           aria-labelledby="profile-tab"
         >
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-7 order-2 sm:col-span-3 sm:order-1 lg:col-span-2">
+            <div className="col-span-6 mt-2 mb-1 md:mb-0 md:mt-0 border-gray-200 unhidden-md">
+              <button
+                id="dropdownTypeSearch"
+                data-dropdown-toggle="dropdown"
+                className="justify-center w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5"
+                type="button"
+              >
+                <p className="text-xs sm:text-sm md:text-base">Nhà cho thuê</p>
+                <span className="material-icons">arrow_drop_down</span>
+              </button>
+            </div>
+            <div className="col-span-6 mt-2 mb-1 md:mb-0 md:mt-0 lg:col-span-2">
               <button
                 id="dropdownTypeSearch"
                 data-dropdown-toggle="dropdown"
@@ -96,7 +107,7 @@ const SearchBar: NextPage = () => {
                 <span className="material-icons">arrow_drop_down</span>
               </button>
             </div>
-            <div className="relative col-span-12 order-1 sm:col-span-9 lg:col-span-8 ">
+            <div className="relative col-span-12 sm:col-span-9 lg:col-span-8 ">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <span className="material-icons">search</span>
               </div>
@@ -107,7 +118,7 @@ const SearchBar: NextPage = () => {
                 placeholder="Bạn tìm kiếm gì hôm nay?"
               />
             </div>
-            <div className="col-span-5 order-3 lg:col-span-2 sm:col-span-12">
+            <div className="col-span-12 lg:col-span-2 sm:col-span-12">
               <button
                 type="button"
                 className="text-white h-full w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -145,7 +156,7 @@ const SearchBar: NextPage = () => {
             <div className="inline-flex justify-center items-center col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <button
                 id="dropdownTypeSearch"
-                className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center bg-white focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center bg-white focus:outline-none hover:bg-gray-100 rounded-lg text-sm px-5 py-2.5"
                 type="button"
                 onClick={expandSearch}
               >

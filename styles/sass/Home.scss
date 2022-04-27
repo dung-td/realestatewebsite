@@ -1,11 +1,49 @@
-.nav-title {
-  color: red;
-}
 .grid {
   max-width: 1200px !important;
   margin-left: auto;
   margin-right: auto;
 }
+.grid-full {
+  margin-left: auto;
+  margin-right: auto;
+}
+.nav-item {
+  &:hover {
+    .nav-link-item {
+      display: block;
+    }
+    .nav-link {
+      &:after {
+        transform: scaleX(1) !important;
+        transform-origin: bottom left !important;
+      }
+    }
+  }
+}
+
+.nav-link {
+  display: inline-block !important;
+  position: relative !important;
+  &:after {
+    content: "" !important;
+    position: absolute !important;
+    width: 100% !important;
+    transform: scaleX(0) !important;
+    height: 2px !important;
+    bottom: -2px !important;
+    left: 0 !important;
+    background-color: #000 !important;
+    transform-origin: bottom right !important;
+    transition: transform 0.25s ease-out !important;
+  }
+}
+
+.nav-link-item {
+  display: none;
+  animation: fadeIn 1s;
+  animation-fill-mode: forwards;
+}
+
 .mt--2 {
   margin-top: -10rem;
 }
@@ -27,4 +65,43 @@
 .center {
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.nav-title:hover:after {
+  border-bottom: #000 1px solid;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.hidden-md {
+  display: none;
+}
+
+.unhidden-md {
+  display: block;
+}
+
+.hidden-nav {
+  width: 0px;
+}
+
+.fadeIn {
+  width: auto;
+  transition: 5s;
+}
+
+@media screen and (min-width: 768px) {
+  .hidden-md {
+    display: block;
+  }
+  .unhidden-md {
+    display: none;
+  }
 }
