@@ -8,10 +8,19 @@ import NotificationListItem from "../components/User/Notification/NotificationLi
 import NotificationModel from "../components/User/Notification/NotificationModel"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
+import Footer from "../components/Footer"
+import { useState } from "react"
 
 const Home: NextPage = () => {
+  const [scrollTop, setScrollTop] = useState(0)
+
+  const onScroll = () => {
+    const scrollY = window.scrollY
+    console.log(`onScroll`)
+  }
+
   return (
-    <>
+    <div onScroll={onScroll}>
       <Header />
 
       <div className="grid-full">
@@ -26,7 +35,11 @@ const Home: NextPage = () => {
 
         {/* ELEMENTS GO HERE PLEASE */}
       </div>
-    </>
+
+      <div className="h-96"></div>
+
+      <Footer />
+    </div>
   )
 }
 

@@ -6,11 +6,9 @@ import Script from "next/script"
 
 const Header: NextPage = () => {
   const [openSideBar, setOpenSideBar] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
 
   const open = () => {
-    console.log("====================================")
-    console.log(openSideBar)
-    console.log("====================================")
     setOpenSideBar(!openSideBar)
   }
   return (
@@ -62,25 +60,41 @@ const Header: NextPage = () => {
                   aria-orientation="horizontal"
                   role="tablist"
                 >
-                  <button
-                    id="tabs-1-tab-1"
-                    className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
-                    aria-controls="tabs-1-panel-1"
-                    role="tab"
-                    type="button"
-                  >
-                    Đăng nhập
-                  </button>
+                  {isLogin ? (
+                    <>
+                      <button
+                        id="tabs-1-tab-1"
+                        className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
+                        aria-controls="tabs-1-panel-1"
+                        role="tab"
+                        type="button"
+                      >
+                        Đăng tin
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        id="tabs-1-tab-1"
+                        className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
+                        aria-controls="tabs-1-panel-1"
+                        role="tab"
+                        type="button"
+                      >
+                        Đăng nhập
+                      </button>
 
-                  <button
-                    id="tabs-1-tab-2"
-                    className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
-                    aria-controls="tabs-1-panel-2"
-                    role="tab"
-                    type="button"
-                  >
-                    Đăng ký
-                  </button>
+                      <button
+                        id="tabs-1-tab-2"
+                        className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
+                        aria-controls="tabs-1-panel-2"
+                        role="tab"
+                        type="button"
+                      >
+                        Đăng ký
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -157,18 +171,18 @@ const Header: NextPage = () => {
               </div>
             </div>
 
-            {/* <div className="border-t border-gray-200 py-6 px-4 space-y-6">
-            <div className="flow-root">
-              <a href="#" className="-m-2 p-2 block font-medium text-gray-900">
-                Sign in
-              </a>
+            <div className="border-t border-gray-200 py-6 px-4 space-y-6">
+              <div className="flow-root">
+                <a
+                  href="#"
+                  className="-m-2 p-2 block font-medium text-gray-900 inline-flex items-center space-x-4"
+                >
+                  <div className="rounded-full bg-black h-10 w-10"></div>
+                  <p className="font-medium text-md">Tống Đức Dũng</p>
+                  <span className="material-icons">expand_more</span>
+                </a>
+              </div>
             </div>
-            <div className="flow-root">
-              <a href="#" className="-m-2 p-2 block font-medium text-gray-900">
-                Create account
-              </a>
-            </div>
-          </div> */}
 
             <div className="border-t border-gray-200 py-6 px-4">
               <a href="#" className="-m-2 p-2 flex items-center">
@@ -186,14 +200,15 @@ const Header: NextPage = () => {
       ) : null}
 
       {/* Header */}
-      <header className="relative bg-white z-10">
+      <header className="relative bg-white">
         <p className="bg-indigo-600 h-10 flex items-center justify-center text-sm font-medium text-white px-4 sm:px-6 lg:px-8">
           Trang Web Bất Động Sản số 1 Việt Nam
         </p>
 
-        <nav aria-label="Top" className="max-w-full mx-auto px-8">
+        <nav aria-label="Top" className="bg-white w-full mx-auto px-8 z-10">
           <div className="border-b border-gray-200">
             <div className="h-16 flex items-center">
+              {/* Open Menu button */}
               <button
                 type="button"
                 className="bg-white p-2 rounded-md text-gray-400 lg:hidden"
@@ -228,6 +243,7 @@ const Header: NextPage = () => {
                 </a>
               </div>
 
+              {/* Navigaton links */}
               <div className="hidden lg:ml-8 lg:block lg:self-stretch">
                 <div className="h-full flex space-x-8">
                   <div className="flex items-center nav-item">
@@ -317,8 +333,18 @@ const Header: NextPage = () => {
                 </div>
               </div>
 
+              {/* Navigation button */}
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                  {/* Notification */}
+                  {isLogin ? (
+                    <a href="#">
+                      <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
+                        notifications_none
+                      </span>
+                    </a>
+                  ) : null}
+                  {/* Saved  */}
                   <a href="#">
                     <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
                       favorite_border
@@ -334,19 +360,63 @@ const Header: NextPage = () => {
                     className="h-6 w-px bg-gray-200"
                     aria-hidden="true"
                   ></span>
-                  <a
-                    href="#"
-                    className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
-                  >
-                    Đăng nhập
-                  </a>
 
-                  <a
-                    href="#"
-                    className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
-                  >
-                    Đăng ký
-                  </a>
+                  {isLogin ? (
+                    <div className="nav-user relative">
+                      <div className="flex flex-nowrap items-center space-x-2">
+                        <div className="rounded-full bg-black h-10 w-10"></div>
+                        <p className="font-medium text-md">Tống Đức Dũng</p>
+                        <span className="material-icons">expand_more</span>
+                      </div>
+                      <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                        <a
+                          href="#"
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">list</span>
+                          <p>Quản lý tin đăng</p>
+                        </a>
+                        <a
+                          href="#"
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">person</span>
+                          <p>Thông tin cá nhân</p>
+                        </a>
+                        <a
+                          href="#"
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">lock</span>
+                          <p>Đổi mật khẩu</p>
+                        </a>
+                        <div className="border-t border-gray-200 m-2" />
+                        <a
+                          href="#"
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">logout</span>
+                          <p>Đăng xuất</p>
+                        </a>
+                      </div>{" "}
+                    </div>
+                  ) : (
+                    <>
+                      <a
+                        href="#"
+                        className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                      >
+                        Đăng nhập
+                      </a>
+
+                      <a
+                        href="#"
+                        className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                      >
+                        Đăng ký
+                      </a>
+                    </>
+                  )}
                 </div>
 
                 <div className="hidden lg:ml-8 lg:flex">
