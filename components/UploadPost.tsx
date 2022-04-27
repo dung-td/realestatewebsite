@@ -581,7 +581,7 @@ const UploadPost = (props: Props) => {
                                         {
                                             images.map((item, index) => {
                                                 return (
-                                                    <div className="w-[30%] mt-1 mb-1 relative hover:cursor-pointer">
+                                                    <div className="w-[30%] mt-1 mb-1 relative hover:cursor-pointer" key={index}>
                                                         <img src={item} className="rounded-lg hover:opacity-90" alt="Ảnh đã chọn"/>
 
                                                         <button
