@@ -9,6 +9,7 @@ import NotificationModel from "../components/User/Notification/NotificationModel
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
+import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
 import { useState } from "react"
 
 const Home: NextPage = () => {
@@ -34,6 +35,7 @@ const Home: NextPage = () => {
         </div>
 
         {/* ELEMENTS GO HERE PLEASE */}
+        <ListEstateOnHome/>
       </div>
 
       <div className="h-96"></div>

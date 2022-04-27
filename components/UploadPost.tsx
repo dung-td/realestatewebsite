@@ -1,5 +1,6 @@
 import type { NextPage } from "next"
 import { useState } from "react"
+import MoneyFormat from "../util/MoneyFormat"
 
 type Props = {
     post_type: string;
@@ -376,7 +377,7 @@ const UploadPost = (props: Props) => {
                                         className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
                                         placeholder="Diện tích (m²)"
                                         required
-                                        value={isNaN(areaSqr) ? "" : areaSqr.toString()}
+                                        value={(isNaN(areaSqr) || areaSqr==0) ? "" : areaSqr.toString()}
                                         onKeyDown={(e) => preventCharInput(e)}
                                         onChange={(e) => setAreaSqr(parseInt(e.target.value))}
                                     />
@@ -394,7 +395,7 @@ const UploadPost = (props: Props) => {
                                             className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
                                             placeholder="Mức giá"
                                             required
-                                            value={isNaN(price) ? "" : price.toString()}
+                                            value={(isNaN(price) || price==0) ? "" : price.toString()}
                                             onKeyDown={(e) => preventCharInput(e)}
                                             onChange={(e) => setPrice(parseInt(e.target.value))}
                                         />
@@ -426,7 +427,7 @@ const UploadPost = (props: Props) => {
                                         {
                                             documents.map((item, index) => {
                                                 return (
-                                                    <div className="flex items-center mb-4">
+                                                    <div className="flex items-center mb-4" key={item}>
                                                         <input type="radio" name="docs" value={item} className="w-5 h-5 border-gray-300" aria-labelledby="docs-option-1" aria-describedby="docs-option-1" onChange={(e) => setDocument(e.target.value)}/>
                                                         <label htmlFor="doc-option-1" className="block ml-2 text-sm text-black">
                                                             {item}
@@ -653,7 +654,7 @@ const UploadPost = (props: Props) => {
 
                                 <div className="flex flex-row justify-between mt-2 mb-3">
                                     <p className="text-black text-sm font-medium">Đơn giá / ngày</p>
-                                    <p className="text-black text-sm">{post_types[postTypeIndex].price} VNĐ</p>
+                                    <p className="text-black text-sm">{MoneyFormat(post_types[postTypeIndex].price)} VNĐ</p>
                                 </div>
 
                                 <div className="flex flex-row justify-between mt-2 mb-3">
@@ -667,9 +668,11 @@ const UploadPost = (props: Props) => {
                                     <p className="text-black text-lg font-medium">Bạn trả</p>
                                     <p className="text-black text-lg font-medium">
                                         {
-                                            (postDuration==0 && postTypeIndex==0) ?
-                                            post_types[0].price * parseInt(post_durations[0])
-                                            : postDuration * post_types[postTypeIndex].price
+                                            MoneyFormat(
+                                                (postDuration==0 && postTypeIndex==0) ?
+                                                post_types[0].price * parseInt(post_durations[0])
+                                                : postDuration * post_types[postTypeIndex].price
+                                            )
                                         } VNĐ
                                     </p>
                                 </div>
