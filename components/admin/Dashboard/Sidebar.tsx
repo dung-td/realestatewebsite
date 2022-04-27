@@ -4,7 +4,7 @@ import { useState } from "react"
 const Sidebar: NextPage = () => {
   return (
     <>
-      <aside className="absolute w-72 " aria-label="Sidebar">
+      <aside className="absolute w-72" aria-label="Sidebar">
         <div className="overflow-y-auto h-screen py-4 px-3 bg-gray-50 rounded">
           <ul className="space-y-2">
             {/* User */}
@@ -14,7 +14,7 @@ const Sidebar: NextPage = () => {
                 className="flex space-x-4 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100"
               >
                 <div className="rounded-full bg-black h-10 w-10"></div>
-                <p className="font-medium text-lg">Tống Đức Dũng</p>
+                <p className="font-medium text-lg">batdongsan88 - Admin</p>
               </a>
             </li>
             {/* Quản lý tin đăng */}
@@ -40,7 +40,7 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Đăng tin mới
+                    Tin đang chờ duyệt
                   </a>
                 </li>
                 <li>
@@ -48,7 +48,7 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Tin đã đăng
+                    Tin đã duyệt
                   </a>
                 </li>
                 <li>
@@ -56,7 +56,7 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Tin nháp
+                    Tin chờ xử lý
                   </a>
                 </li>
               </ul>
@@ -84,7 +84,7 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Thông tin tài khoản
+                    Danh sách người dùng
                   </a>
                 </li>
                 <li>
@@ -92,7 +92,7 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Bảo mật tài khoản
+                    Xử lý vi phạm
                   </a>
                 </li>
                 <li>
@@ -100,12 +100,12 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    abcxyz
+                    Thống kê
                   </a>
                 </li>
               </ul>
             </li>
-            {/* Quản lý giao dịch */}
+            {/* Quản lý dự án */}
             <li>
               <button
                 type="button"
@@ -113,12 +113,12 @@ const Sidebar: NextPage = () => {
                 aria-controls="dropdown-example"
                 data-collapse-toggle="dropdown-example"
               >
-                <span className="material-icons">receipt_long</span>
+                <span className="material-icons">apartment</span>
                 <span
                   className="flex-1 ml-3 text-left whitespace-nowrap"
                   sidebar-toggle-item="dropdown-1"
                 >
-                  Quản lý giao dịch
+                  Quản lý dự án
                 </span>
                 <span className="material-icons">expand_more</span>
               </button>
@@ -128,7 +128,7 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Lịch sử giao dịch
+                    Danh sách dự án
                   </a>
                 </li>
                 <li>
@@ -136,7 +136,15 @@ const Sidebar: NextPage = () => {
                     href="#"
                     className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Khiếu nại
+                    Dự án chờ duyệt
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Dự án chờ xử lý
                   </a>
                 </li>
               </ul>

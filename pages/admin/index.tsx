@@ -1,15 +1,15 @@
 import type { NextPage } from "next"
 import { useState } from "react"
+import Sidebar from "../../components/admin/Dashboard/Sidebar"
+import Header from "../../components/admin/Header"
 import Footer from "../../components/Footer"
-import Header from "../../components/Header"
 import Filter from "../../components/User/Filter"
-import Item from "../../components/User/Item"
-import Sidebar from "../../components/User/Sidebar"
+import Item from "../../components/admin/Dashboard/Post/Item"
 import Tab from "../../components/User/Tab"
 
 const Home: NextPage = () => {
   return (
-    <>
+    <div className="">
       <Header />
 
       <Sidebar />
@@ -121,7 +121,7 @@ const Home: NextPage = () => {
       </div>
 
       <Footer />
-    </>
+    </div>
   )
 }
 

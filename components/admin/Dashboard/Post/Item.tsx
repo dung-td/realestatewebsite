@@ -50,7 +50,14 @@ const Item: NextPage = () => {
         </div>
       </div>
 
-      <div className="col-span-12 md:col-span-6 mt-4"></div>
+      <div className="col-span-12 md:col-span-6 mt-4">
+        {isPublised ? null : (
+          <>
+            <p>Hạn duyệt bài</p>
+            <p className="font-bold">20/02/2022</p>
+          </>
+        )}
+      </div>
       <div className="w-full col-span-12 md:col-span-6 mt-4 grid grid-cols-4 gap-1">
         {isPublised ? (
           <>
@@ -66,9 +73,9 @@ const Item: NextPage = () => {
             <div className="col-span-2 md:col-span-1">
               <button
                 type="button"
-                className="w-full  text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Sửa tin
+                Xem tin
               </button>
             </div>
 
@@ -95,9 +102,9 @@ const Item: NextPage = () => {
             <div className="col-span-2 md:col-span-1">
               <button
                 type="button"
-                className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="w-full text-white bg-green-700 hover:bg-green-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Sửa tin
+                Duyệt tin
               </button>
             </div>
 
@@ -106,7 +113,7 @@ const Item: NextPage = () => {
                 type="button"
                 className="w-full text-white bg-red-700 hover:bg-red-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Xóa tin
+                Từ chối
               </button>
             </div>
           </>
@@ -161,8 +168,36 @@ const Item: NextPage = () => {
         ) : (
           <>
             <p className="col-span-12 text-center font-bold text-md">
-              Chưa có thông tin thống kê
+              THÔNG TIN NGƯỜI ĐĂNG
             </p>
+            <div className="col-span-6 font-medium">
+              Người đăng: <span className="font-bold">Tống Đức Dũng</span>
+            </div>
+            <div className="col-span-6 font-medium">
+              Loại tài khoản: <span className="font-bold">VIP1</span>
+            </div>
+            <div className="col-span-6 font-medium">
+              Số bài đã đăng: <span className="font-bold">304</span> bài
+            </div>
+            <div className="col-span-6 font-medium">
+              Loại tin đăng: <span className="font-bold">Nổi bật</span>
+            </div>
+            <div className="col-span-12 md:col-span-6 font-medium">
+              <button
+                type="button"
+                className="w-full justify-center text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              >
+                <p className="text-center">Thông tin người dùng</p>
+              </button>
+            </div>
+            <div className="col-span-12 md:col-span-6 font-medium">
+              <button
+                type="button"
+                className="w-full justify-center text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              >
+                <p className="text-center">Đẩy bài viết</p>
+              </button>
+            </div>
           </>
         )
       ) : null}

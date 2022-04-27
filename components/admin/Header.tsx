@@ -6,18 +6,18 @@ import Script from "next/script"
 
 const Header: NextPage = () => {
   const [openSideBar, setOpenSideBar] = useState(false)
-  const [isLogin, setIsLogin] = useState(true)
 
   const open = () => {
     setOpenSideBar(!openSideBar)
   }
+
   return (
     <div className="bg-white">
       {/* Nav Hidden */}
       {openSideBar ? (
         <div
           className={`${
-            openSideBar ? "fadeIn z-40" : "hidden-nav z-0"
+            openSideBar ? "fadeIn z-40" : "hidden-nav z-10"
           } fixed inset-0 flex `}
           role="dialog"
           aria-modal="true"
@@ -60,41 +60,15 @@ const Header: NextPage = () => {
                   aria-orientation="horizontal"
                   role="tablist"
                 >
-                  {isLogin ? (
-                    <>
-                      <button
-                        id="tabs-1-tab-1"
-                        className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
-                        aria-controls="tabs-1-panel-1"
-                        role="tab"
-                        type="button"
-                      >
-                        Đăng tin
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        id="tabs-1-tab-1"
-                        className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
-                        aria-controls="tabs-1-panel-1"
-                        role="tab"
-                        type="button"
-                      >
-                        Đăng nhập
-                      </button>
-
-                      <button
-                        id="tabs-1-tab-2"
-                        className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
-                        aria-controls="tabs-1-panel-2"
-                        role="tab"
-                        type="button"
-                      >
-                        Đăng ký
-                      </button>
-                    </>
-                  )}
+                  <button
+                    id="tabs-1-tab-1"
+                    className="text-gray-900 border-transparent flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
+                    aria-controls="tabs-1-panel-1"
+                    role="tab"
+                    type="button"
+                  >
+                    Trang quản lý
+                  </button>
                 </div>
               </div>
 
@@ -200,7 +174,7 @@ const Header: NextPage = () => {
       ) : null}
 
       {/* Header */}
-      <header className="relative bg-white z-10">
+      <header className="relative bg-white">
         <p className="bg-indigo-600 h-10 flex items-center justify-center text-sm font-medium text-white px-4 sm:px-6 lg:px-8">
           Trang Web Bất Động Sản số 1 Việt Nam
         </p>
@@ -215,7 +189,7 @@ const Header: NextPage = () => {
                 onClick={open}
               >
                 <span className="sr-only">Open menu</span>
-                <svg
+                {/* <svg
                   className="h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -229,7 +203,7 @@ const Header: NextPage = () => {
                     stroke-stokeWidth="2"
                     d="M4 6h16M4 12h16M4 18h16"
                   />
-                </svg>
+                </svg> */}
               </button>
 
               <div className="ml-4 flex lg:ml-0">
@@ -244,7 +218,7 @@ const Header: NextPage = () => {
               </div>
 
               {/* Navigaton links */}
-              <div className="hidden lg:ml-8 lg:block lg:self-stretch">
+              <div className="hidden lg:ml-8 lg:block lg:self-stretch z-50">
                 <div className="h-full flex space-x-8">
                   <div className="flex items-center nav-item">
                     <a
@@ -253,7 +227,7 @@ const Header: NextPage = () => {
                     >
                       Nhà đất cho thuê
                     </a>
-                    <div className="nav-link-item absolute mt-40 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                    <div className="z-50 nav-link-item absolute mt-40 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       <a
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
@@ -337,86 +311,54 @@ const Header: NextPage = () => {
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   {/* Notification */}
-                  {isLogin ? (
-                    <a href="#">
-                      <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
-                        notifications_none
-                      </span>
-                    </a>
-                  ) : null}
-                  {/* Saved  */}
                   <a href="#">
                     <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
-                      favorite_border
+                      notifications_none
                     </span>
-                  </a>
-                  <a
-                    href="#"
-                    className="border-2 rounded-md border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-                  >
-                    Đăng tin
                   </a>
                   <span
                     className="h-6 w-px bg-gray-200"
                     aria-hidden="true"
                   ></span>
 
-                  {isLogin ? (
-                    <div className="nav-user relative">
-                      <div className="flex flex-nowrap items-center space-x-2">
-                        <div className="rounded-full bg-black h-10 w-10"></div>
-                        <p className="font-medium text-md">Tống Đức Dũng</p>
-                        <span className="material-icons">expand_more</span>
-                      </div>
-                      <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">list</span>
-                          <p>Quản lý tin đăng</p>
-                        </a>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">person</span>
-                          <p>Thông tin cá nhân</p>
-                        </a>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">lock</span>
-                          <p>Đổi mật khẩu</p>
-                        </a>
-                        <div className="border-t border-gray-200 m-2" />
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">logout</span>
-                          <p>Đăng xuất</p>
-                        </a>
-                      </div>{" "}
+                  <div className="nav-user relative">
+                    <div className="flex flex-nowrap items-center space-x-2">
+                      <div className="rounded-full bg-black h-10 w-10"></div>
+                      <p className="font-medium text-md">Tống Đức Dũng</p>
+                      <span className="material-icons">expand_more</span>
                     </div>
-                  ) : (
-                    <>
+                    <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       <a
                         href="#"
-                        className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                        className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
                       >
-                        Đăng nhập
+                        <span className="material-icons mr-2">list</span>
+                        <p>Quản lý tin đăng</p>
                       </a>
-
                       <a
                         href="#"
-                        className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                        className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
                       >
-                        Đăng ký
+                        <span className="material-icons mr-2">person</span>
+                        <p>Quản lý tài khoản</p>
                       </a>
-                    </>
-                  )}
+                      <a
+                        href="#"
+                        className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                      >
+                        <span className="material-icons mr-2">apartment</span>
+                        <p>Quản lý dự án</p>
+                      </a>
+                      <div className="border-t border-gray-200 m-2" />
+                      <a
+                        href="#"
+                        className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                      >
+                        <span className="material-icons mr-2">logout</span>
+                        <p>Đăng xuất</p>
+                      </a>
+                    </div>{" "}
+                  </div>
                 </div>
 
                 <div className="hidden lg:ml-8 lg:flex">
@@ -433,7 +375,6 @@ const Header: NextPage = () => {
                       {" "}
                       VIE{" "}
                     </span>
-                    <span className="sr-only">, change currency</span>
                   </a>
                 </div>
               </div>

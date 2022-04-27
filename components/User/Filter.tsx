@@ -6,7 +6,7 @@ import { useState } from "react"
 
 const Filter: NextPage = () => {
   return (
-    <div className="grid grid-cols-12 mt-1 gap-4">
+    <div className="grid grid-cols-12 mt-1 gap-4 ml-0">
       <div className="col-span-4">
         <div className="relative w-full h-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
