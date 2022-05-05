@@ -5,7 +5,7 @@ import Head from "next/head"
 import { useState } from "react"
 import Image from "next/image"
 
-const Item: NextPage = () => {
+const Item = () => {
   const [expandDetail, setExpandDetail] = useState(false)
   const [isPublised, setIsPublish] = useState(false)
 

@@ -1,4 +1,3 @@
-import type { NextPage } from "next"
 import { useState } from "react"
 import Footer from "../../components/Footer"
 import Header from "../../components/Header"
@@ -7,7 +6,7 @@ import Sidebar from "../../components/User/Sidebar"
 import Tab from "../../components/User/Tab"
 import Item from "../../components/User/Transaction/Item"
 
-const Home: NextPage = () => {
+const Home = () => {
   return (
     <>
       <Header />

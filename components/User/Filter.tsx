@@ -4,7 +4,7 @@ import Head from "next/head"
 
 import { useState } from "react"
 
-const Filter: NextPage = () => {
+const Filter = () => {
   return (
     <div className="grid grid-cols-12 mt-1 gap-4 ml-0">
       <div className="col-span-4">

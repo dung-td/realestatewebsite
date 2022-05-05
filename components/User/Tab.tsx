@@ -4,7 +4,7 @@ import Head from "next/head"
 import { useState } from "react"
 import Item from "./Item"
 
-const Tab: NextPage = () => {
+const Tab = () => {
   const titles = [
     { title: "Tất cả", num: 0 },
     { title: "VIP1", num: 0 },

@@ -1,11 +1,10 @@
-import { NextPage } from "next"
 import Script from "next/script"
 import Head from "next/head"
 import { useState } from "react"
 import Image from "next/image"
 import MoneyFormat from "../../../util/MoneyFormat"
 
-const NotificationModel: NextPage = () => {
+const NotificationModel = () => {
   
   return (
     <div className="p-4 relative grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">

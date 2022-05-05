@@ -1,10 +1,6 @@
-import type { NextPage } from "next"
 import { useState } from "react"
-import Head from "next/head"
-import Image from "next/image"
-import Script from "next/script"
 
-const Header: NextPage = () => {
+const Header = () => {
   const [openSideBar, setOpenSideBar] = useState(false)
   const [isLogin, setIsLogin] = useState(true)
 

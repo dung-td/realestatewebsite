@@ -1,7 +1,7 @@
 import type { NextPage } from "next"
 import { useState } from "react"
 
-const Sidebar: NextPage = () => {
+const Sidebar = () => {
   return (
     <>
       <aside className="absolute w-72 " aria-label="Sidebar">

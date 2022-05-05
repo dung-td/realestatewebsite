@@ -1,4 +1,3 @@
-import { NextPage } from "next"
 import Script from "next/script"
 import Head from "next/head"
 import { useState } from "react"
@@ -6,7 +5,7 @@ import Image from "next/image"
 
 import MoneyFormat from "../../../util/MoneyFormat"
 
-const Item: NextPage = () => {
+const Item = () => {
   const [expandDetail, setExpandDetail] = useState(false)
 
   const [accountValue, setAccountValue] = useState(100000)

@@ -1,4 +1,3 @@
-import type { NextPage } from "next"
 import { useState } from "react"
 import Sidebar from "../../components/admin/Dashboard/Sidebar"
 import Header from "../../components/admin/Header"
@@ -7,7 +6,7 @@ import Filter from "../../components/User/Filter"
 import Item from "../../components/admin/Dashboard/Post/Item"
 import Tab from "../../components/User/Tab"
 
-const Home: NextPage = () => {
+const Home = () => {
   return (
     <div className="">
       <Header />
