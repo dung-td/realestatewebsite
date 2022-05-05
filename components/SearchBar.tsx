@@ -1,11 +1,117 @@
-import { NextPage } from "next"
+import { NextPage, GetServerSideProps } from "next"
+import React, { useState, Component, useEffect } from "react"
 import Script from "next/script"
 import Head from "next/head"
+import Select from "react-select"
+import { Province } from "../interfaces/Province"
 
-import { useState } from "react"
+type Props = {
+  provinces: Province[]
+}
 
-const SearchBar: NextPage = () => {
+type Search = {
+  province?: string
+  district?: string
+  ward?: string
+  street?: string
+}
+
+const SearchBar = ({ provinces }: Props) => {
   const [SearchExpand, setSearchExpand] = useState(false)
+
+  const [districts, setDistrics] = useState(new Array())
+  const [wards, setWards] = useState(new Array())
+  const [streets, setStreets] = useState(new Array())
+
+  let search: Search = {
+    province: "",
+    district: "",
+    ward: "",
+    street: "",
+  }
+
+  const onSearch = () => {
+    console.log(search)
+  }
+
+  const onProvinceChange = (provinceId: string | undefined) => {
+    if (search != undefined && provinceId != undefined) {
+      search.province = provinceId
+      console.log(search)
+    }
+  }
+
+  const onDistrictChange = (districtId: string | undefined) => {
+    if (search != undefined && districtId != undefined) {
+      search.district = districtId
+    }
+  }
+
+  const onWardChange = (wardId: string) => {
+    if (search != undefined) {
+      search.ward = wardId
+    }
+  }
+
+  const onStreetChange = (streetId: string) => {
+    if (search != undefined) {
+      search.street = streetId
+    }
+  }
+
+  const fetchDistrict = async (provinceId: string | undefined) => {
+    if (provinceId !== undefined) {
+      fetch(`http://localhost:3031/api/a/district/get?p=${provinceId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          let ds = new Array()
+          data.data.forEach((district: any) => {
+            let d = {
+              label: district.districtName,
+              value: district.districtCode,
+            }
+            ds.push(d)
+          })
+          setDistrics(ds)
+        })
+    }
+  }
+
+  const fetchWard = async (districtId: string | undefined) => {
+    if (districtId !== undefined) {
+      fetch(`http://localhost:3031/api/a/ward/get?d=${districtId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          let ws = new Array()
+          data.data.forEach((ward: any) => {
+            let w = {
+              label: ward.wardName,
+              value: ward.wardCode,
+            }
+            ws.push(w)
+          })
+          setWards(ws)
+        })
+    }
+  }
+
+  const fetchStreet = async (districtId: string | undefined) => {
+    if (districtId !== undefined) {
+      fetch(`http://localhost:3031/api/a/street/get?d=${districtId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          let ss = new Array()
+          data.data.forEach((street: any) => {
+            let s = {
+              label: street.streetName,
+              value: street.streetCode,
+            }
+            ss.push(s)
+          })
+          setStreets(ss)
+        })
+    }
+  }
 
   const expandSearch = () => {
     setSearchExpand(!SearchExpand)
@@ -122,6 +228,7 @@ const SearchBar: NextPage = () => {
               <button
                 type="button"
                 className="text-white h-full w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                onClick={onSearch}
               >
                 Tìm kiếm
               </button>
@@ -129,8 +236,21 @@ const SearchBar: NextPage = () => {
           </div>
 
           <div className="grid grid-cols-12 gap-4 mt-4 sm:p-8">
+            <div
+              key={"city"}
+              className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+            >
+              <Select
+                className="text-gray-900"
+                placeholder={"Tỉnh/ thành phố"}
+                options={provinces}
+                onChange={(value) => {
+                  onProvinceChange(value?.value)
+                  fetchDistrict(value?.value)
+                }}
+              />
+            </div>
             {[
-              ["home", "Tỉnh/ thành phố"],
               ["attach_money", "Khoảng giá"],
               ["crop_square", "Diện tích"],
             ].map(([icon, title]) => (
@@ -138,7 +258,14 @@ const SearchBar: NextPage = () => {
                 key={title}
                 className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
               >
-                <button
+                <Select
+                  className="text-gray-900"
+                  placeholder={title}
+                  isSearchable={false}
+                  // options={provinces}
+                />
+
+                {/* <button
                   id="dropdownTypeSearch"
                   data-dropdown-toggle="dropdown"
                   className="justify-center w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -149,7 +276,7 @@ const SearchBar: NextPage = () => {
                   </span>
                   <p className="text-xs sm:text-sm md:text-base">{title}</p>
                   <span className="material-icons">arrow_drop_down</span>
-                </button>
+                </button> */}
               </div>
             ))}
 
@@ -168,10 +295,45 @@ const SearchBar: NextPage = () => {
 
           {SearchExpand ? (
             <div className=" grid grid-cols-12 gap-4 mt-4 sm:p-8">
+              <div
+                key={"district"}
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+              >
+                <Select
+                  placeholder="Quận/ huyện/ thành phố"
+                  options={districts}
+                  onChange={(value) => {
+                    onDistrictChange(value?.value)
+                    fetchWard(value?.value)
+                    fetchStreet(value?.value)
+                  }}
+                />
+              </div>
+              <div
+                key={"ward"}
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+              >
+                <Select
+                  placeholder="Xã/ phường/ thị trấn"
+                  options={wards}
+                  onChange={(value) => {
+                    onWardChange(value.value)
+                  }}
+                />
+              </div>
+              <div
+                key={"road"}
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+              >
+                <Select
+                  placeholder="Đường/ phố"
+                  options={streets}
+                  onChange={(value) => {
+                    onStreetChange(value.value)
+                  }}
+                />
+              </div>
               {[
-                "Quận/ huyện/ thành phố",
-                "Phường/ xã/ thị trấn",
-                "Đường/ phố",
                 "Dự án",
                 "Số phòng ngủ",
                 "Hướng nhà",
@@ -182,14 +344,19 @@ const SearchBar: NextPage = () => {
                   key={title}
                   className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
                 >
-                  <button
+                  <Select
+                    placeholder={title}
+                    isSearchable={false}
+                    // options={provinces}
+                  />
+                  {/* <button
                     id="dropdownTypeSearch"
                     className="justify-center w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                     type="button"
                   >
                     <p className="text-xs sm:text-sm md:text-base">{title}</p>
                     <span className="material-icons">arrow_drop_down</span>
-                  </button>
+                  </button> */}
                 </div>
               ))}
             </div>
@@ -198,6 +365,19 @@ const SearchBar: NextPage = () => {
       </div>
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await fetch(`https://provinces.open-api.vn/api/?depth=2`)
+  const data = await res.json()
+  let provinces = new Array()
+  data.forEach((province: any) => {
+    let obj = { value: province.code, label: province.name }
+    provinces.push(obj)
+  })
+
+  // Pass data to the page via props
+  return { props: { provinces } }
 }
 
 export default SearchBar
