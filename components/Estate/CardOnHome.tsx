@@ -44,32 +44,32 @@ const CardOnHome = (props : Props) => {
 
                 <div className="mt-2 flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center">
-                        <span className="material-icons-outlined text-xl">paid</span>
-                        <p className="text-black text-xs ml-1">{props.price}</p>
+                        <span className="material-icons-outlined text-[20px]">paid</span>
+                        <p className="text-black text-sm ml-1">{props.price}</p>
                     </div>
 
                     <div className="flex flex-row items-center">
-                        <span className="material-icons-outlined text-xl">
+                        <span className="material-icons-outlined text-[20px]">
                         check_box_outline_blank
                         </span>
-                        <p className="text-black text-xs ml-1">{props.areaSqr}</p>
+                        <p className="text-black text-sm ml-1">{props.areaSqr}</p>
                     </div>
                 </div>
 
                 <div className="flex flex-row mt-2 items-center">
-                    <span className="material-icons-outlined text-xl">navigation</span>
-                    <p className="text-black text-xs ml-1">{props.address}</p>
+                    <span className="material-icons-outlined text-[20px]">navigation</span>
+                    <p className="text-black text-sm ml-1">{props.address}</p>
                 </div>
 
                 <hr className="mt-2"/>
 
                 <div className="mt-2 flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center">
-                    <span className="material-icons-outlined text-xl">schedule</span>
-                        <p className="text-black text-xs ml-1">{props.upload_date}</p>
+                        <span className="material-icons-outlined text-[20px]">schedule</span>
+                        <p className="text-black text-sm ml-1">{props.upload_date}</p>
                     </div>
 
-                    <p className="text-black text-xs font-bold">{props.author}</p>
+                    <p className="text-black text-sm font-bold">{props.author}</p>
                 </div>
             </div>
         </div>

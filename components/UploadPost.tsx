@@ -1,5 +1,8 @@
 import type { NextPage } from "next"
 import { useState } from "react"
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import MoneyFormat from "../util/MoneyFormat"
 
 type Props = {
@@ -221,21 +224,30 @@ const UploadPost = (props: Props) => {
                                         <label htmlFor="categories" className="block mb-2 text-sm font-medium text-black">Loại bất động sản</label>
                                         <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                     </div>
-                                    <select
-                                        id="categories"
-                                        className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2"
-                                        onChange={(e) => {
-                                            setCategory(e.target.value)
-                                        }}
-                                    >
-                                        {
-                                            categories.map((item, index) => {
-                                                return (
-                                                    <option key={index}>{item}</option>
-                                                )
-                                            })
-                                        }
-                                    </select>
+
+                                    <FormControl fullWidth>
+                                        <Select
+                                            displayEmpty
+                                            value={category}
+                                            style={{height: 38, fontSize: 14}}
+                                            className="text-sm"
+                                            onChange={(e) => setCategory(e.target.value)}
+                                        >
+                                            {
+                                                categories.map((item, index) => {
+                                                    return (
+                                                        <MenuItem
+                                                            key={index}
+                                                            value={item}
+                                                            style={{fontSize: 14}}
+                                                        >
+                                                            {item}
+                                                        </MenuItem>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
+                                    </FormControl>
                                 </div>
 
                                 <div className="mt-2 mb-2">
@@ -243,7 +255,7 @@ const UploadPost = (props: Props) => {
                                         <label htmlFor="countries" className="block mb-2 text-sm font-medium text-black">Địa chỉ</label>
                                         <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                     </div>
-                                    <input type="email" id="address" className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5" placeholder="Địa chỉ hiển thị" required onChange={(e) => setDisplayAdress(e.target.value)}/>
+                                    <input type="text" className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-cyan-700" placeholder="Địa chỉ hiển thị" required onChange={(e) => setDisplayAdress(e.target.value)}/>
                                 </div>
 
                                 <div className="flex flex-row flex-wrap items-center justify-between">
@@ -252,15 +264,30 @@ const UploadPost = (props: Props) => {
                                             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-black">Tỉnh, thành phố</label>
                                             <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                         </div>
-                                        <select id="city" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => setCity(e.target.value)}>
-                                            {
-                                                geoData.city.map((item, index) => {
-                                                    return (
-                                                        <option key={index}>{item}</option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
+
+                                        <FormControl fullWidth>
+                                            <Select
+                                                displayEmpty
+                                                value={city}
+                                                style={{height: 38, fontSize: 14}}
+                                                className="text-sm"
+                                                onChange={(e) => setCity(e.target.value)}
+                                            >
+                                                {
+                                                    geoData.city.map((item, index) => {
+                                                        return (
+                                                            <MenuItem
+                                                                key={index}
+                                                                value={item}
+                                                                style={{fontSize: 14}}
+                                                            >
+                                                                {item}
+                                                            </MenuItem>
+                                                            )
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
 
                                     <div className="mt-2 mb-2 w-5/12">
@@ -268,15 +295,29 @@ const UploadPost = (props: Props) => {
                                             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-black">Quận, huyện</label>
                                             <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                         </div>
-                                        <select id="district" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => setDistrict(e.target.value)}>
-                                            {
-                                                geoData.district.map((item, index) => {
-                                                    return (
-                                                        <option key={index}>{item}</option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
+
+                                        <FormControl fullWidth>
+                                            <Select
+                                                displayEmpty
+                                                value={district}
+                                                style={{height: 38, fontSize: 14}}
+                                                onChange={(e) => setDistrict(e.target.value)}
+                                            >
+                                                {
+                                                    geoData.district.map((item, index) => {
+                                                        return (
+                                                            <MenuItem
+                                                                key={index}
+                                                                value={item}
+                                                                style={{fontSize: 14}}
+                                                            >
+                                                                {item}
+                                                            </MenuItem>
+                                                            )
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
 
                                     <div className="mt-2 mb-2 w-5/12">
@@ -284,31 +325,57 @@ const UploadPost = (props: Props) => {
                                             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-black">Phường, xã</label>
                                             <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                         </div>
-                                        <select id="quarter" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => setQuarter(e.target.value)}>
-                                            {
-                                                geoData.quarter.map((item, index) => {
-                                                    return (
-                                                        <option key={index}>{item}</option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
+                                        <FormControl fullWidth>
+                                            <Select
+                                                displayEmpty
+                                                value={quarter}
+                                                style={{height: 38, fontSize: 14}}
+                                                onChange={(e) => setQuarter(e.target.value)}
+                                            >
+                                                {
+                                                    geoData.quarter.map((item, index) => {
+                                                        return (
+                                                            <MenuItem
+                                                                key={index}
+                                                                value={item}
+                                                                style={{fontSize: 14}}
+                                                            >
+                                                                {item}
+                                                            </MenuItem>
+                                                            )
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
 
                                     <div className="mt-2 mb-2 w-5/12">
                                         <div className="flex flex-row">
                                             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-black">Đường, phố</label>
                                             <span className="text-sm text-rose-800">&nbsp;(*)</span>
-                                        </div>
-                                        <select id="street" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => setStreet(e.target.value)}>
-                                            {
-                                                geoData.street.map((item, index) => {
-                                                    return (
-                                                        <option key={index}>{item}</option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
+                                        </div>  
+                                        <FormControl fullWidth>
+                                            <Select
+                                                displayEmpty
+                                                value={street}
+                                                style={{height: 38, fontSize: 14}}
+                                                onChange={(e) => setStreet(e.target.value)}
+                                            >
+                                                {
+                                                    geoData.street.map((item, index) => {
+                                                        return (
+                                                            <MenuItem
+                                                                key={index}
+                                                                value={item}
+                                                                style={{fontSize: 14}}
+                                                            >
+                                                                {item}
+                                                            </MenuItem>
+                                                            )
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
                                 </div>
                             </div>
@@ -331,7 +398,7 @@ const UploadPost = (props: Props) => {
                                         name="title"
                                         id="title"
                                         cols={1} rows={2}
-                                        className="bg-white h-16 border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 resize-none "
+                                        className="bg-white h-16 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
                                         placeholder="Tiêu đề hiển thị"
                                         onChange={(e) => setTitle(e.target.value)}
                                         required
@@ -348,7 +415,7 @@ const UploadPost = (props: Props) => {
                                         name="title"
                                         id="title"
                                         cols={1} rows={2}
-                                        className="bg-white h-44 border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 resize-none "
+                                        className="bg-white h-44 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
                                         placeholder="Nhập mô tả về bất động sản của bạn"
                                         onChange={(e) => setDescription(e.target.value)}
                                         required
@@ -372,9 +439,9 @@ const UploadPost = (props: Props) => {
                                         <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                     </div>
                                     <input
-                                        type="email"
+                                        type="text"
                                         id="areaSqr"
-                                        className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                        className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                         placeholder="Diện tích (m²)"
                                         required
                                         value={(isNaN(areaSqr) || areaSqr==0) ? "" : areaSqr.toString()}
@@ -390,9 +457,9 @@ const UploadPost = (props: Props) => {
                                             <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                         </div>
                                         <input
-                                            type="email"
+                                            type="text"
                                             id="price"
-                                            className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="Mức giá"
                                             required
                                             value={(isNaN(price) || price==0) ? "" : price.toString()}
@@ -406,15 +473,28 @@ const UploadPost = (props: Props) => {
                                             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-black">Đơn vị</label>
                                             <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                         </div>
-                                        <select id="price_unit" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2" onChange={(e) => setPriceUnit(e.target.value)}>
-                                        {
-                                            priceUnits.map((item, index) => {
-                                                return (
-                                                    <option key={index}>{item}</option>
-                                                )
-                                            })
-                                        }
-                                        </select>
+                                        <FormControl fullWidth>
+                                            <Select
+                                                displayEmpty
+                                                value={priceUnit}
+                                                style={{height: 38, fontSize: 14}}
+                                                onChange={(e) => setPriceUnit(e.target.value)}
+                                            >
+                                                {
+                                                    priceUnits.map((item, index) => {
+                                                        return (
+                                                            <MenuItem
+                                                                key={index}
+                                                                value={item}
+                                                                style={{fontSize: 14}}
+                                                            >
+                                                                {item}
+                                                            </MenuItem>
+                                                            )
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
                                 </div>
 
@@ -445,7 +525,7 @@ const UploadPost = (props: Props) => {
                                             <input
                                                 type="email"
                                                 id="doc_else"
-                                                className="bg-white ml-3 border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                                className="bg-white ml-3 border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                                 placeholder="Nhập"
                                                 onChange={(e) => {
                                                     isElseOptDoc ? setDocument(e.target.value) : null
@@ -464,7 +544,7 @@ const UploadPost = (props: Props) => {
                                         <input
                                             type="text" 
                                             id="floors"
-                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="0"
                                             required
                                             onKeyDown={(e) => preventCharInput(e)}
@@ -477,7 +557,7 @@ const UploadPost = (props: Props) => {
                                         <input
                                             type="email"
                                             id="width"
-                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="(m)"
                                             required
                                             onKeyDown={(e) => preventCharInput(e)}
@@ -490,7 +570,7 @@ const UploadPost = (props: Props) => {
                                         <input
                                             type="email"
                                             id="bedrooms"
-                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="0"
                                             required
                                             onKeyDown={(e) => preventCharInput(e)}
@@ -503,7 +583,7 @@ const UploadPost = (props: Props) => {
                                         <input
                                             type="email"
                                             id="depth"
-                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="(m)"
                                             required
                                             onKeyDown={(e) => preventCharInput(e)}
@@ -516,7 +596,7 @@ const UploadPost = (props: Props) => {
                                         <input
                                             type="email"
                                             id="bathrooms"
-                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="0"
                                             required
                                             onKeyDown={(e) => preventCharInput(e)}
@@ -529,7 +609,7 @@ const UploadPost = (props: Props) => {
                                         <input
                                             type="email"
                                             id="entrance-width"
-                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                                            className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="(m)"
                                             required
                                             onKeyDown={(e) => preventCharInput(e)}
@@ -539,29 +619,50 @@ const UploadPost = (props: Props) => {
 
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Hướng nhà</label>
-                                        <select id="direction" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-3/5 p-2" onChange={(e) => setDirection(e.target.value)}>
-                                            <option>Đông</option>
-                                            <option>Tây</option>
-                                            <option>Nam</option>
-                                            <option>Bắc</option>
-                                            <option>Tây Bắc</option>
-                                            <option>Đông Bắc</option>
-                                            <option>Đông Nam</option>
-                                            <option>Tây Nam</option>
-                                        </select>
+                                        <FormControl>
+                                            <Select
+                                                displayEmpty
+                                                value={direction}
+                                                style={{height: 38, fontSize: 14}}
+                                                onChange={(e) => setDirection(e.target.value)}
+                                            >
+                                                <MenuItem key={'Đông'} value={'Đông'} style={{fontSize: 14}}>Đông</MenuItem>
+                                                <MenuItem key={'Tây'} value={'Tây'} style={{fontSize: 14}}>Tây</MenuItem>
+                                                <MenuItem key={'Nam'} value={'Nam'} style={{fontSize: 14}}>Nam</MenuItem>
+                                                <MenuItem key={'Bắc'} value={'Bắc'} style={{fontSize: 14}}>Bắc</MenuItem>
+                                                <MenuItem key={'Tây Bắc'} value={'Tây Bắc'} style={{fontSize: 14}}>Tây Bắc</MenuItem>
+                                                <MenuItem key={'Đông Bắc'} value={'Đông Bắc'} style={{fontSize: 14}}>Đông Bắc</MenuItem>
+                                                <MenuItem key={'Đông Nam'} value={'Đông Nam'} style={{fontSize: 14}}>Đông Nam</MenuItem>
+                                                <MenuItem key={'Tây Nam'} value={'Tây Nam'} style={{fontSize: 14}}>Tây Nam</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </div>
 
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Nội thất</label>
-                                        <select id="furniture" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-3/5 p-2" onChange={(e) => setFuniture(e.target.value)}>
-                                            {
-                                                furnitures.map((item, index) => {
-                                                    return (
-                                                        <option key={index}>{item}</option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
+
+                                        <FormControl>
+                                            <Select
+                                                displayEmpty
+                                                value={furniture}
+                                                style={{height: 38, fontSize: 14}}
+                                                onChange={(e) => setFuniture(e.target.value)}
+                                            >
+                                                {
+                                                    furnitures.map((item, index) => {
+                                                        return (
+                                                            <MenuItem
+                                                                key={index}
+                                                                value={item}
+                                                                style={{fontSize: 14}}
+                                                            >
+                                                                {item}
+                                                            </MenuItem>
+                                                            )
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
                                 </div>
                             </div>
@@ -571,7 +672,7 @@ const UploadPost = (props: Props) => {
                                 <h1 className="font-bold text-lg">Hình ảnh</h1>
                                 
                                 <div className="mt-2 w-1/3 self-center">
-                                    <label htmlFor="file-upload" className="block px-9 lg:px-10 py-2 h-10 text-sm font-medium text-black bg-white rounded-lg border border-gray-300 cursor-pointer hover:border-blue-700 hover:border-2">Chọn ảnh</label>
+                                    <label htmlFor="file-upload" className="block px-9 lg:px-10 py-2 h-10 text-sm font-medium text-black bg-white rounded border border-gray-300 cursor-pointer hover:border-blue-700 hover:border-2">Chọn ảnh</label>
                                     <input className="hidden" aria-describedby="file-upload" id="file-upload" type="file" accept="image/*" multiple onChange={(e) => handleImageSelected(e)}/>
                                 </div>
 
@@ -607,15 +708,29 @@ const UploadPost = (props: Props) => {
                                     <label htmlFor="post-type" className="block mb-2 text-sm font-medium text-black">Loại tin đăng</label>
                                     <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                 </div>
-                                <select id="post-type" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-3/5 p-2" onChange={(e) => handlePostTypeIndex(e)}>
-                                    {
-                                        post_types.map((item, index) => {
-                                            return (
-                                                <option key={index}>{item.name}</option>
-                                            )
-                                        })
-                                    }
-                                </select>
+                                
+                                <FormControl style={{width: '50%'}}>
+                                    <Select
+                                        displayEmpty
+                                        value={post_types[postTypeIndex].name}
+                                        style={{height: 38, fontSize: 14}}
+                                        onChange={(e) => handlePostTypeIndex(e)}
+                                    >
+                                        {
+                                            post_types.map((item, index) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={index}
+                                                        value={item.name}
+                                                        style={{fontSize: 14}}
+                                                    >
+                                                        {item.name}
+                                                    </MenuItem>
+                                                    )
+                                            })
+                                        }
+                                    </Select>
+                                </FormControl>
                             </div>
 
                             <div className="flex flex-row justify-between">
@@ -624,15 +739,29 @@ const UploadPost = (props: Props) => {
                                         <label htmlFor="post-type" className="block mb-2 text-sm font-medium text-black">Số ngày đăng</label>
                                         <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                     </div>
-                                    <select id="post-type" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2" onChange={(e) => setPostDuration(parseInt(e.target.value))}>
-                                    {
-                                        post_durations.map((item, index) => {
-                                            return (
-                                                <option key={index} value={item}>{item} ngày</option>
-                                            )
-                                        })
-                                    }
-                                    </select>
+
+                                    <FormControl fullWidth>
+                                        <Select
+                                            displayEmpty
+                                            value={postDuration.toString()}
+                                            style={{height: 38, fontSize: 14}}
+                                            onChange={(e) => setPostDuration(parseInt(e.target.value))}
+                                        >
+                                            {
+                                                post_durations.map((item, index) => {
+                                                    return (
+                                                        <MenuItem
+                                                            key={index}
+                                                            value={item}
+                                                            style={{fontSize: 14}}
+                                                        >
+                                                            {item} ngày
+                                                        </MenuItem>
+                                                        )
+                                                })
+                                            }
+                                        </Select>
+                                    </FormControl>
                                 </div>
 
                                 <div className="mt-2 mb-2" style={{width: '54%'}}>
@@ -640,7 +769,7 @@ const UploadPost = (props: Props) => {
                                         <label htmlFor="post-type" className="block mb-2 text-sm font-medium text-black">Ngày bắt đầu</label>
                                         <span className="text-sm text-rose-800">&nbsp;(*)</span>
                                     </div>
-                                    <input type="date" className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded-lg " placeholder="Select date" style={{width: '98%'}}
+                                    <input type="date" className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700" placeholder="Select date" style={{width: '98%'}}
                                         onChange={(e) => setStartDate(e.target.value)}
                                     />
                                 </div>
@@ -683,7 +812,7 @@ const UploadPost = (props: Props) => {
                     {/* Upload button */}
                     <div className="w-full text-center">
                         <button
-                            className="bg-blue-700 w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-lg text-center cursor-pointer hover:bg-blue-800"
+                            className="bg-blue-700 w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
                             onClick={() => console.log(postDuration)}
                         >
                             <p className="text-white text-center">Đăng tin {'>'}</p>

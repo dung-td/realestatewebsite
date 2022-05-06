@@ -59,19 +59,21 @@ const ListEstate: NextPage = () => {
 
     return (
         <>
-            <div className="bg-white">
-                <div className="max-w-2xl mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:max-w-6xl lg:px-8" style={{maxWidth: '1200'}}>
-                    <div className="flex flex-row mb-4 items-center justify-between">
-                        <h2 className="font-bold text-base">Nhà bán/ Trang 1</h2>
+            <div className="bg-white w-full">
+                <div className="max-w-full mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:px-8" style={{maxWidth: '1200'}}>
+                    <div className="grid">
+                        <div className="flex flex-row mb-4 items-center justify-between">
+                            <h2 className="font-bold text-base">Nhà bán/ Trang 1</h2>
 
-                        <div className="w-[34%] sm:w-[20%] md:w-[20%] lg:w-[14%]">
-                            <select id="district" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => handleSortResults(e)}>
-                                <option>Thông thường</option>
-                                <option>Mới nhất</option>
-                                <option>Cũ nhất</option>
-                                <option>Giá thấp đến cao</option>
-                                <option>Giá cao đến thấp</option>
-                            </select>
+                            <div className="w-[34%] sm:w-[20%] md:w-[20%] lg:w-[14%]">
+                                <select id="district" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => handleSortResults(e)}>
+                                    <option>Thông thường</option>
+                                    <option>Mới nhất</option>
+                                    <option>Cũ nhất</option>
+                                    <option>Giá thấp đến cao</option>
+                                    <option>Giá cao đến thấp</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 
