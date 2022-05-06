@@ -2,9 +2,9 @@ import { useState } from "react"
 import Footer from "../../components/Footer"
 import Header from "../../components/Header"
 import Filter from "../../components/User/Filter"
-import Item from "../../components/User/Item"
 import Sidebar from "../../components/User/Sidebar"
 import Tab from "../../components/User/Tab"
+import Item from "../../components/User/Transaction/Item"
 
 const Home = () => {
   return (
@@ -16,7 +16,7 @@ const Home = () => {
       <div className="ml-72 p-8">
         <div className="grid grid-full">
           <div className="mb-4">
-            <p className="font-bold text-xl">Tin đang chờ duyệt</p>
+            <p className="font-bold text-xl">LỊCH SỬ GIAO DỊCH</p>
             <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
           </div>
 

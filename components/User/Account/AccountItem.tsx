@@ -1,4 +1,3 @@
-import { NextPage } from "next"
 import Script from "next/script"
 import Head from "next/head"
 import { useState } from "react"
@@ -6,7 +5,7 @@ import Item from "../Item"
 
 import MoneyFormat from "../../../util/MoneyFormat"
 
-const AccountItem: NextPage = () => {
+const AccountItem = () => {
   const [isUsing, setIsUsing] = useState(false)
 
   const features = [
