@@ -1,4 +1,9 @@
 import { useState } from "react"
+import Accordion from "@mui/material/Accordion"
+import AccordionSummary from "@mui/material/AccordionSummary"
+import AccordionDetails from "@mui/material/AccordionDetails"
+import Typography from "@mui/material/Typography"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
 const Sidebar = () => {
   return (
@@ -18,135 +23,133 @@ const Sidebar = () => {
             </li>
             {/* Quản lý tin đăng */}
             <li>
-              <button
-                type="button"
-                className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                aria-controls="dropdown-example"
-                data-collapse-toggle="dropdown-example"
-              >
-                <span className="material-icons">list</span>
-                <span
-                  className="flex-1 ml-3 text-left whitespace-nowrap"
-                  sidebar-toggle-item="dropdown-1"
+              <Accordion expanded={true}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  Quản lý tin đăng
-                </span>
-                <span className="material-icons">expand_more</span>
-              </button>
-              <ul id="dropdown-1" className="py-2 space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  <span className="material-icons">list</span>
+                  <span
+                    className="flex-1 ml-3 text-left whitespace-nowrap"
+                    sidebar-toggle-item="dropdown-1"
                   >
-                    Tin đang chờ duyệt
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Tin đã duyệt
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Tin chờ xử lý
-                  </a>
-                </li>
-              </ul>
+                    Quản lý tin đăng
+                  </span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul id="dropdown-1" className="space-y-2">
+                    <li>
+                      <a
+                        href="#"
+                        className="border-r-4 border-[#1976d2] bg-blue-50 flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Tin đang chờ duyệt
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Tin đã duyệt
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Tin chờ xử lý
+                      </a>
+                    </li>
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
             </li>
             {/* Quản lý tài khoản */}
             <li>
-              <button
-                type="button"
-                className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                aria-controls="dropdown-example"
-                data-collapse-toggle="dropdown-example"
-              >
-                <span className="material-icons">person</span>
-                <span
-                  className="flex-1 ml-3 text-left whitespace-nowrap"
-                  sidebar-toggle-item="dropdown-1"
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  Quản lý tài khoản
-                </span>
-                <span className="material-icons">expand_more</span>
-              </button>
-              <ul id="dropdown-1" className="py-2 space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  <span className="material-icons">person</span>
+                  <span
+                    className="flex-1 ml-3 text-left whitespace-nowrap"
+                    sidebar-toggle-item="dropdown-1"
                   >
-                    Danh sách người dùng
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Xử lý vi phạm
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Thống kê
-                  </a>
-                </li>
-              </ul>
+                    Quản lý tài khoản
+                  </span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul id="dropdown-1" className="space-y-2">
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Danh sách người dùng
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Xử lý vi phạm
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Thống kê
+                      </a>
+                    </li>
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
             </li>
             {/* Quản lý dự án */}
             <li>
-              <button
-                type="button"
-                className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                aria-controls="dropdown-example"
-                data-collapse-toggle="dropdown-example"
-              >
-                <span className="material-icons">apartment</span>
-                <span
-                  className="flex-1 ml-3 text-left whitespace-nowrap"
-                  sidebar-toggle-item="dropdown-1"
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  Quản lý dự án
-                </span>
-                <span className="material-icons">expand_more</span>
-              </button>
-              <ul id="dropdown-1" className="py-2 space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  <span className="material-icons">apartment</span>
+                  <span
+                    className="flex-1 ml-3 text-left whitespace-nowrap"
+                    sidebar-toggle-item="dropdown-1"
                   >
-                    Danh sách dự án
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Dự án chờ duyệt
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Dự án chờ xử lý
-                  </a>
-                </li>
-              </ul>
+                    Quản lý dự án
+                  </span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul id="dropdown-1" className="space-y-2">
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Danh sách dự án
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Dự án chờ phê duyệt
+                      </a>
+                    </li>
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
             </li>
           </ul>
         </div>

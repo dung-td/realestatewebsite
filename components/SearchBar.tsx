@@ -8,7 +8,9 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Typography from "@mui/material/Typography"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
+import Autocomplete from "@mui/material/Autocomplete"
 import { Province } from "../interfaces/Province"
+import TextField from "@mui/material/TextField"
 
 type Props = {
   provinces: Province[]
@@ -308,6 +310,7 @@ const SearchBar = ({ provinces }: Props) => {
               <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
                 <FormControl fullWidth>
                   <InputLabel id="label-input-city">Tỉnh/ thành phố</InputLabel>
+
                   <Select
                     labelId="label-input-city"
                     id="input-city"

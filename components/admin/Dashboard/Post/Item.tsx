@@ -3,6 +3,7 @@ import Head from "next/head"
 
 import { useState } from "react"
 import Image from "next/image"
+import Chip from "@mui/material/Chip"
 
 const Item = () => {
   const [expandDetail, setExpandDetail] = useState(false)
@@ -27,12 +28,10 @@ const Item = () => {
         <p className="font-normal text-gray-700">
           Bán nhà riêng - Thuận An, Bình Dương
         </p>
-        <div className="grid grid-cols-4 mt-6 w-full">
+        <div className="grid grid-cols-4 gap-4 mt-6 w-full">
           <div className="col-span-2">
             <p>Trạng thái</p>
-            <p className="w-max text-white bg-yellow-400 font-medium rounded-md text-xs p-0.5">
-              Chờ duyệt
-            </p>
+            <Chip label="Chờ duyệt" color="warning" />
           </div>
           <div className="col-span-2">
             <p>Mã tin</p>
