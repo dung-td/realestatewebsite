@@ -48,12 +48,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let data = await res.json()
   data = data.data
   let provinces = new Array()
-  let disctricts = new Array()
   data.forEach((province: any) => {
     let obj = {
       value: province._id,
       label: province.provinceName,
-      disctricts: disctricts,
     }
 
     provinces.push(obj)

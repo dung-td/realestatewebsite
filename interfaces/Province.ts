@@ -1,7 +1,6 @@
 export type Province = {
-  value: string
-  code: number
-  districts: Array<District>
+  label: string
+  value: number
 }
 
 type District = {
