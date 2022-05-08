@@ -1,15 +1,25 @@
 import type { NextPage } from "next"
 import { useState } from "react"
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
+
 import MoneyFormat from "../util/MoneyFormat"
+import { getProvinceName, getDistrictName, getDistrictPrefix, getDistrictId, getStreetId, getStreetName, getWardId, getWardName, getWardPrefix } from "../util/Address"
+import { Province } from "../interfaces/Province"
 
 type Props = {
     post_type: string;
+    provinces: Province[]
 }
 
 const UploadPost = (props: Props) => {
+    const [districts, setDistricts] = useState(new Array())
+    const [wards, setWards] = useState(new Array())
+    const [streets, setStreets] = useState(new Array())
+
     const [purpose, setPurpose] = useState('sell');
     const [category, setCategory] = useState('');
     const [displayAddress, setDisplayAdress] = useState('');
@@ -38,40 +48,7 @@ const UploadPost = (props: Props) => {
     const [postDuration, setPostDuration] = useState(0);
     const [startDate, setStartDate] = useState('');
 
-    const geoData = {
-        city: [
-            "Hà Nội",
-            "Đà Nẵng",
-            "Nha Trang",
-            "Bình Dương",
-            "Hồ Chí Minh",
-            "Bến Tre",
-        ],
-        district: [
-            "Hà Nội",
-            "Đà Nẵng",
-            "Nha Trang",
-            "Bình Dương",
-            "Hồ Chí Minh",
-            "Bến Tre",
-        ],
-        quarter: [
-            "Hà Nội",
-            "Đà Nẵng",
-            "Nha Trang",
-            "Bình Dương",
-            "Hồ Chí Minh",
-            "Bến Tre",
-        ],
-        street: [
-            "Hà Nội",
-            "Đà Nẵng",
-            "Nha Trang",
-            "Bình Dương",
-            "Hồ Chí Minh",
-            "Bến Tre",
-        ],
-    };
+    const [showAlert, setShowAlert] = useState(false);
 
     const purposes = [
         "BÁN", 
@@ -128,6 +105,65 @@ const UploadPost = (props: Props) => {
         "21",
     ];
 
+    const fetchDistrict = async (provinceId: string | undefined) => {
+        if (provinceId !== undefined) {
+          fetch(`http://localhost:3001/api/a/district/get?p=${provinceId}`)
+            .then((res) => res.json())
+            .then((data) => {
+              let ds = new Array()
+              data.data.forEach((district: any) => {
+                let d = {
+                  label: district.districtName,
+                  value: district.districtCode,
+                  _id: district._id,
+                  prefix: district.prefix
+                }
+                ds.push(d)
+              })
+              setDistricts(ds)
+            })
+        }
+    }
+    
+    const fetchWard = async (districtId: string | undefined) => {
+        if (districtId !== undefined) {
+            fetch(`http://localhost:3001/api/a/ward/get?d=${districtId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                let ws = new Array()
+                data.data.forEach((ward: any) => {
+                let w = {
+                    label: ward.wardName,
+                    value: ward.wardCode,
+                    _id: ward._id,
+                    prefix: ward.prefix
+                }
+                ws.push(w)
+            })
+            setWards(ws)
+        })
+    }
+    }
+    
+    const fetchStreet = async (districtId: string | undefined) => {
+        if (districtId !== undefined) {
+            fetch(`http://localhost:3001/api/a/street/get?d=${districtId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                let ss = new Array()
+                data.data.forEach((street: any) => {
+                let s = {
+                    label: street.streetName,
+                    value: street.streetCode,
+                    _id: street._id,
+                }
+                ss.push(s)
+            })
+            setStreets(ss)
+        })
+    }
+    }
+
     const preventCharInput = (e: any) => {
         var regex = new RegExp("[0-9\b]+");
         var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -166,6 +202,76 @@ const UploadPost = (props: Props) => {
             }
         }
         setImages(photoUriArr);
+    }
+
+    const handleCreatePost = async () => {
+        const response = await fetch('http://localhost:3001/api/post/upload', {
+            method: 'POST',
+            body: JSON.stringify({
+                "title": title,
+                "address": displayAddress,
+                "ownerId": "user_2",
+                "postType": {
+                    "_id": "VIP1",
+                    "name": "VIP 1" 
+                },
+                "estateType": {
+                    "_id": "type_id",
+                    "name": "Nhà riêng"
+                },
+                "status": "pending",
+                "forSaleOrRent": purpose == "BÁN" ? "sell" : "rent",
+                "location": {
+                    "CityCode": city,
+                    "CityName": getProvinceName(city, props.provinces),
+                    "DistrictId": getDistrictId(district, districts),
+                    "DistrictName": getDistrictName(district, districts),
+                    "DistrictPrefix": getDistrictPrefix(district, districts),
+                    "Label": displayAddress,
+                    "ShortName": "?",
+                    "StreetId": getStreetId(street, streets),
+                    "StreetName": getStreetName(street, streets),
+                    "StreetPrefix": "Đường",
+                    "TextSearch": displayAddress,
+                    "WardId": getWardId(quarter, wards),
+                    "WardName": getWardName(quarter, wards),
+                    "WardPrefix": getWardPrefix(quarter, wards)
+                },
+                "cor": {
+                    "lat": 0,
+                    "Lng": 0
+                },
+                "belongToProject": {
+                    "projectId": 0,
+                    "projectName": "SMART"
+                },
+                "description": description,
+                "images": [
+                    "https://images.adsttc.com/media/images/5e68/48ed/b357/658e/fb00/0441/large_jpg/AM1506.jpg?1583892706"
+                ],
+                "legalDocuments": document,
+                "publishedDate": "15/4/2022",
+                "expiredDate": "18/4/2022",
+                "price": price,
+                "priceType": priceUnit,
+                "area": areaSqr,
+                "floorNumber": floor,
+                "bathroomNumber": bathrooms,
+                "bedroomNumber": bedrooms,
+                "direction": direction,
+                "furniture": furniture,
+                "width": width,
+                "depth": depth,
+                "roadWidth": roadWidth,
+                "facade": 0
+            }), // string or object
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        // const myJson = await response.json(); //extract JSON from the http response
+        // console.log("Create post result: " + myJson.token)
+        setShowAlert(true)
     }
 
     return (
@@ -271,17 +377,21 @@ const UploadPost = (props: Props) => {
                                                 value={city}
                                                 style={{height: 38, fontSize: 14}}
                                                 className="text-sm"
-                                                onChange={(e) => setCity(e.target.value)}
+                                                onChange={(e) => {
+                                                    console.log(e.target.value)
+                                                    setCity(e.target.value)
+                                                    fetchDistrict(e.target.value)
+                                                }}
                                             >
                                                 {
-                                                    geoData.city.map((item, index) => {
+                                                    props.provinces.map((item, index) => {
                                                         return (
                                                             <MenuItem
-                                                                key={index}
-                                                                value={item}
+                                                                key={item.value}
+                                                                value={item.value}
                                                                 style={{fontSize: 14}}
                                                             >
-                                                                {item}
+                                                                {item.label}
                                                             </MenuItem>
                                                             )
                                                     })
@@ -301,19 +411,24 @@ const UploadPost = (props: Props) => {
                                                 displayEmpty
                                                 value={district}
                                                 style={{height: 38, fontSize: 14}}
-                                                onChange={(e) => setDistrict(e.target.value)}
+                                                onChange={(e) => {
+                                                    console.log("Select district: " + getDistrictPrefix(e.target.value, districts))
+                                                    setDistrict(e.target.value)
+                                                    fetchWard(e.target.value)
+                                                    fetchStreet(e.target.value)
+                                                }}
                                             >
                                                 {
-                                                    geoData.district.map((item, index) => {
+                                                    districts.map((item, index) => {
                                                         return (
                                                             <MenuItem
                                                                 key={index}
-                                                                value={item}
+                                                                value={item.value}
                                                                 style={{fontSize: 14}}
                                                             >
-                                                                {item}
+                                                                {item.label}
                                                             </MenuItem>
-                                                            )
+                                                        )
                                                     })
                                                 }
                                             </Select>
@@ -333,14 +448,14 @@ const UploadPost = (props: Props) => {
                                                 onChange={(e) => setQuarter(e.target.value)}
                                             >
                                                 {
-                                                    geoData.quarter.map((item, index) => {
+                                                    wards.map((item, index) => {
                                                         return (
                                                             <MenuItem
-                                                                key={index}
-                                                                value={item}
+                                                                key={item.value}
+                                                                value={item.value}
                                                                 style={{fontSize: 14}}
                                                             >
-                                                                {item}
+                                                                {item.label}
                                                             </MenuItem>
                                                             )
                                                     })
@@ -362,14 +477,14 @@ const UploadPost = (props: Props) => {
                                                 onChange={(e) => setStreet(e.target.value)}
                                             >
                                                 {
-                                                    geoData.street.map((item, index) => {
+                                                    streets.map((item, index) => {
                                                         return (
                                                             <MenuItem
-                                                                key={index}
-                                                                value={item}
+                                                                key={item.value}
+                                                                value={item.value}
                                                                 style={{fontSize: 14}}
                                                             >
-                                                                {item}
+                                                                {item.label}
                                                             </MenuItem>
                                                             )
                                                     })
@@ -810,14 +925,24 @@ const UploadPost = (props: Props) => {
                     </div>
 
                     {/* Upload button */}
-                    <div className="w-full text-center">
-                        <button
-                            className="bg-blue-700 w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
-                            onClick={() => console.log(postDuration)}
-                        >
-                            <p className="text-white text-center">Đăng tin {'>'}</p>
-                        </button>
-                    </div>
+                    {
+                        !showAlert ?
+                        <div className="w-full text-center">
+                            <button
+                                className="bg-blue-700 w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
+                                onClick={() => handleCreatePost()}
+                            >
+                                <p className="text-white text-center">Đăng tin {'>'}</p>
+                            </button>
+                        </div>
+                        :
+                        <div className="w-full lg:w-1/2 mx-auto mt-6">
+                            <Alert severity="success" onClose={() => {setShowAlert(false)}}>
+                                <AlertTitle>Thành công</AlertTitle>
+                                Tin đăng của bạn đã được ghi nhận — <strong>Vui lòng chờ kiểm duyệt của QTV!</strong>
+                            </Alert>
+                        </div>
+                    }
                 </div>
             </div>
         </>

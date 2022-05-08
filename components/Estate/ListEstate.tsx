@@ -1,7 +1,16 @@
-import type { NextPage } from "next"
+import type { NextPage, GetServerSideProps } from "next"
+import { useState, useEffect } from "react"
+import { PostCard } from "../../interfaces/PostCard"
 import EstateCard from "./EstateCard"
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 
 const ListEstate: NextPage = () => {
+    const [posts, setPosts] = useState(new Array())
+    const [sort, setSort] = useState('Thông thường')
+
     const list = [
         {
             id: 'id1',
@@ -57,6 +66,40 @@ const ListEstate: NextPage = () => {
 
     }
 
+    useEffect(() => {
+        const fetchPosts = async () => {
+            console.log("Getting post list from Server...")
+            const res = await fetch(`http://localhost:3001/api/post/list-post?purpose=sale`)
+            let data = await res.json()
+            
+            data = data.data
+            let posts = new Array()
+
+            data.forEach((post: any) => {
+                let obj = {
+                    _id: post._id,
+                    title: post.title,
+                    address: post.address,
+                    estateType: {
+                        _id: post.estateType._id,
+                        name: post.estateType.name
+                    },
+                    thumbnail: post.images[0],
+                    price: post.price,
+                    area: post.area,
+                    bathroom: post.bathroomNumber,
+                    bedroom: post.bedroomNumber,
+                    ownerId: post.ownerId,
+                }
+                posts.push(obj)
+            })
+            
+            setPosts(posts)
+        }
+
+        fetchPosts()
+    }, [])
+
     return (
         <>
             <div className="bg-white w-full">
@@ -66,33 +109,43 @@ const ListEstate: NextPage = () => {
                             <h2 className="font-bold text-base">Nhà bán/ Trang 1</h2>
 
                             <div className="w-[34%] sm:w-[20%] md:w-[20%] lg:w-[14%]">
-                                <select id="district" className="bg-white border border-gray-300 text-black text-sm rounded-lg  block w-full p-2 " required onChange={(e) => handleSortResults(e)}>
-                                    <option>Thông thường</option>
-                                    <option>Mới nhất</option>
-                                    <option>Cũ nhất</option>
-                                    <option>Giá thấp đến cao</option>
-                                    <option>Giá cao đến thấp</option>
-                                </select>
+                                <FormControl fullWidth>
+                                    <Select
+                                        value={sort}
+                                        style={{height: 38, fontSize: 14}}
+                                        className="text-sm"
+                                        onChange={(e) => {
+                                            setSort(e.target.value)
+                                            handleSortResults(e)
+                                        }}
+                                    >
+                                        <MenuItem key={0} value={'Thông thường'} style={{fontSize: 14}}>Thông thường</MenuItem>
+                                        <MenuItem key={0} value={'Mới nhất'} style={{fontSize: 14}}>Mới nhất</MenuItem>
+                                        <MenuItem key={0} value={'Cũ nhất'} style={{fontSize: 14}}>Cũ nhất</MenuItem>
+                                        <MenuItem key={0} value={'Giá thấp đến cao'} style={{fontSize: 14}}>Giá thấp đến cao</MenuItem>
+                                        <MenuItem key={0} value={'Giá cao đến thấp'} style={{fontSize: 14}}>Giá cao đến thấp</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </div>
                         </div>
                     </div>
                 
                     <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-2 xl:grid-cols-2 xl:gap-x-8">
                         {
-                            list.map((item) => {
+                            posts.map((item) => {
                                 return (
                                     <EstateCard
-                                        key={item.id}
-                                        id={item.id}
+                                        key={item._id}
+                                        id={item._id}
                                         title={item.title}
-                                        imageUrl={item.imageUrl}
-                                        category={item.category}
+                                        imageUrl={item.thumbnail}
+                                        category={item.estateType.name}
                                         price={item.price}
-                                        areaSqr={item.areaSqr}
-                                        rooms={item.rooms}
+                                        areaSqr={item.area}
+                                        rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
-                                        author={item.author}
-                                        author_phone_number={item.author_phone_number}
+                                        author={item.ownerId}
+                                        author_phone_number={item.ownerId}
                                     />
                                 )
                             })

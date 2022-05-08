@@ -2,7 +2,11 @@ import type { NextPage, GetServerSideProps } from "next"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
+
 import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
+import ListEstate from "../components/Estate/ListEstate"
+import UploadPost from "../components/UploadPost"
+import ChangePassword from "../components/User/Account/ChangePassword"
 import { useState } from "react"
 
 import { Province } from "../interfaces/Province"
@@ -34,7 +38,10 @@ const Home = ({ provinces }: Props) => {
         </div>
 
         {/* ELEMENTS GO HERE PLEASE */}
-        <ListEstateOnHome/>
+        <UploadPost post_type="" provinces={provinces}/>
+        {/* <ListEstate/> */}
+        {/* <ListEstateOnHome/> */}
+        
       </div>
 
       <div className="h-96"></div>
@@ -46,7 +53,7 @@ const Home = ({ provinces }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   console.log("Getting post list from Server...")
-  const res = await fetch(`http://localhost:3031/api/a/province/get`)
+  const res = await fetch(`http://localhost:3001/api/a/province/get`)
   let data = await res.json()
   data = data.data
   let provinces = new Array()

@@ -22,7 +22,7 @@ const EstateCard = (props : Props) => {
     }
 
     return (
-        <div className="flex flex-row xl:flex-row h-max drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
+        <div className="flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
             <div className="w-2/3 xl:max-h-72 aspect-w-1 aspect-h-1 bg-gray-200 rounded-tl-lg rounded-bl-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                 <img
                     className="w-full h-full object-cover xl:max-h-72"
@@ -43,7 +43,7 @@ const EstateCard = (props : Props) => {
                         <span className="material-icons-outlined">
                         check_box_outline_blank
                         </span>
-                        <p className="text-black text-sm ml-1">{props.areaSqr}</p>
+                        <p className="text-black text-sm ml-1">{props.areaSqr} m²</p>
                     </div>
                 </div>
                 <div className="flex flex-row mt-2 items-center">
