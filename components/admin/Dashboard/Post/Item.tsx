@@ -1,11 +1,11 @@
 import Script from "next/script"
 import Head from "next/head"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Chip from "@mui/material/Chip"
 
-const Item = () => {
+const Item = ({ data }: any) => {
   const [expandDetail, setExpandDetail] = useState(false)
   const [isPublised, setIsPublish] = useState(false)
 
@@ -17,33 +17,37 @@ const Item = () => {
     <div className="p-4 grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
       <img
         className="rounded-lg col-span-12 md:col-span-3  lg:col-span-3"
-        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+        src={data.images[0]}
         width={"100%"}
         height={400}
       />
       <div className="col-span-12 md:col-span-9">
         <a href="#" className="text-xl font-bold text-gray-700">
-          Bán nhà riêng 5m mặt tiền, tổng diện tích 100m2
+          {data.title}
         </a>
         <p className="font-normal text-gray-700">
-          Bán nhà riêng - Thuận An, Bình Dương
+          {data.estateType.name} - {data.address}
         </p>
         <div className="grid grid-cols-4 gap-4 mt-6 w-full">
           <div className="col-span-2">
             <p>Trạng thái</p>
-            <Chip label="Chờ duyệt" color="warning" />
+            {data.status == "publish" ? (
+              <Chip label="Đã duyệt" color="success" />
+            ) : (
+              <Chip label="Chờ duyệt" color="warning" />
+            )}
           </div>
           <div className="col-span-2">
             <p>Mã tin</p>
-            <p className="font-bold">30041975</p>
+            <p className="font-bold">{data._id}</p>
           </div>
           <div className="col-span-2">
             <p>Ngày đăng</p>
-            <p className="font-bold">22/02/2022</p>
+            <p className="font-bold">{data.publishedDate}</p>
           </div>
           <div className="col-span-2">
             <p>Ngày hết hạn</p>
-            <p className="font-bold">22/02/2022</p>
+            <p className="font-bold">{data.expiredDate}</p>
           </div>
         </div>
       </div>
@@ -169,7 +173,7 @@ const Item = () => {
               THÔNG TIN NGƯỜI ĐĂNG
             </p>
             <div className="col-span-6 font-medium">
-              Người đăng: <span className="font-bold">Tống Đức Dũng</span>
+              Người đăng: <span className="font-bold">{data.ownerId}</span>
             </div>
             <div className="col-span-6 font-medium">
               Loại tài khoản: <span className="font-bold">VIP1</span>

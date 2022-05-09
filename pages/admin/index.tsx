@@ -9,6 +9,7 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Pagination from "@mui/material/Pagination"
+import type { NextPage, GetServerSideProps } from "next"
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -43,7 +44,7 @@ function a11yProps(index: number) {
   }
 }
 
-const Home = () => {
+const Home = ({ data }: any) => {
   const [tabValue, setTabValue] = useState(0)
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -79,7 +80,7 @@ const Home = () => {
             </Box>
 
             <TabPanel value={tabValue} index={0}>
-              <Item />
+              <Item data={data[0]}/>
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
               <Item />
@@ -100,6 +101,15 @@ const Home = () => {
       <Footer />
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  console.log("Getting publish post from Server...")
+  const res = await fetch(`http://localhost:3031/api/post/list-post-by-status?status=publish`)
+  let data = await res.json()
+  data = data.data
+  
+  return { props: { data } }
 }
 
 export default Home
