@@ -69,7 +69,7 @@ const ListEstate: NextPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`http://localhost:3001/api/post/list-post?purpose=sale`)
+            const res = await fetch(`http://localhost:3001/api/post/list-post-by-purpose?purpose=sale`)
             let data = await res.json()
             
             data = data.data

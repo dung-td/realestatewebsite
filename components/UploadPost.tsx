@@ -52,7 +52,7 @@ const UploadPost = (props: Props) => {
 
     const purposes = [
         "BÁN", 
-        "CHO THuê"
+        "CHO THUÊ"
     ];
 
     const categories = [
@@ -219,7 +219,6 @@ const UploadPost = (props: Props) => {
                     "_id": "type_id",
                     "name": "Nhà riêng"
                 },
-                "status": "pending",
                 "forSaleOrRent": purpose == "BÁN" ? "sell" : "rent",
                 "location": {
                     "CityCode": city,
@@ -263,14 +262,15 @@ const UploadPost = (props: Props) => {
                 "width": width,
                 "depth": depth,
                 "roadWidth": roadWidth,
-                "facade": 0
+                "facade": 0,
+                "status": "pending",
             }), // string or object
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        // const myJson = await response.json(); //extract JSON from the http response
-        // console.log("Create post result: " + myJson.token)
+        const myJson = await response.json(); //extract JSON from the http response
+        console.log("Create post result: " + myJson.token)
         setShowAlert(true)
     }
 
