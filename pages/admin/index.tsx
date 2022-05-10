@@ -10,7 +10,8 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Pagination from "@mui/material/Pagination"
 import type { NextPage, GetServerSideProps } from "next"
-
+import { setAge } from "../../redux/reducers/userSlice"
+import store from "../../redux/store"
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
@@ -51,9 +52,16 @@ const Home = ({ data }: any) => {
     setTabValue(newValue)
   }
 
+  const buttonClick = () => {
+    const a = Math.floor(Math.random() * 10)
+    store.dispatch(setAge({ age: a }))
+  }
+
   return (
     <div className="">
       <Header />
+
+      <button onClick={buttonClick}> Click me!</button>
 
       <Sidebar />
 
@@ -80,7 +88,7 @@ const Home = ({ data }: any) => {
             </Box>
 
             <TabPanel value={tabValue} index={0}>
-              <Item data={data[0]}/>
+              <Item data={data[0]} />
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
               <Item />
@@ -105,10 +113,12 @@ const Home = ({ data }: any) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   console.log("Getting publish post from Server...")
-  const res = await fetch(`http://localhost:3031/api/post/list-post-by-status?status=publish`)
+  const res = await fetch(
+    `http://localhost:3031/api/post/list-post-by-status?status=publish`
+  )
   let data = await res.json()
   data = data.data
-  
+
   return { props: { data } }
 }
 

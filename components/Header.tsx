@@ -412,7 +412,7 @@ const Header = () => {
                   ) : (
                     <>
                       <a
-                        href="#"
+                        href="/admin"
                         className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
                       >
                         Đăng nhập

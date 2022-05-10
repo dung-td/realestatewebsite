@@ -2,6 +2,11 @@ import type { NextPage, GetServerSideProps } from "next"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
+import City from "../components/Home/City"
+import { setAge } from "../redux/reducers/userSlice"
+import store from "../redux/store"
+import { userState } from "../redux/reducers/selectors"
+
 import { useState } from "react"
 
 import { Province } from "../interfaces/Province"
@@ -18,6 +23,11 @@ const Home = ({ provinces }: Props) => {
     console.log(`onScroll`)
   }
 
+  const buttonClick = () => {
+    const a = store.getState().reducer.users.data.age
+    store.dispatch(setAge({ age: a + 1 }))
+  }
+
   return (
     <div onScroll={onScroll}>
       <Header />
@@ -32,6 +42,8 @@ const Home = ({ provinces }: Props) => {
           </div>
         </div>
 
+        <button onClick={buttonClick}> Click me!</button>
+        <City />
         {/* ELEMENTS GO HERE PLEASE */}
       </div>
 
