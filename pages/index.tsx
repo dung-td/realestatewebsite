@@ -23,11 +23,6 @@ const Home = ({ provinces }: Props) => {
     console.log(`onScroll`)
   }
 
-  const buttonClick = () => {
-    const a = store.getState().reducer.users.data.age
-    store.dispatch(setAge({ age: a + 1 }))
-  }
-
   return (
     <div onScroll={onScroll}>
       <Header />
@@ -42,8 +37,7 @@ const Home = ({ provinces }: Props) => {
           </div>
         </div>
 
-        <button onClick={buttonClick}> Click me!</button>
-        <City />
+        <City provinces={provinces} />
         {/* ELEMENTS GO HERE PLEASE */}
       </div>
 
@@ -60,10 +54,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let data = await res.json()
   data = data.data
   let provinces = new Array()
+  let bigCity = ["SG", "HN", "DDN", "BD", "DN"]
   data.forEach((province: any) => {
     let obj = {
       value: province._id,
       label: province.provinceName,
+      slug: province.slug,
     }
 
     provinces.push(obj)

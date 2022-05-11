@@ -110,6 +110,14 @@ const SearchBar = ({ provinces }: Props) => {
     { value: "mat-tien5", label: "> 500m2" },
   ]
 
+  const projects = [
+    { value: "project-1", label: "Vinhomes 1" },
+    { value: "project-2", label: "Vinhomes 2" },
+    { value: "project-3", label: "Vinhomes 3" },
+    { value: "project-4", label: "Vinhomes 4" },
+    { value: "project-5", label: "Vinhomes 5" },
+  ]
+
   const onSearch = () => {
     console.log(search)
   }
@@ -434,6 +442,26 @@ const SearchBar = ({ provinces }: Props) => {
                 <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
                   <FormControl fullWidth>
                     <InputLabel id="label-input-ward">Đường/ phố</InputLabel>
+                    <Select
+                      labelId="label-input-street"
+                      id="input-ward"
+                      value={search.street}
+                      label="Đường/ phố"
+                      onChange={onStreetChange}
+                    >
+                      {streets.map((street) => {
+                        return (
+                          <MenuItem key={street.value} value={street.value}>
+                            {street.label}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                  <FormControl fullWidth>
+                    <InputLabel id="label-input-ward">Dự án</InputLabel>
                     <Select
                       labelId="label-input-street"
                       id="input-ward"
