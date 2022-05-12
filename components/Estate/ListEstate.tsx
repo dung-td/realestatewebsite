@@ -11,57 +11,6 @@ const ListEstate: NextPage = () => {
     const [posts, setPosts] = useState(new Array())
     const [sort, setSort] = useState('Thông thường')
 
-    const list = [
-        {
-            id: 'id1',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://static.chotot.com/storage/chotot-kinhnghiem/nha/2021/10/cfa88710-mua-ban-nha-dat-1.jpg',
-            category: 'Nhà riêng',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            rooms: '2 PN + 2 WC',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            author_phone_number: '0914 321 878'
-        },
-        {
-            id: 'id2',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://dat24h.com/uploads/news/2018/nha-dat.jpg',
-            category: 'Nhà riêng',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            rooms: '2 PN + 2 WC',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            author_phone_number: '0914 321 878'
-        },
-        {
-            id: 'id3',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://happynest.vn/storage/uploads/2021/04/8d46d17e81cce979ee586c3f447c8c39.jpg',
-            category: 'Nhà riêng',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            rooms: '2 PN + 2 WC',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            author_phone_number: '0914 321 878'
-        },
-        {
-            id: 'id4',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'http://xhomeviet.vn/Uploads/Images/z2255614633805-7e55ff5c8e3dcec942d717d5cebf0567.jpg',
-            category: 'Nhà riêng',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            rooms: '2 PN + 2 WC',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            author_phone_number: '0914 321 878'
-        }
-    ];
-
     const handleSortResults = (e: any) => {
 
     }
@@ -80,16 +29,14 @@ const ListEstate: NextPage = () => {
                     _id: post._id,
                     title: post.title,
                     address: post.address,
-                    estateType: {
-                        _id: post.estateType._id,
-                        name: post.estateType.name
-                    },
+                    estateType: post.estateType,
                     thumbnail: post.images[0],
-                    price: post.price,
+                    price: post.price + " " + post.priceType,
                     area: post.area,
                     bathroom: post.bathroomNumber,
                     bedroom: post.bedroomNumber,
-                    ownerId: post.ownerId,
+                    ownerName: post.owner.name,
+                    ownerPhone: post.owner.phone,
                 }
                 posts.push(obj)
             })
@@ -139,13 +86,13 @@ const ListEstate: NextPage = () => {
                                         id={item._id}
                                         title={item.title}
                                         imageUrl={item.thumbnail}
-                                        category={item.estateType.name}
+                                        category={item.estateType}
                                         price={item.price}
                                         areaSqr={item.area}
                                         rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
-                                        author={item.ownerId}
-                                        author_phone_number={item.ownerId}
+                                        author={item.ownerName}
+                                        author_phone_number={item.ownerPhone}
                                     />
                                 )
                             })

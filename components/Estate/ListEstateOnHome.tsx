@@ -1,12 +1,11 @@
 import type { NextPage } from "next"
-import EstateCard from "./EstateCard"
+import { useEffect, useState } from "react";
 import CardOnHome from "./CardOnHome";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 
 const ListEstateOnHome: NextPage = () => {
+    const [posts, setPosts] = useState(new Array())
+
     const list = [
         {
             id: 'id1',
@@ -90,9 +89,38 @@ const ListEstateOnHome: NextPage = () => {
         },
     ];
 
-    const handleSortResults = (e: any) => {
+    useEffect(() => {
+        const fetchPosts = async () => {
+            console.log("Getting post list from Server...")
+            const res = await fetch(`http://localhost:3001/api/post/list-post-by-purpose?purpose=sale`)
+            let data = await res.json()
+            
+            data = data.data
+            let posts = new Array()
 
-    }
+            data.forEach((post: any) => {
+                let obj = {
+                    _id: post._id,
+                    title: post.title,
+                    address: post.address,
+                    estateType: post.estateType,
+                    thumbnail: post.images[0],
+                    price: post.price,
+                    area: post.area,
+                    bathroom: post.bathroomNumber,
+                    bedroom: post.bedroomNumber,
+                    ownerName: post.owner.name,
+                    ownerPhone: post.owner.phone,
+                    publishDate: post.publishedDate
+                }
+                posts.push(obj)
+            })
+            
+            setPosts(posts)
+        }
+
+        fetchPosts()
+    }, [])
 
     return (
         <>
@@ -105,18 +133,18 @@ const ListEstateOnHome: NextPage = () => {
                 
                     <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6">
                         {
-                            list.map((item) => {
+                            posts.map((item) => {
                                 return (
                                     <CardOnHome
-                                        key={item.id}
-                                        id={item.id}
+                                        key={item._id}
+                                        id={item._id}
                                         title={item.title}
-                                        imageUrl={item.imageUrl}
+                                        imageUrl={item.thumbnail}
                                         price={item.price}
-                                        areaSqr={item.areaSqr}
+                                        areaSqr={item.area}
                                         address={item.address}
-                                        author={item.author}
-                                        upload_date={item.upload_date}
+                                        author={item.ownerName}
+                                        upload_date={item.publishDate}
                                     />
                                 )
                             })
@@ -127,23 +155,6 @@ const ListEstateOnHome: NextPage = () => {
                         <button className="w-28 h-9 border border-solid border-gray-300 rounded-lg hover:border-black" title="Xem thêm">
                             <p className="text-xs font-medium">Xem thêm</p>
                         </button>
-
-                        {/* <div className="w-28 h-9">
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={1}
-                                    label="Age"
-                                    onChange={() => {}}
-                                >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div> */}
                     </div>
                 </div>
             </div>

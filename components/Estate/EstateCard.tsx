@@ -23,7 +23,7 @@ const EstateCard = (props : Props) => {
 
     return (
         <div className="flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
-            <div className="w-2/3 xl:max-h-72 aspect-w-1 aspect-h-1 bg-gray-200 rounded-tl-lg rounded-bl-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+            <div className="w-3/5 xl:max-h-72 aspect-w-1 aspect-h-1 bg-gray-200 rounded-tl-lg rounded-bl-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                 <img
                     className="w-full h-full object-cover xl:max-h-72"
                     src={props.imageUrl}
@@ -32,7 +32,19 @@ const EstateCard = (props : Props) => {
             </div>
             
             <div className="ml-4 w-8/12 mr-4">
-                <h3 className="mt-2 text-black text-base font-bold">{props.title}</h3>
+                <h3
+                    className="mt-2 text-black text-sm font-bold"
+                    style={{
+                        textOverflow: 'ellipsis',
+                        display: 'block',
+                        wordWrap: 'break-word',
+                        overflow: 'hidden',
+                        maxHeight: '3em',
+                        lineHeight: '1.5em'
+                    }}
+                >
+                    {props.title}
+                </h3>
                 <div className="pr-3 mt-2 flex flex-row justify-between">
                     <div className="flex flex-row items-center">
                         <span className="material-icons-outlined">paid</span>
@@ -56,7 +68,19 @@ const EstateCard = (props : Props) => {
                 </div>
                 <div className="flex flex-row mt-2 items-center">
                     <span className="material-icons-outlined">navigation</span>
-                    <p className="text-black text-sm ml-1">{props.address}</p>
+                    <p
+                        className="text-black text-sm ml-1"
+                        style={{
+                            textOverflow: 'ellipsis',
+                            display: 'block',
+                            wordWrap: 'break-word',
+                            overflow: 'hidden',
+                            maxHeight: '3em',
+                            lineHeight: '1.5em'
+                        }}
+                    >
+                        {props.address}
+                    </p>
                 </div>
                 <div className="flex flex-row mt-2 items-center">
                     <p className="text-black text-sm font-bold">Đăng bởi: </p>

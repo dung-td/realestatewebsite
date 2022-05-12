@@ -40,7 +40,19 @@ const CardOnHome = (props : Props) => {
             </div>
             
             <div className="w-full flex flex-col px-4 py-2">
-                <h3 className="text-black text-sm font-bold">{props.title}</h3>
+                <h3
+                    className="text-black text-sm font-bold"
+                    style={{
+                        textOverflow: 'ellipsis',
+                        display: 'block',
+                        wordWrap: 'break-word',
+                        overflow: 'hidden',
+                        maxHeight: '3em',
+                        lineHeight: '1.5em'
+                    }}
+                >
+                    {props.title}
+                </h3>
 
                 <div className="mt-2 flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center">
@@ -52,13 +64,25 @@ const CardOnHome = (props : Props) => {
                         <span className="material-icons-outlined text-[20px]">
                         check_box_outline_blank
                         </span>
-                        <p className="text-black text-sm ml-1">{props.areaSqr}</p>
+                        <p className="text-black text-sm ml-1">{props.areaSqr} m²</p>
                     </div>
                 </div>
 
                 <div className="flex flex-row mt-2 items-center">
                     <span className="material-icons-outlined text-[20px]">navigation</span>
-                    <p className="text-black text-sm ml-1">{props.address}</p>
+                    <p
+                        className="text-black text-sm ml-1"
+                        style={{
+                            textOverflow: 'ellipsis',
+                            display: 'block',
+                            wordWrap: 'break-word',
+                            overflow: 'hidden',
+                            maxHeight: '3em',
+                            lineHeight: '1.5em'
+                        }}
+                    >
+                        {props.address}
+                    </p>
                 </div>
 
                 <hr className="mt-2"/>

@@ -1,5 +1,5 @@
 import type { NextPage } from "next"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
@@ -7,7 +7,17 @@ import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 
 import MoneyFormat from "../util/MoneyFormat"
-import { getProvinceName, getDistrictName, getDistrictPrefix, getDistrictId, getStreetId, getStreetName, getWardId, getWardName, getWardPrefix } from "../util/Address"
+import {
+    getProvinceName,
+    getDistrictName,
+    getDistrictPrefix,
+    getDistrictId,
+    getStreetId,
+    getStreetName,
+    getWardId,
+    getWardName,
+    getWardPrefix
+} from "../util/Address"
 import { Province } from "../interfaces/Province"
 
 type Props = {
@@ -16,9 +26,12 @@ type Props = {
 }
 
 const UploadPost = (props: Props) => {
+    const [postTypes, setPostTypes] = useState(new Array())
+    const [estateTypes, setEstateTypes] = useState(new Array())
     const [districts, setDistricts] = useState(new Array())
     const [wards, setWards] = useState(new Array())
     const [streets, setStreets] = useState(new Array())
+    const [priceUnits, setPriceUnits] = useState(new Array())
 
     const [purpose, setPurpose] = useState('sell');
     const [category, setCategory] = useState('');
@@ -46,27 +59,23 @@ const UploadPost = (props: Props) => {
 
     const [postTypeIndex, setPostTypeIndex] = useState(0);
     const [postDuration, setPostDuration] = useState(0);
+    const [postType, setPostType] = useState('');
     const [startDate, setStartDate] = useState('');
 
     const [showAlert, setShowAlert] = useState(false);
+    const [files, setFiles] = useState('');
+    const [imgUrls, setImgUrls] = useState(new Array());
 
     const purposes = [
         "BÁN", 
         "CHO THUÊ"
     ];
 
-    const categories = [
-        "Bán nhà riêng", 
-        "Bán căn hộ chung cư",
-        "Bán đất",
-        "Bán kho xưởng"
-    ];
-
-    const priceUnits = [
-        "VNĐ", 
-        "Giá / m²",
-        "Thỏa thuận",
-    ];
+    // const priceUnits = [
+    //     "VNĐ", 
+    //     "Giá / m²",
+    //     "Thỏa thuận",
+    // ];
 
     const documents = [
         "Sổ đỏ/ Sổ hồng", 
@@ -77,25 +86,6 @@ const UploadPost = (props: Props) => {
     const furnitures = [
         "Đầy đủ", 
         "Không có",
-    ];
-
-    const post_types = [
-        {
-            name: "VIP 1",
-            price: 3000,
-        },
-        {
-            name: "VIP 2",
-            price: 4000,
-        },
-        {
-            name: "VIP 3",
-            price: 5000,
-        },
-        {
-            name: "Tin thường",
-            price: 2000,
-        },
     ];
 
     const post_durations = [
@@ -175,8 +165,8 @@ const UploadPost = (props: Props) => {
 
     const handlePostTypeIndex = (e: any) => {
         let index = 0;
-        post_types.forEach((element, currentIndex) => {
-            if (element.name == e.target.value) {
+        postTypes.forEach((element, currentIndex) => {
+            if (element._id == e.target.value) {
                 index = currentIndex;
             }
         });
@@ -192,6 +182,8 @@ const UploadPost = (props: Props) => {
         }
         console.log(e.target.files)
         setImages(photoUriArr);
+
+        setFiles(files)
     }
 
     const updateDisplayImages = (index: number) => {
@@ -205,21 +197,36 @@ const UploadPost = (props: Props) => {
     }
 
     const handleCreatePost = async () => {
+        // Uploading images to server
+        var base64Arr = new Array()
+        for (let index = 0; index < files.length; index++) {
+            const img = await toBase64(files[index])
+            base64Arr.push(img)
+        }
+
+        const imgResponse = await fetch('http://localhost:3001/api/image-upload/multiple', {
+            method: 'POST',
+            body: JSON.stringify({
+                "files": base64Arr
+            }), // string or object
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const urlArr = await imgResponse.json(); //extract JSON from the http response
+        setImgUrls(urlArr.data)
+
+        // // Creating post
         const response = await fetch('http://localhost:3001/api/post/upload', {
             method: 'POST',
             body: JSON.stringify({
                 "title": title,
                 "address": displayAddress,
-                "ownerId": "user_2",
-                "postType": {
-                    "_id": "VIP1",
-                    "name": "VIP 1" 
-                },
-                "estateType": {
-                    "_id": "type_id",
-                    "name": "Nhà riêng"
-                },
-                "forSaleOrRent": purpose == "BÁN" ? "sell" : "rent",
+                "ownerId": "6263a81788bcf34dbe3030cd",
+                "postTypeId": postType,
+                "estateTypeId": category,
+                "forSaleOrRent": purpose == "BÁN" ? "sale" : "rent",
                 "location": {
                     "CityCode": city,
                     "CityName": getProvinceName(city, props.provinces),
@@ -245,12 +252,10 @@ const UploadPost = (props: Props) => {
                     "projectName": "SMART"
                 },
                 "description": description,
-                "images": [
-                    "https://images.adsttc.com/media/images/5e68/48ed/b357/658e/fb00/0441/large_jpg/AM1506.jpg?1583892706"
-                ],
+                "images": urlArr.data,
                 "legalDocuments": document,
-                "publishedDate": "15/4/2022",
-                "expiredDate": "18/4/2022",
+                "publishedDate": "13/05/2022",
+                "expiredDate": "23/05/2022",
                 "price": price,
                 "priceType": priceUnit,
                 "area": areaSqr,
@@ -263,16 +268,88 @@ const UploadPost = (props: Props) => {
                 "depth": depth,
                 "roadWidth": roadWidth,
                 "facade": 0,
-                "status": "pending",
+                "status": "waiting",
             }), // string or object
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        const myJson = await response.json(); //extract JSON from the http response
+        
+        const myJson = await response.json();
         console.log("Create post result: " + myJson.token)
         setShowAlert(true)
     }
+
+    const toBase64 = (obj: any) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(obj);
+        reader.onload = () => resolve(reader.result?.toString());
+        reader.onerror = error => reject(error);
+    });
+
+    useEffect(() => {
+        const fetchEstateTypes = async () => {
+            console.log("Getting estate types from Server...")
+            const res = await fetch(`http://localhost:3001/api/a/estate-type/get`)
+            let data = await res.json()
+            
+            data = data.data
+            let types = new Array()
+
+            data.forEach((type: any) => {
+                let obj = {
+                    _id: type._id,
+                    name: type.name,
+                }
+                types.push(obj)
+            })
+            
+            setEstateTypes(types)
+        }
+
+        const fetchPostTypes = async () => {
+            console.log("Getting post types from Server...")
+            const res = await fetch(`http://localhost:3001/api/a/post-type/get`)
+            let data = await res.json()
+            
+            data = data.data
+            let types = new Array()
+
+            data.forEach((type: any) => {
+                let obj = {
+                    _id: type._id,
+                    name: type.name,
+                    price: type.price,
+                }
+                types.push(obj)
+            })
+            
+            setPostTypes(types)
+        }
+
+        const fetchPriceUnits = async () => {
+            console.log("Getting price units from Server...")
+            const res = await fetch(`http://localhost:3001/api/a/price-unit/get`)
+            let data = await res.json()
+            
+            data = data.data
+            let units = new Array()
+
+            data.forEach((unit: any) => {
+                let obj = {
+                    _id: unit._id,
+                    label: unit.label,
+                }
+                units.push(obj)
+            })
+            
+            setPriceUnits(units)
+        }
+
+        fetchEstateTypes()
+        fetchPostTypes()
+        fetchPriceUnits()
+    }, [])
 
     return (
         <>
@@ -337,17 +414,19 @@ const UploadPost = (props: Props) => {
                                             value={category}
                                             style={{height: 38, fontSize: 14}}
                                             className="text-sm"
-                                            onChange={(e) => setCategory(e.target.value)}
+                                            onChange={(e) => {
+                                                setCategory(e.target.value)
+                                            }}
                                         >
                                             {
-                                                categories.map((item, index) => {
+                                                estateTypes.map((item, index) => {
                                                     return (
                                                         <MenuItem
                                                             key={index}
-                                                            value={item}
+                                                            value={item._id}
                                                             style={{fontSize: 14}}
                                                         >
-                                                            {item}
+                                                            {item.name}
                                                         </MenuItem>
                                                     )
                                                 })
@@ -518,7 +597,7 @@ const UploadPost = (props: Props) => {
                                         onChange={(e) => setTitle(e.target.value)}
                                         required
                                     />
-                                    <p className="text-xs mt-2">Tối thiểu 30 ký tự, tối đa 99 ký tự</p>
+                                    <p className="text-xs mt-2">Tối thiểu 40 ký tự, tối đa 99 ký tự</p>
                                 </div>
 
                                 <div className="mt-4 mb-2">
@@ -600,10 +679,10 @@ const UploadPost = (props: Props) => {
                                                         return (
                                                             <MenuItem
                                                                 key={index}
-                                                                value={item}
+                                                                value={item._id}
                                                                 style={{fontSize: 14}}
                                                             >
-                                                                {item}
+                                                                {item.label}
                                                             </MenuItem>
                                                             )
                                                     })
@@ -827,21 +906,25 @@ const UploadPost = (props: Props) => {
                                 <FormControl style={{width: '50%'}}>
                                     <Select
                                         displayEmpty
-                                        value={post_types[postTypeIndex].name}
+                                        value={postType}
+                                        className="text-sm"
                                         style={{height: 38, fontSize: 14}}
-                                        onChange={(e) => handlePostTypeIndex(e)}
+                                        onChange={(e) => {
+                                            handlePostTypeIndex(e)
+                                            setPostType(e.target.value)
+                                        }}
                                     >
                                         {
-                                            post_types.map((item, index) => {
+                                            postTypes.map((item, index) => {
                                                 return (
                                                     <MenuItem
                                                         key={index}
-                                                        value={item.name}
+                                                        value={item._id}
                                                         style={{fontSize: 14}}
                                                     >
                                                         {item.name}
                                                     </MenuItem>
-                                                    )
+                                                )
                                             })
                                         }
                                     </Select>
@@ -893,12 +976,12 @@ const UploadPost = (props: Props) => {
                             <div className="bg-blue-200 w-full h-40 py-1 px-3 mt-4 rounded-lg">
                                 <div className="flex flex-row justify-between mt-2 mt-2 mb-3">
                                     <p className="text-black text-sm font-medium">Loại tin đăng</p>
-                                    <p className="text-black text-sm">{post_types[postTypeIndex].name}</p>
+                                    <p className="text-black text-sm">{postTypes.length > 0 ? postTypes[postTypeIndex].name : ''}</p>
                                 </div>
 
                                 <div className="flex flex-row justify-between mt-2 mb-3">
                                     <p className="text-black text-sm font-medium">Đơn giá / ngày</p>
-                                    <p className="text-black text-sm">{MoneyFormat(post_types[postTypeIndex].price)} VNĐ</p>
+                                    <p className="text-black text-sm">{postTypes.length > 0 ? MoneyFormat(postTypes[postTypeIndex].price) : ''} VNĐ</p>
                                 </div>
 
                                 <div className="flex flex-row justify-between mt-2 mb-3">
@@ -912,11 +995,12 @@ const UploadPost = (props: Props) => {
                                     <p className="text-black text-lg font-medium">Bạn trả</p>
                                     <p className="text-black text-lg font-medium">
                                         {
+                                            postTypes.length > 0 ?
                                             MoneyFormat(
                                                 (postDuration==0 && postTypeIndex==0) ?
-                                                post_types[0].price * parseInt(post_durations[0])
-                                                : postDuration * post_types[postTypeIndex].price
-                                            )
+                                                postTypes[postTypeIndex].price * parseInt(post_durations[0])
+                                                : postDuration * postTypes[postTypeIndex].price
+                                            ) : ''
                                         } VNĐ
                                     </p>
                                 </div>
