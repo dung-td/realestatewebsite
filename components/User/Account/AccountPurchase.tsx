@@ -1,4 +1,3 @@
-import { NextComponentType, NextPage } from "next"
 import Script from "next/script"
 import Head from "next/head"
 import { useState } from "react"
@@ -13,7 +12,7 @@ type item = {
   price: number
 }
 
-const AccountPurchase: NextPage = () => {
+const AccountPurchase = () => {
   const items = [
     {
       period: 1,

@@ -1,0 +1,23 @@
+.nav-user:hover {
+  cursor: pointer;
+}
+.nav-user:hover .nav-user-item {
+  display: block;
+}
+
+.nav-user-item {
+  display: none;
+  animation: fadeIn 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*# sourceMappingURL=Seller.css.map */

@@ -1,6 +1,6 @@
-import type { NextPage } from "next"
 
-const Footer: NextPage = () => {
+
+const Footer = () => {
   return (
     <footer className="bg-gray-800">
       {/* Info */}

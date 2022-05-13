@@ -1,4 +1,3 @@
-import { NextPage } from "next"
 import Script from "next/script"
 import Head from "next/head"
 import { useState } from "react"
@@ -6,8 +5,8 @@ import Image from "next/image"
 
 import MoneyFormat from "../../../util/MoneyFormat"
 
-const Item: NextPage = () => {
-  const [expandDetail, setExpandDetail] = useState(true)
+const Item = () => {
+  const [expandDetail, setExpandDetail] = useState(false)
 
   const [accountValue, setAccountValue] = useState(100000)
   const [accountValueChange, setAccountValueChange] = useState(50000)
@@ -32,7 +31,7 @@ const Item: NextPage = () => {
         </p>
       </div>
       <div className="col-span-6 md:col-span-2">
-        <p>Mã tin</p>
+        <p>Mã giao dịch</p>
         <p className="font-bold">30041975</p>
       </div>
       <div className="col-span-6 md:col-span-2">
@@ -58,7 +57,9 @@ const Item: NextPage = () => {
       {expandDetail ? (
         <>
           <div className="col-span-12 md:col-span-6 mt-4">
-            <p className="text-md text-center font-bold md:text-lg">TÀI KHOẢN CHÍNH</p>
+            <p className="text-md text-center font-bold md:text-lg">
+              TÀI KHOẢN CHÍNH
+            </p>
             <div className="grid grid-cols-2 text-center">
               <div>
                 <p>Số dư</p>
