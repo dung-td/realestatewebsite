@@ -1,12 +1,20 @@
-import { NextPage } from "next"
+import { useState } from "react"
 import Script from "next/script"
 import Head from "next/head"
+import TextField from "@mui/material/TextField"
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker"
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker"
 
-import { useState } from "react"
+const Filter = () => {
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
-const Filter: NextPage = () => {
+  const handleDateChange = (newValue: Date | null) => {
+    if (newValue != null) setEndDate(newValue)
+  }
+
   return (
-    <div className="grid grid-cols-12 mt-1 gap-4">
+    <div className="grid grid-cols-12 mt-1 gap-4 ml-0 inline-flex items-center ">
       <div className="col-span-4">
         <div className="relative w-full h-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -22,38 +30,29 @@ const Filter: NextPage = () => {
       </div>
 
       <div className="col-span-2">
-        <button
-          id="dropdownTypeSearch"
-          data-dropdown-toggle="dropdown"
-          className="justify-between w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5"
-          type="button"
-        >
-          <span className="material-icons mr-2 text-sm sm:text-base md:text-xl">
-            calendar_month
-          </span>
-          <p className="text-xs sm:text-sm md:text-base">22/02/2022</p>
-          <span className="material-icons">arrow_drop_down</span>
-        </button>
+        <DesktopDatePicker
+          label="Ngày bắt đầu"
+          inputFormat="DD/MM/yyyy"
+          value={endDate}
+          onChange={handleDateChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
       </div>
+      <div className="col-span-2">
+        <DesktopDatePicker
+          label="Ngày kết thúc"
+          inputFormat="DD/MM/yyyy"
+          value={endDate}
+          onChange={handleDateChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </div>
+
       <div className="col-span-2">
         <button
           id="dropdownTypeSearch"
           data-dropdown-toggle="dropdown"
-          className="justify-between w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5"
-          type="button"
-        >
-          <span className="material-icons mr-2 text-sm sm:text-base md:text-xl">
-            calendar_month
-          </span>
-          <p className="text-xs sm:text-sm md:text-base">22/02/2022</p>
-          <span className="material-icons">arrow_drop_down</span>
-        </button>
-      </div>
-      <div className="col-span-2">
-        <button
-          id="dropdownTypeSearch"
-          data-dropdown-toggle="dropdown"
-          className="justify-between inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5"
+          className="justify-between inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-2.5 py-2.5"
           type="button"
         >
           <span className="material-icons mr-2 text-sm sm:text-base md:text-xl">

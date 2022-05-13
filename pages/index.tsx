@@ -1,17 +1,31 @@
-import type { NextPage } from "next"
-import Filter from "../components/User/Filter"
-import Item from "../components/User/Transaction/Item"
-import Tab from "../components/User/Tab"
-import AccountItem from "../components/User/Account/AccountItem"
-import AccountPurchase from "../components/User/Account/AccountPurchase"
-import NotificationListItem from "../components/User/Notification/NotificationListItem"
-import NotificationModel from "../components/User/Notification/NotificationModel"
+import type { NextPage, GetServerSideProps } from "next"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
+import Footer from "../components/Footer"
 
-const Home: NextPage = () => {
+import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
+import ListEstate from "../components/Estate/ListEstate"
+import UploadPost from "../components/UploadPost"
+import ChangePassword from "../components/User/Account/ChangePassword"
+import { useState } from "react"
+
+import { Province } from "../interfaces/Province"
+import EditInformation from "../components/User/Account/EditInformation"
+
+type Props = {
+  provinces: Province[]
+}
+
+const Home = ({ provinces }: Props) => {
+  const [scrollTop, setScrollTop] = useState(0)
+
+  const onScroll = () => {
+    const scrollY = window.scrollY
+    console.log(`onScroll`)
+  }
+
   return (
-    <>
+    <div onScroll={onScroll}>
       <Header />
 
       <div className="grid-full">
@@ -20,14 +34,40 @@ const Home: NextPage = () => {
             <img src="https://phathung.vn/wp-content/uploads/2019/02/ecogreen-banner.jpg" />
           </div>
           <div className="w-4/5 ml-auto mr-auto md:absolute md:w-full md:top-10">
-            <SearchBar />
+            <SearchBar provinces={provinces} />
           </div>
         </div>
 
         {/* ELEMENTS GO HERE PLEASE */}
+        {/* <UploadPost post_type="" provinces={provinces}/> */}
+        <ListEstate/>
+        <ListEstateOnHome/>
+        {/* <EditInformation/> */}
+        
       </div>
-    </>
+
+      <div className="h-96"></div>
+
+      <Footer />
+    </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  console.log("Getting post list from Server...")
+  const res = await fetch(`http://localhost:3001/api/a/province/get`)
+  let data = await res.json()
+  data = data.data
+  let provinces = new Array()
+  data.forEach((province: any) => {
+    let obj = {
+      value: province._id,
+      label: province.provinceName,
+    }
+
+    provinces.push(obj)
+  })
+  return { props: { provinces } }
 }
 
 export default Home

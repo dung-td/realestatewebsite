@@ -1,6 +1,5 @@
-import { NextPage } from "next"
 
-const City: NextPage = () => {
+const City = () => {
   return (
     <div>
       <div>
