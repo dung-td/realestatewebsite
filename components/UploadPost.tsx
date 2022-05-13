@@ -1053,6 +1053,7 @@ const UploadPost = (props: Props) => {
                     }
                 </div>
             </div>
+            
             <Backdrop
                 className="flex flex-col"
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

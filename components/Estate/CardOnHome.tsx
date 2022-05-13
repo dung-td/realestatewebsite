@@ -10,6 +10,7 @@ type Props = {
     address: string;
     author: string;
     upload_date: string;
+    titleColor: string;
 }
 
 const CardOnHome = (props : Props) => {
@@ -48,7 +49,8 @@ const CardOnHome = (props : Props) => {
                         wordWrap: 'break-word',
                         overflow: 'hidden',
                         maxHeight: '3em',
-                        lineHeight: '1.5em'
+                        lineHeight: '1.5em',
+                        color: props.titleColor
                     }}
                 >
                     {props.title}

@@ -39,7 +39,7 @@ const Home = ({ provinces }: Props) => {
         </div>
 
         {/* ELEMENTS GO HERE PLEASE */}
-        {/* <UploadPost post_type="" provinces={provinces}/> */}
+        <UploadPost post_type="" provinces={provinces}/>
         <ListEstate/>
         <ListEstateOnHome/>
         {/* <EditInformation/> */}
