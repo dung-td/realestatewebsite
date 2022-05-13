@@ -5,6 +5,7 @@ import EstateCard from "./EstateCard"
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import MoneyFormat from "../../util/MoneyFormat";
 
 
 const ListEstate: NextPage = () => {
@@ -18,7 +19,7 @@ const ListEstate: NextPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`http://localhost:3001/api/post/list-post-by-purpose?purpose=sale`)
+            const res = await fetch(`http://localhost:3001/api/post/get`)
             let data = await res.json()
             
             data = data.data
@@ -31,7 +32,7 @@ const ListEstate: NextPage = () => {
                     address: post.address,
                     estateType: post.estateType,
                     thumbnail: post.images[0],
-                    price: post.price + " " + post.priceType,
+                    price: MoneyFormat(post.price) + " " + post.priceType,
                     area: post.area,
                     bathroom: post.bathroomNumber,
                     bedroom: post.bedroomNumber,

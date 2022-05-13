@@ -10,6 +10,7 @@ import ChangePassword from "../components/User/Account/ChangePassword"
 import { useState } from "react"
 
 import { Province } from "../interfaces/Province"
+import EditInformation from "../components/User/Account/EditInformation"
 
 type Props = {
   provinces: Province[]
@@ -38,9 +39,10 @@ const Home = ({ provinces }: Props) => {
         </div>
 
         {/* ELEMENTS GO HERE PLEASE */}
-        <UploadPost post_type="" provinces={provinces}/>
+        {/* <UploadPost post_type="" provinces={provinces}/> */}
         <ListEstate/>
-        {/* <ListEstateOnHome/> */}
+        <ListEstateOnHome/>
+        {/* <EditInformation/> */}
         
       </div>
 

@@ -1,6 +1,7 @@
 import type { NextPage } from "next"
 import { useEffect, useState } from "react";
 import CardOnHome from "./CardOnHome";
+import MoneyFormat from "../../util/MoneyFormat";
 
 
 const ListEstateOnHome: NextPage = () => {
@@ -92,7 +93,7 @@ const ListEstateOnHome: NextPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`http://localhost:3001/api/post/list-post-by-purpose?purpose=sale`)
+            const res = await fetch(`http://localhost:3001/api/post/get`)
             let data = await res.json()
             
             data = data.data
@@ -105,7 +106,7 @@ const ListEstateOnHome: NextPage = () => {
                     address: post.address,
                     estateType: post.estateType,
                     thumbnail: post.images[0],
-                    price: post.price,
+                    price: MoneyFormat(post.price) + " " + post.priceType,
                     area: post.area,
                     bathroom: post.bathroomNumber,
                     bedroom: post.bedroomNumber,

@@ -5,6 +5,8 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import MoneyFormat from "../util/MoneyFormat"
 import {
@@ -62,20 +64,15 @@ const UploadPost = (props: Props) => {
     const [postType, setPostType] = useState('');
     const [startDate, setStartDate] = useState('');
 
+    const [backdrop, setBackDrop] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [files, setFiles] = useState('');
-    const [imgUrls, setImgUrls] = useState(new Array());
+    const [checkFieldsAlert, setCheckFieldsAlert] = useState(false);
 
     const purposes = [
         "BÁN", 
         "CHO THUÊ"
     ];
-
-    // const priceUnits = [
-    //     "VNĐ", 
-    //     "Giá / m²",
-    //     "Thỏa thuận",
-    // ];
 
     const documents = [
         "Sổ đỏ/ Sổ hồng", 
@@ -197,87 +194,92 @@ const UploadPost = (props: Props) => {
     }
 
     const handleCreatePost = async () => {
-        // Uploading images to server
-        var base64Arr = new Array()
-        for (let index = 0; index < files.length; index++) {
-            const img = await toBase64(files[index])
-            base64Arr.push(img)
+        if (checkSubmitFields()) {
+            setBackDrop(true)
+            // Uploading images to server
+            var base64Arr = new Array()
+            for (let index = 0; index < files.length; index++) {
+                const img = await toBase64(files[index])
+                base64Arr.push(img)
+            }
+
+            const imgResponse = await fetch('http://localhost:3001/api/image-upload/multiple', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "files": base64Arr
+                }), // string or object
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const urlArr = await imgResponse.json(); //extract JSON from the http response
+
+            // Creating post
+            const response = await fetch('http://localhost:3001/api/post/upload', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "title": title,
+                    "address": displayAddress,
+                    "ownerId": "6263a81788bcf34dbe3030cd",
+                    "postTypeId": postType,
+                    "estateTypeId": category,
+                    "forSaleOrRent": purpose == "BÁN" ? "sale" : "rent",
+                    "location": {
+                        "CityCode": city,
+                        "CityName": getProvinceName(city, props.provinces),
+                        "DistrictId": getDistrictId(district, districts),
+                        "DistrictName": getDistrictName(district, districts),
+                        "DistrictPrefix": getDistrictPrefix(district, districts),
+                        "Label": displayAddress,
+                        "ShortName": "?",
+                        "StreetId": getStreetId(street, streets),
+                        "StreetName": getStreetName(street, streets),
+                        "StreetPrefix": "Đường",
+                        "TextSearch": displayAddress,
+                        "WardId": getWardId(quarter, wards),
+                        "WardName": getWardName(quarter, wards),
+                        "WardPrefix": getWardPrefix(quarter, wards)
+                    },
+                    "cor": {
+                        "lat": 0,
+                        "Lng": 0
+                    },
+                    "belongToProject": {
+                        "projectId": 0,
+                        "projectName": "SMART"
+                    },
+                    "description": description,
+                    "images": urlArr.data,
+                    "legalDocuments": document,
+                    "publishedDate": "13/05/2022",
+                    "expiredDate": "23/05/2022",
+                    "price": price,
+                    "priceType": priceUnit,
+                    "area": areaSqr,
+                    "floorNumber": floor,
+                    "bathroomNumber": bathrooms,
+                    "bedroomNumber": bedrooms,
+                    "direction": direction,
+                    "furniture": furniture,
+                    "width": width,
+                    "depth": depth,
+                    "roadWidth": roadWidth,
+                    "facade": 0,
+                    "status": "waiting",
+                }), // string or object
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const myJson = await response.json();
+            console.log("Create post result: " + myJson.token)
+            setBackDrop(false)
+            setShowAlert(true)
+        } else {
+            setCheckFieldsAlert(true)
         }
-
-        const imgResponse = await fetch('http://localhost:3001/api/image-upload/multiple', {
-            method: 'POST',
-            body: JSON.stringify({
-                "files": base64Arr
-            }), // string or object
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const urlArr = await imgResponse.json(); //extract JSON from the http response
-        setImgUrls(urlArr.data)
-
-        // // Creating post
-        const response = await fetch('http://localhost:3001/api/post/upload', {
-            method: 'POST',
-            body: JSON.stringify({
-                "title": title,
-                "address": displayAddress,
-                "ownerId": "6263a81788bcf34dbe3030cd",
-                "postTypeId": postType,
-                "estateTypeId": category,
-                "forSaleOrRent": purpose == "BÁN" ? "sale" : "rent",
-                "location": {
-                    "CityCode": city,
-                    "CityName": getProvinceName(city, props.provinces),
-                    "DistrictId": getDistrictId(district, districts),
-                    "DistrictName": getDistrictName(district, districts),
-                    "DistrictPrefix": getDistrictPrefix(district, districts),
-                    "Label": displayAddress,
-                    "ShortName": "?",
-                    "StreetId": getStreetId(street, streets),
-                    "StreetName": getStreetName(street, streets),
-                    "StreetPrefix": "Đường",
-                    "TextSearch": displayAddress,
-                    "WardId": getWardId(quarter, wards),
-                    "WardName": getWardName(quarter, wards),
-                    "WardPrefix": getWardPrefix(quarter, wards)
-                },
-                "cor": {
-                    "lat": 0,
-                    "Lng": 0
-                },
-                "belongToProject": {
-                    "projectId": 0,
-                    "projectName": "SMART"
-                },
-                "description": description,
-                "images": urlArr.data,
-                "legalDocuments": document,
-                "publishedDate": "13/05/2022",
-                "expiredDate": "23/05/2022",
-                "price": price,
-                "priceType": priceUnit,
-                "area": areaSqr,
-                "floorNumber": floor,
-                "bathroomNumber": bathrooms,
-                "bedroomNumber": bedrooms,
-                "direction": direction,
-                "furniture": furniture,
-                "width": width,
-                "depth": depth,
-                "roadWidth": roadWidth,
-                "facade": 0,
-                "status": "waiting",
-            }), // string or object
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        const myJson = await response.json();
-        console.log("Create post result: " + myJson.token)
-        setShowAlert(true)
     }
 
     const toBase64 = (obj: any) => new Promise((resolve, reject) => {
@@ -286,6 +288,15 @@ const UploadPost = (props: Props) => {
         reader.onload = () => resolve(reader.result?.toString());
         reader.onerror = error => reject(error);
     });
+
+    const checkSubmitFields = () => {
+        if (postType == '' || purpose == '' || category == '' ||displayAddress == '' || city == ''
+            || district == '' || quarter == '' || street == '' || title =='' || description == ''
+            || areaSqr == 0 || price == 0 || priceUnit == '' || document == '' || images.length < 0) {
+                return false
+            }
+        return true
+    }
 
     useEffect(() => {
         const fetchEstateTypes = async () => {
@@ -717,7 +728,7 @@ const UploadPost = (props: Props) => {
                                             Khác
                                             </label>
                                             <input
-                                                type="email"
+                                                type="text"
                                                 id="doc_else"
                                                 className="bg-white ml-3 border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                                 placeholder="Nhập"
@@ -749,7 +760,7 @@ const UploadPost = (props: Props) => {
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Chiều rộng</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             id="width"
                                             className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="(m)"
@@ -762,7 +773,7 @@ const UploadPost = (props: Props) => {
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Số phòng ngủ</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             id="bedrooms"
                                             className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="0"
@@ -775,7 +786,7 @@ const UploadPost = (props: Props) => {
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Chiều sâu</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             id="depth"
                                             className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="(m)"
@@ -788,7 +799,7 @@ const UploadPost = (props: Props) => {
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Số phòng tắm</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             id="bathrooms"
                                             className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="0"
@@ -801,7 +812,7 @@ const UploadPost = (props: Props) => {
                                     <div className="flex flex-row mt-2 mb-2 items-center justify-between" style={{width: '45%'}}>
                                         <label className="block text-sm font-medium text-black">Đường rộng</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             id="entrance-width"
                                             className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                                             placeholder="(m)"
@@ -1027,8 +1038,29 @@ const UploadPost = (props: Props) => {
                             </Alert>
                         </div>
                     }
+
+
+                    {/* /* Check all fields alert */}
+                    {
+                        checkFieldsAlert ?
+                        <div className="w-full lg:w-1/2 mx-auto mt-6">
+                            <Alert severity="error" onClose={() => {setCheckFieldsAlert(false)}}>
+                                <AlertTitle>Thất bại</AlertTitle>
+                                Kiểm tra lại tất cả thông tin — <strong>Vui lòng thử lại!</strong>
+                            </Alert>
+                        </div>
+                        : null
+                    }
                 </div>
             </div>
+            <Backdrop
+                className="flex flex-col"
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={backdrop}
+            >
+                <CircularProgress color="inherit" />
+                <p className="mt-4 text-base text-white">Đang thực hiện. Bạn vui lòng chờ chút nhé!</p>
+            </Backdrop>
         </>
     )
 }
