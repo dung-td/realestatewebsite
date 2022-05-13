@@ -6,7 +6,8 @@ import CollapseDescription from '../../components/EstateDetail/CollapseDescripti
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
 import { PhoneIcon } from '@heroicons/react/solid'
 import {Unit} from '../../Enum'
-
+import PostContent from '../../components/EstateDetail/PostContent'
+import PostDto from '../../interface/PostDTO'
 interface TitleSectionProps{
     title: string,
     issuedDate?: string,
@@ -28,18 +29,21 @@ const TitleSection = (props: TitleSectionProps)=>{
         </div>
     )
 }
-
+interface IPost{
+    post: PostDto
+}
 const images = ["https://file4.batdongsan.com.vn/2022/01/25/20220125103335-9e40_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-d128_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-c7fe_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-d128_wm.jpg",
 "https://file4.batdongsan.com.vn/2022/01/25/20220125103335-36dc_wm.jpg",]
-const EstateDetail: NextPage = ()=>{
-    const [showLess, setShowLess] = useState(false)
+const EstateDetail: NextPage<IPost> = (props)=>{
+    const {owner} = props.post
     return (    
         <div className="sm:w-[1200px] mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
             <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
-                <ImageCarousel imageList={images} className="border-2xl overflow-clip rounded-lg"/>
+                <PostContent post={props.post}/>
+                {/* <ImageCarousel imageList={images} className="border-2xl overflow-clip rounded-lg"/>
                 <div className="p-3">
                     <TitleSection 
                     title="Bán nhà một mặt tiền - AEON Bình Dương"
@@ -78,14 +82,17 @@ const EstateDetail: NextPage = ()=>{
                         address="Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương"
                         attributeList={[{name: "Diện tích", value: "50", unit: Unit.AREA}, {name: "Số tầng", value: "2"}, {name: "Chiều ngang", value: "12", unit: Unit.LENGTH}, {name:"Chiều sâu", value: "20", unit:Unit.LENGTH}]}
                     />
-                </div>            
+                </div>             */}
+
             </div>
-            <div className="container flex sm:border-black sm:w-1/4 sm:h-[50vh] sm:flex-col sm:justify-center items-center justify-around" id="sideContent">
+            <div className="container flex sm:border-gray-300 sm:w-1/4 sm:h-[50vh] sm:flex-col sm:justify-center items-center justify-around border border-gray-300" id="sideContent">
                 <img className="w-20 h-20 rounded-full bg-cyan-500"
-                src="https://cdn.pixabay.com/photo/2017/01/08/13/58/cube-1963036__340.jpg"/>
-                <p className="my-1">Nguyễn Văn A</p>
+                src={owner.avatar}/>
+                <p className="my-1">{owner.name}</p>
                 <a className="italic cursor-pointer">Xem thêm bài đăng khác</a>
-                <a href="tel:0000000000" className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static"><PhoneIcon className='inline h-5 w-5'/> 0989 898 989</a>
+                <a href={`tel:${owner.phone}`} className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static">
+                    <PhoneIcon className='inline h-5 w-5'/>{owner.phone}
+                </a>
             </div>
             <br/>
             <br/>
@@ -94,3 +101,38 @@ const EstateDetail: NextPage = ()=>{
     )
 }
 export default EstateDetail
+
+
+interface IPathParam{
+    params:{
+        estateTypeSlug: string,
+        estatePostSlug: string
+    }
+}
+export async function getStaticPaths() {
+    // Call an external API endpoint to get posts
+    const res = await fetch('http://localhost:3001/api/post/slug')
+    const data = await res.json()
+    const {slugs} = data
+    console.log(slugs)
+    // We'll pre-render only these paths at build time.
+    // { fallback: false } means other routes should 404.
+    return { paths: slugs, fallback: false }
+  }
+  
+
+export async function getStaticProps (pathParam: IPathParam) {
+    const { params } = pathParam
+    const res = await fetch(`http://localhost:3001/api/post/slug?slug=${params.estatePostSlug}`)
+    const data = await res.json()
+    const {post} =data
+    console.log(post)
+    // By returning { props: { posts } }, the Blog component
+    // will receive `posts` as a prop at build time
+    return {
+      props: {
+        post,
+      },
+    }
+  }
+  
