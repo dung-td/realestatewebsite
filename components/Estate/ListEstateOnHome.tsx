@@ -132,7 +132,7 @@ const ListEstateOnHome: NextPage = () => {
                         <hr className="w-1/3 ml:0 -mt-3 mb-4 border-black"/>
                     </div>
                 
-                    <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6">
+                    <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-6">
                         {
                             posts.map((item) => {
                                 return (

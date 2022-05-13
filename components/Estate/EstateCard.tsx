@@ -11,6 +11,7 @@ type Props = {
     rooms: string;
     address: string;
     author: string;
+    titleColor: string;
     author_phone_number: string;
 }
 

@@ -38,6 +38,7 @@ const ListEstate: NextPage = () => {
                     bedroom: post.bedroomNumber,
                     ownerName: post.owner.name,
                     ownerPhone: post.owner.phone,
+                    titleColor: post.postType.title_color
                 }
                 posts.push(obj)
             })
@@ -92,6 +93,7 @@ const ListEstate: NextPage = () => {
                                         areaSqr={item.area}
                                         rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
+                                        titleColor={item.titleColor}
                                         author={item.ownerName}
                                         author_phone_number={item.ownerPhone}
                                     />
