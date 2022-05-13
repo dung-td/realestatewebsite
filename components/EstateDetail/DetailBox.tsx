@@ -1,4 +1,4 @@
-import {Unit} from '../Enum'
+import {Unit} from '../../Enum'
 const getUnitComponent = (unit?: Unit) =>
 {
     if (!unit) return null;
@@ -30,7 +30,7 @@ const DetailBox = (props: DetailProps) => {
             <div className='mb-3'><b>Địa chỉ:</b> <span>{props.address}</span></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 mb-2">
                 {props.attributeList.map((val) =>(
-                    <div className="container border-b border-y-black container pb-2 mb-2 flex justify-between">
+                    <div className="container border-b border-y-black pb-2 mb-2 flex justify-between">
                         <b>{val.name}:</b> <div>{val.value} {getUnitComponent(val.unit)}</div>
                     </div>
                 ))}

@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import type { NextPage } from "next"
-import ImageCarousel from '../../components/ImageCarousel'
-import DetailBox from "../../components/DetailBox"
-import CollapseDescription from '../../components/CollapseDescription'
+import ImageCarousel from '../../components/EstateDetail/ImageCarousel'
+import DetailBox from "../../components/EstateDetail/DetailBox"
+import CollapseDescription from '../../components/EstateDetail/CollapseDescription'
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
 import { PhoneIcon } from '@heroicons/react/solid'
 import {Unit} from '../../Enum'
@@ -37,10 +37,8 @@ const images = ["https://file4.batdongsan.com.vn/2022/01/25/20220125103335-9e40_
 const EstateDetail: NextPage = ()=>{
     const [showLess, setShowLess] = useState(false)
     return (    
-        <div className="container mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
+        <div className="sm:w-[1200px] mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
             <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
-                {/* <img src="https://jes.edu.vn/wp-content/uploads/2017/10/h%C3%ACnh-%E1%BA%A3nh.jpg" width="100%"
-                    className="border-2xl overflow-clip rounded-lg"></img> */}
                 <ImageCarousel imageList={images} className="border-2xl overflow-clip rounded-lg"/>
                 <div className="p-3">
                     <TitleSection 
