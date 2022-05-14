@@ -2,14 +2,15 @@ import type { NextPage, GetServerSideProps } from "next"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
-
+import City from "../components/Home/City"
 import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
 import ListEstate from "../components/Estate/ListEstate"
 import UploadPost from "../components/UploadPost"
 import ChangePassword from "../components/User/Account/ChangePassword"
 import { useState } from "react"
-
 import { Province } from "../interfaces/Province"
+import server from "../interfaces/server"
+import Map from "../components/Map"
 import EditInformation from "../components/User/Account/EditInformation"
 
 type Props = {
@@ -24,6 +25,9 @@ const Home = ({ provinces }: Props) => {
     console.log(`onScroll`)
   }
 
+  const onCallBackMap = (lat: number, lng: number) => {
+    console.log(lat + "/" + lng)
+  }
   return (
     <div onScroll={onScroll}>
       <Header />
@@ -37,6 +41,8 @@ const Home = ({ provinces }: Props) => {
             <SearchBar provinces={provinces} />
           </div>
         </div>
+
+        <City provinces={provinces} />
 
         {/* ELEMENTS GO HERE PLEASE */}
         <UploadPost post_type="" provinces={provinces}/>
@@ -55,14 +61,16 @@ const Home = ({ provinces }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   console.log("Getting post list from Server...")
-  const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/a/province/get`)
+  const res = await fetch(`${server}/a/province/get`)
   let data = await res.json()
   data = data.data
   let provinces = new Array()
+  let bigCity = ["SG", "HN", "DDN", "BD", "DN"]
   data.forEach((province: any) => {
     let obj = {
       value: province._id,
       label: province.provinceName,
+      slug: province.slug,
     }
 
     provinces.push(obj)

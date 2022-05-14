@@ -2,182 +2,228 @@ import { useState } from "react"
 import Sidebar from "../../components/admin/Dashboard/Sidebar"
 import Header from "../../components/admin/Header"
 import Footer from "../../components/Footer"
-import Filter from "../../components/User/Filter"
-import Item from "../../components/admin/Dashboard/Post/Item"
-import Tabs from "@mui/material/Tabs"
-import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  }
-}
+import Accordion from "@mui/material/Accordion"
+import AccordionSummary from "@mui/material/AccordionSummary"
+import AccordionDetails from "@mui/material/AccordionDetails"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import type { NextPage, GetServerSideProps } from "next"
+import AdminPost from "./AdminPost"
+import AdminUser from "./AdminUser"
+import server from "../../interfaces/server"
 
 const Home = () => {
-  const [tabValue, setTabValue] = useState(0)
+  const [select, setSelect] = useState("post")
+  const [selectPostType, setSelectPostType] = useState("waiting")
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
+  const onSidebarChange = (type: string) => {
+    console.log(type)
   }
 
   return (
     <div className="">
       <Header />
 
-      <Sidebar />
-
-      <div className="ml-72 p-8">
-        <div className="grid grid-full">
-          <div className="mb-4">
-            <p className="font-bold text-xl">Tin đang chờ duyệt</p>
-            <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
-          </div>
-
-          <Filter />
-
-          <Box sx={{ width: "100%" }}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <Tabs
-                value={tabValue}
-                onChange={handleTabChange}
-                aria-label="basic tabs example"
+      <aside className="absolute w-72" aria-label="Sidebar">
+        <div className="overflow-y-auto h-screen py-4 px-3 bg-gray-50 rounded">
+          <ul className="space-y-2">
+            {/* User */}
+            <li>
+              <a
+                href="#"
+                className="flex space-x-4 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100"
               >
-                <Tab label="Nhà cho thuê" {...a11yProps(0)} />
-                <Tab label="Nhà bán/ sang nhượng" {...a11yProps(1)} />
-                <Tab label="Dự án" {...a11yProps(2)} />
-              </Tabs>
-            </Box>
-
-            <TabPanel value={tabValue} index={0}>
-              <Item />
-            </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-              <Item />
-              <Item />
-            </TabPanel>
-            <TabPanel value={tabValue} index={0}></TabPanel>
-          </Box>
-
-          <div className="grid">
-            <ul className="inline-flex items-center -space-x-px">
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                <div className="rounded-full bg-black h-10 w-10"></div>
+                <p className="font-medium text-lg">batdongsan88 - Admin</p>
+              </a>
+            </li>
+            {/* Quản lý tin đăng */}
+            <li>
+              <Accordion expanded={true}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  <span className="sr-only">Previous</span>
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <span className="material-icons">list</span>
+                  <span
+                    className="flex-1 ml-3 text-left whitespace-nowrap"
+                    sidebar-toggle-item="dropdown-1"
                   >
-                    <path
-                      fill-Rule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clip-Rule="evenodd"
-                    ></path>
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    Quản lý tin đăng
+                  </span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul id="dropdown-1" className="space-y-2">
+                    <li>
+                      <a
+                        onClick={() => {
+                          setSelect("post")
+                          setSelectPostType("waiting")
+                        }}
+                        className={`${
+                          select == "post" && selectPostType == "waiting"
+                            ? `border-r-4 border-[#1976d2] bg-blue-50`
+                            : ``
+                        } cursor-pointer  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                      >
+                        Tin đang chờ duyệt
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={() => {
+                          setSelect("post")
+                          setSelectPostType("approved")
+                        }}
+                        className={`${
+                          select == "post" && selectPostType == "approved"
+                            ? `border-r-4 border-[#1976d2] bg-blue-50`
+                            : ``
+                        }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                      >
+                        Tin đã duyệt
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={() => {
+                          setSelect("post")
+                          setSelectPostType("handle")
+                        }}
+                        className={`${
+                          select == "post" && selectPostType == "handle"
+                            ? `border-r-4 border-[#1976d2] bg-blue-50`
+                            : ``
+                        }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                      >
+                        Tin chờ xử lý
+                      </a>
+                    </li>
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </li>
+            {/* Quản lý tài khoản */}
+            <li>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  1
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  2
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  aria-current="page"
-                  className="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                >
-                  3
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  4
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  5
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span className="sr-only">Next</span>
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <span className="material-icons">person</span>
+                  <span
+                    className="flex-1 ml-3 text-left whitespace-nowrap"
+                    sidebar-toggle-item="dropdown-1"
                   >
-                    <path
-                      fill-Rule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-Rule="evenodd"
-                    ></path>
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
+                    Quản lý tài khoản
+                  </span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul id="dropdown-1" className="space-y-2">
+                    <li>
+                      <a
+                        onClick={() => {
+                          setSelect("userList")
+                        }}
+                        className={`${
+                          select == "userList"
+                            ? `border-r-4 border-[#1976d2] bg-blue-50`
+                            : ``
+                        }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                      >
+                        Danh sách người dùng
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={() => {
+                          setSelect("userWrong")
+                        }}
+                        className={`${
+                          select == "userWrong"
+                            ? `border-r-4 border-[#1976d2] bg-blue-50`
+                            : ``
+                        }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                      >
+                        Xử lý vi phạm
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={() => {
+                          setSelect("userStatistic")
+                        }}
+                        className={`${
+                          select == "userStatistic"
+                            ? `border-r-4 border-[#1976d2] bg-blue-50`
+                            : ``
+                        }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                      >
+                        Thống kê
+                      </a>
+                    </li>
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </li>
+            {/* Quản lý dự án */}
+            <li>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <span className="material-icons">apartment</span>
+                  <span
+                    className="flex-1 ml-3 text-left whitespace-nowrap"
+                    sidebar-toggle-item="dropdown-1"
+                  >
+                    Quản lý dự án
+                  </span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul id="dropdown-1" className="space-y-2">
+                    <li>
+                      <a
+                        href="#"
+                        className="cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Danh sách dự án
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                      >
+                        Dự án chờ phê duyệt
+                      </a>
+                    </li>
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </li>
+          </ul>
         </div>
-      </div>
+      </aside>
 
+      <div className="min-h-screen">
+        {select == "post" ? <AdminPost type={selectPostType} /> : null}
+      </div>
       <Footer />
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await fetch(`${server}/post/get?s=waiting`)
+  let data = await res.json()
+  data = data.data
+
+  return { props: { data } }
 }
 
 export default Home

@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+Powered by [TailwindCSS](https://tailwindcss.com/), [MUI](https://mui.com/) [TypeScript](https://www.typescriptlang.org/)
+
 ## Getting Started
 
 First, run the development server:
@@ -12,7 +14,10 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Backend service
 
-### Demo Website
+You can find out our backend service for this project [hear](https://github.com/nointh/real-estate-backend).
+
+## Demo Website
 
 Visit [https://batdongsan88.vercel.app/](https://batdongsan88.vercel.app/)!

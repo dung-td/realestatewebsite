@@ -1,6 +1,7 @@
 export type Province = {
   label: string
   value: number
+  slug: string
 }
 
 type District = {

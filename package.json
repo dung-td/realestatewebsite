@@ -10,19 +10,28 @@
     "watch": "sass --watch styles/sass:public/css"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "@date-io/moment": "^2.13.2",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.4",
+    "@mui/x-data-grid": "^5.10.0",
     "@mui/x-date-pickers": "^5.0.0-alpha.2",
+    "@reduxjs/toolkit": "^1.8.1",
     "flowbite": "^1.4.1",
+    "mapbox-gl": "^2.8.2",
     "moment": "^2.29.3",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-select": "^5.3.1",
+    "redux": "^4.2.0",
+    "react-responsive-carousel": "^3.2.23",
     "react-select": "^5.3.1"
   },
   "devDependencies": {
+    "@types/mapbox-gl": "^2.7.1",
     "@types/node": "17.0.22",
     "@types/react": "17.0.41",
     "autoprefixer": "^10.4.4",
