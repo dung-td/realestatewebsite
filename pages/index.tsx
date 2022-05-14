@@ -3,13 +3,10 @@ import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
 import City from "../components/Home/City"
-import { setAge } from "../redux/reducers/userSlice"
-import store from "../redux/store"
-import { userState } from "../redux/reducers/selectors"
-
 import { useState } from "react"
-
 import { Province } from "../interfaces/Province"
+import server from "../interfaces/server"
+import Map from "../components/Map"
 
 type Props = {
   provinces: Province[]
@@ -23,6 +20,9 @@ const Home = ({ provinces }: Props) => {
     console.log(`onScroll`)
   }
 
+  const onCallBackMap = (lat: number, lng: number) => {
+    console.log(lat + "/" + lng)
+  }
   return (
     <div onScroll={onScroll}>
       <Header />
@@ -38,6 +38,16 @@ const Home = ({ provinces }: Props) => {
         </div>
 
         <City provinces={provinces} />
+
+        <div className="grid">
+          <Map
+            type="view"
+            lng={106.80309701313547}
+            lat={10.870314445802961}
+            callback={onCallBackMap}
+          />
+        </div>
+
         {/* ELEMENTS GO HERE PLEASE */}
       </div>
 
@@ -50,7 +60,7 @@ const Home = ({ provinces }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   console.log("Getting post list from Server...")
-  const res = await fetch(`http://localhost:3031/api/a/province/get`)
+  const res = await fetch(`${server}/a/province/get`)
   let data = await res.json()
   data = data.data
   let provinces = new Array()

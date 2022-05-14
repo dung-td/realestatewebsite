@@ -1,17 +1,20 @@
-import { useState, Fragment, MouseEvent, KeyboardEvent } from "react"
+import { useState, Fragment, MouseEvent, KeyboardEvent, useEffect } from "react"
+import Link from "next/link"
 import Drawer from "@mui/material/Drawer"
-import Button from "@mui/material/Button"
 import List from "@mui/material/List"
 import Box from "@mui/material/Box"
-import Divider from "@mui/material/Divider"
-import ListItem from "@mui/material/ListItem"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import Tooltip from "@mui/material/Tooltip"
+import server from "../interfaces/server"
+
+type EstateType = {
+  _id: string
+  name: string
+  slug: string
+}
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [state, setState] = useState(false)
+  const [typeLinks, setTypeLinks] = useState([])
 
   const toggleDrawer =
     (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
@@ -25,6 +28,14 @@ const Header = () => {
 
       setState(open)
     }
+
+  useEffect(() => {
+    fetch(`${server}/a/estate-type/get`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTypeLinks(data.data)
+      })
+  }, [])
 
   return (
     <div className="bg-white">
@@ -262,25 +273,18 @@ const Header = () => {
                     >
                       Nhà đất cho thuê
                     </a>
-                    <div className="nav-link-item absolute mt-40 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                      >
-                        Cho thuê nhà riêng
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                      >
-                        Cho thuê căn hộ, chung cư
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                      >
-                        Cho thuê nhà biệt thự
-                      </a>
+                    <div className="nav-link-item absolute top-24 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                      {typeLinks.map((typeLink: EstateType) => {
+                        return (
+                          <a
+                            key={typeLink._id}
+                            href={typeLink.slug}
+                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                          >
+                            Cho thuê {typeLink.name}
+                          </a>
+                        )
+                      })}
                     </div>{" "}
                   </div>
                   <div className="flex items-center nav-item">
@@ -290,25 +294,18 @@ const Header = () => {
                     >
                       Nhà đất bán
                     </a>
-                    <div className="nav-link-item absolute mt-40 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                      >
-                        Bán nhà riêng
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                      >
-                        Bán căn hộ, chung cư
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                      >
-                        Bán nhà biệt thự
-                      </a>
+                    <div className="z-10 nav-link-item absolute top-24 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                      {typeLinks.map((typeLink: EstateType) => {
+                        return (
+                          <a
+                            key={typeLink._id}
+                            href="#"
+                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                          >
+                            Bán {typeLink.name}
+                          </a>
+                        )
+                      })}
                     </div>{" "}
                   </div>
                   <div className="flex items-center nav-item">
@@ -411,12 +408,11 @@ const Header = () => {
                     </div>
                   ) : (
                     <>
-                      <a
-                        href="/admin"
-                        className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
-                      >
-                        Đăng nhập
-                      </a>
+                      <Link passHref href="/admin">
+                        <div className="cursor-pointer p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200">
+                          Đăng nhập{" "}
+                        </div>
+                      </Link>
 
                       <a
                         href="#"

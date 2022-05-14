@@ -2,7 +2,6 @@ import { useState } from "react"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
-import Typography from "@mui/material/Typography"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
 const Sidebar = () => {
@@ -40,10 +39,7 @@ const Sidebar = () => {
                 <AccordionDetails>
                   <ul id="dropdown-1" className="space-y-2">
                     <li>
-                      <a
-                        href="#"
-                        className="border-r-4 border-[#1976d2] bg-blue-50 flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
-                      >
+                      <a className="border-r-4 border-[#1976d2] bg-blue-50 flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100">
                         Tin đang chờ duyệt
                       </a>
                     </li>
