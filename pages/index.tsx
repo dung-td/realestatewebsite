@@ -44,21 +44,11 @@ const Home = ({ provinces }: Props) => {
 
         <City provinces={provinces} />
 
-        <div className="grid">
-          <Map
-            type="view"
-            lng={106.80309701313547}
-            lat={10.870314445802961}
-            callback={onCallBackMap}
-          />
-        </div>
-
         {/* ELEMENTS GO HERE PLEASE */}
-        {/* <UploadPost post_type="" provinces={provinces}/> */}
-        <ListEstate/>
-        <ListEstateOnHome/>
-        {/* <EditInformation/> */}
-        
+        {/* <UploadPost post_type="" provinces={provinces} /> */}
+        <ListEstate />
+        <ListEstateOnHome />
+        <EditInformation />
       </div>
 
       <div className="h-96"></div>

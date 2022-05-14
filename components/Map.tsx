@@ -13,11 +13,7 @@ const Map = ({ type, lng, lat, callback }: any) => {
   let markerLng = useRef(lng)
   let markerLat = useRef(lat)
 
-  const [zoom, setZoom] = useState(17)
-
-  const click = () => {
-    callback(markerLng.current, markerLat.current)
-  }
+  const [zoom, setZoom] = useState(type == "view" ? 17 : 5)
 
   useEffect(() => {
     const map = new mapboxgl.Map({
@@ -34,6 +30,7 @@ const Map = ({ type, lng, lat, callback }: any) => {
     marker.on("dragend", () => {
       markerLng.current = marker.getLngLat().lng
       markerLat.current = marker.getLngLat().lat
+      callback(markerLng.current, markerLat.current)
     })
 
     map.addControl(new mapboxgl.NavigationControl(), "top-right")
@@ -50,8 +47,7 @@ const Map = ({ type, lng, lat, callback }: any) => {
 
   return (
     <div>
-      <button onClick={click}>Click</button>
-      <div className="h-[32rem] " id="mapConatainer" />
+      <div className="h-[32rem] w-full" id="mapConatainer" />
     </div>
   )
 }
