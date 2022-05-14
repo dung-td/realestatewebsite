@@ -1,10 +1,10 @@
 import type { NextPage, GetServerSideProps } from "next"
 import { useState, useEffect } from "react"
-import { PostCard } from "../../interfaces/PostCard"
 import EstateCard from "./EstateCard"
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import server from "../../interfaces/server";
 import MoneyFormat from "../../util/MoneyFormat";
 
 
@@ -19,7 +19,7 @@ const ListEstate: NextPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/post/get`)
+            const res = await fetch(`${server}/post/get`)
             let data = await res.json()
             
             data = data.data

@@ -26,6 +26,7 @@ const CardOnHome = (props : Props) => {
                 <img
                     className="w-full h-40 max-h-48 object-cover transition group-hover:-translate-y-1 group-hover:scale-110 duration-300"
                     src={props.imageUrl}
+                    style={{imageRendering: '-webkit-optimize-contrast'}}
                     alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
                 />
 

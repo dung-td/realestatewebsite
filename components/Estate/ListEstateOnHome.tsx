@@ -1,5 +1,6 @@
 import type { NextPage } from "next"
 import { useEffect, useState } from "react";
+import server from "../../interfaces/server";
 import CardOnHome from "./CardOnHome";
 import MoneyFormat from "../../util/MoneyFormat";
 
@@ -10,7 +11,7 @@ const ListEstateOnHome: NextPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/post/get`)
+            const res = await fetch(`${server}/post/get`)
             let data = await res.json()
             
             data = data.data
