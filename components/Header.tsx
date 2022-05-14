@@ -25,7 +25,6 @@ const Header = () => {
       ) {
         return
       }
-
       setState(open)
     }
 

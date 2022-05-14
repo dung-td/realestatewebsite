@@ -10,6 +10,7 @@
     "watch": "sass --watch styles/sass:public/css"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "@date-io/moment": "^2.13.2",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
@@ -25,7 +26,9 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-select": "^5.3.1",
-    "redux": "^4.2.0"
+    "redux": "^4.2.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-select": "^5.3.1"
   },
   "devDependencies": {
     "@types/mapbox-gl": "^2.7.1",
