@@ -1,14 +1,17 @@
 import { NextPage, GetServerSideProps } from "next"
 import React, { useState, Component, useEffect } from "react"
 import Box from "@mui/material/Box"
-import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
+import InputLabel from "@mui/material/InputLabel"
 import FormControl from "@mui/material/FormControl"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Typography from "@mui/material/Typography"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
+import Autocomplete from "@mui/material/Autocomplete"
 import { Province } from "../interfaces/Province"
+import TextField from "@mui/material/TextField"
+import server from "../interfaces/server"
 
 type Props = {
   provinces: Province[]
@@ -108,6 +111,14 @@ const SearchBar = ({ provinces }: Props) => {
     { value: "mat-tien5", label: "> 500m2" },
   ]
 
+  const projects = [
+    { value: "project-1", label: "Vinhomes 1" },
+    { value: "project-2", label: "Vinhomes 2" },
+    { value: "project-3", label: "Vinhomes 3" },
+    { value: "project-4", label: "Vinhomes 4" },
+    { value: "project-5", label: "Vinhomes 5" },
+  ]
+
   const onSearch = () => {
     console.log(search)
   }
@@ -182,7 +193,7 @@ const SearchBar = ({ provinces }: Props) => {
 
   const fetchDistrict = async (provinceId: string | undefined) => {
     if (provinceId !== undefined) {
-      fetch(`http://localhost:3031/api/a/district/get?p=${provinceId}`)
+      fetch(`${server}/a/district/get?p=${provinceId}`)
         .then((res) => res.json())
         .then((data) => {
           let ds = new Array()
@@ -200,7 +211,7 @@ const SearchBar = ({ provinces }: Props) => {
 
   const fetchWard = async (districtId: string | undefined) => {
     if (districtId !== undefined) {
-      fetch(`http://localhost:3031/api/a/ward/get?d=${districtId}`)
+      fetch(`${server}/a/ward/get?d=${districtId}`)
         .then((res) => res.json())
         .then((data) => {
           let ws = new Array()
@@ -218,7 +229,7 @@ const SearchBar = ({ provinces }: Props) => {
 
   const fetchStreet = async (districtId: string | undefined) => {
     if (districtId !== undefined) {
-      fetch(`http://localhost:3031/api/a/street/get?d=${districtId}`)
+      fetch(`${server}/a/street/get?d=${districtId}`)
         .then((res) => res.json())
         .then((data) => {
           let ss = new Array()
@@ -308,6 +319,7 @@ const SearchBar = ({ provinces }: Props) => {
               <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
                 <FormControl fullWidth>
                   <InputLabel id="label-input-city">Tỉnh/ thành phố</InputLabel>
+
                   <Select
                     labelId="label-input-city"
                     id="input-city"
@@ -431,6 +443,26 @@ const SearchBar = ({ provinces }: Props) => {
                 <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
                   <FormControl fullWidth>
                     <InputLabel id="label-input-ward">Đường/ phố</InputLabel>
+                    <Select
+                      labelId="label-input-street"
+                      id="input-ward"
+                      value={search.street}
+                      label="Đường/ phố"
+                      onChange={onStreetChange}
+                    >
+                      {streets.map((street) => {
+                        return (
+                          <MenuItem key={street.value} value={street.value}>
+                            {street.label}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                  <FormControl fullWidth>
+                    <InputLabel id="label-input-ward">Dự án</InputLabel>
                     <Select
                       labelId="label-input-street"
                       id="input-ward"
