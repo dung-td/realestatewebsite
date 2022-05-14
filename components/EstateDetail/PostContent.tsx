@@ -1,6 +1,6 @@
 import { ClockIcon, HeartIcon, HomeIcon } from "@heroicons/react/outline"
 import { Unit, getUnitComponent } from "../../Enum"
-import PostDto from "../../interface/PostDTO"
+import PostDto from "../../interfaces/PostDTO"
 import CollapseDescription from "./CollapseDescription"
 import DetailBox from "./DetailBox"
 import ImageCarousel from "./ImageCarousel"
