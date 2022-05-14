@@ -3,10 +3,15 @@ import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
 import City from "../components/Home/City"
+import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
+import ListEstate from "../components/Estate/ListEstate"
+import UploadPost from "../components/UploadPost"
+import ChangePassword from "../components/User/Account/ChangePassword"
 import { useState } from "react"
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 import Map from "../components/Map"
+import EditInformation from "../components/User/Account/EditInformation"
 
 type Props = {
   provinces: Province[]
@@ -49,6 +54,11 @@ const Home = ({ provinces }: Props) => {
         </div>
 
         {/* ELEMENTS GO HERE PLEASE */}
+        {/* <UploadPost post_type="" provinces={provinces}/> */}
+        <ListEstate/>
+        <ListEstateOnHome/>
+        {/* <EditInformation/> */}
+        
       </div>
 
       <div className="h-96"></div>
