@@ -55,7 +55,7 @@ const Home = ({ provinces }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   console.log("Getting post list from Server...")
-  const res = await fetch(`http://localhost:3001/api/a/province/get`)
+  const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/a/province/get`)
   let data = await res.json()
   data = data.data
   let provinces = new Array()

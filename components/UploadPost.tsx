@@ -94,7 +94,7 @@ const UploadPost = (props: Props) => {
 
     const fetchDistrict = async (provinceId: string | undefined) => {
         if (provinceId !== undefined) {
-          fetch(`http://localhost:3001/api/a/district/get?p=${provinceId}`)
+          fetch(`https://vn-real-estate-api.herokuapp.com/api/a/district/get?p=${provinceId}`)
             .then((res) => res.json())
             .then((data) => {
               let ds = new Array()
@@ -114,7 +114,7 @@ const UploadPost = (props: Props) => {
     
     const fetchWard = async (districtId: string | undefined) => {
         if (districtId !== undefined) {
-            fetch(`http://localhost:3001/api/a/ward/get?d=${districtId}`)
+            fetch(`https://vn-real-estate-api.herokuapp.com/api/a/ward/get?d=${districtId}`)
             .then((res) => res.json())
             .then((data) => {
                 let ws = new Array()
@@ -134,7 +134,7 @@ const UploadPost = (props: Props) => {
     
     const fetchStreet = async (districtId: string | undefined) => {
         if (districtId !== undefined) {
-            fetch(`http://localhost:3001/api/a/street/get?d=${districtId}`)
+            fetch(`https://vn-real-estate-api.herokuapp.com/api/a/street/get?d=${districtId}`)
             .then((res) => res.json())
             .then((data) => {
                 let ss = new Array()
@@ -203,7 +203,7 @@ const UploadPost = (props: Props) => {
                 base64Arr.push(img)
             }
 
-            const imgResponse = await fetch('http://localhost:3001/api/image-upload/multiple', {
+            const imgResponse = await fetch('https://vn-real-estate-api.herokuapp.com/api/image-upload/multiple', {
                 method: 'POST',
                 body: JSON.stringify({
                     "files": base64Arr
@@ -216,7 +216,7 @@ const UploadPost = (props: Props) => {
             const urlArr = await imgResponse.json(); //extract JSON from the http response
 
             // Creating post
-            const response = await fetch('http://localhost:3001/api/post/upload', {
+            const response = await fetch('https://vn-real-estate-api.herokuapp.com/api/post/upload', {
                 method: 'POST',
                 body: JSON.stringify({
                     "title": title,
@@ -292,7 +292,7 @@ const UploadPost = (props: Props) => {
     const checkSubmitFields = () => {
         if (postType == '' || purpose == '' || category == '' ||displayAddress == '' || city == ''
             || district == '' || quarter == '' || street == '' || title =='' || description == ''
-            || areaSqr == 0 || price == 0 || priceUnit == '' || document == '' || images.length < 0) {
+            || areaSqr == 0 || price == 0 || priceUnit == '' || document == '' || images.length < 1) {
                 return false
             }
         return true
@@ -301,7 +301,7 @@ const UploadPost = (props: Props) => {
     useEffect(() => {
         const fetchEstateTypes = async () => {
             console.log("Getting estate types from Server...")
-            const res = await fetch(`http://localhost:3001/api/a/estate-type/get`)
+            const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/a/estate-type/get`)
             let data = await res.json()
             
             data = data.data
@@ -320,7 +320,7 @@ const UploadPost = (props: Props) => {
 
         const fetchPostTypes = async () => {
             console.log("Getting post types from Server...")
-            const res = await fetch(`http://localhost:3001/api/a/post-type/get`)
+            const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/a/post-type/get`)
             let data = await res.json()
             
             data = data.data
@@ -340,7 +340,7 @@ const UploadPost = (props: Props) => {
 
         const fetchPriceUnits = async () => {
             console.log("Getting price units from Server...")
-            const res = await fetch(`http://localhost:3001/api/a/price-unit/get`)
+            const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/a/price-unit/get`)
             let data = await res.json()
             
             data = data.data

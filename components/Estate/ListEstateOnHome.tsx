@@ -10,7 +10,7 @@ const ListEstateOnHome: NextPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`http://localhost:3001/api/post/get`)
+            const res = await fetch(`https://vn-real-estate-api.herokuapp.com/api/post/get`)
             let data = await res.json()
             
             data = data.data
