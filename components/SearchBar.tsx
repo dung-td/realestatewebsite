@@ -31,6 +31,10 @@ type Search = {
   price?: string
   area?: string
   type?: string
+  bedroom?: string
+  width?: string
+  streetWidth?: string
+  orientation?: string
 }
 
 interface TabPanelProps {
@@ -42,7 +46,7 @@ interface TabPanelProps {
 const SearchBar = ({ provinces }: Props) => {
   const [SearchExpand, setSearchExpand] = useState(false)
   const [tabValue, setTabValue] = useState(0)
-  const [estateType, setEstateType] = useState("project")
+  const [estateType, setEstateType] = useState("sell")
 
   const [price, setPrice] = useState("")
   const [area, setArea] = useState("")
@@ -63,12 +67,15 @@ const SearchBar = ({ provinces }: Props) => {
     price: "",
     area: "",
     type: "",
+    bedroom: "",
+    width: "",
+    streetWidth: "",
+    orientation: "",
   })
 
   const [districts, setDistrics] = useState(new Array())
   const [wards, setWards] = useState(new Array())
   const [streets, setStreets] = useState(new Array())
-
   const [types, setTypes] = useState([])
 
   const prices = [
@@ -83,7 +90,7 @@ const SearchBar = ({ provinces }: Props) => {
   ]
 
   const areas = [
-    { value: "mat-tien", label: "< 30m2>" },
+    { value: "mat-tien", label: "< 30m" },
     { value: "mat-tien2", label: "30 - 100 m2" },
     { value: "mat-tien3", label: "100m2 - 200m2" },
     { value: "mat-tien4", label: "200m2 - 500m2" },
@@ -103,6 +110,38 @@ const SearchBar = ({ provinces }: Props) => {
     { value: "project-2", label: "Sắp mở bán" },
     { value: "project-3", label: "Đang mở bán" },
     { value: "project-4", label: "Đã bàn giao" },
+  ]
+
+  const bedroom = [
+    { value: "project-1", label: "1 - 2" },
+    { value: "project-2", label: "3 - 5" },
+    { value: "project-3", label: "> 5" },
+  ]
+
+  const width = [
+    { value: "4mt", label: " <= 4m" },
+    { value: "6mt", label: "4m - 10m" },
+    { value: "10mt", label: "10m - 20m" },
+    { value: "12mt", label: "20m - 50m" },
+    { value: "12mt", label: "> 50m" },
+  ]
+
+  const streetWidth = [
+    { value: "4mt", label: "4m" },
+    { value: "6mt", label: "6m" },
+    { value: "10mt", label: "10m" },
+    { value: "12mt", label: "12m" },
+  ]
+
+  const orientation = [
+    { value: "4mt", label: "Đống" },
+    { value: "6mt", label: "Đông Bắc" },
+    { value: "10mt", label: "Bắc" },
+    { value: "12mt", label: "Tấy Bắc" },
+    { value: "12mt", label: "Tấy" },
+    { value: "12mt", label: "Tấy Nam" },
+    { value: "12mt", label: "Nam" },
+    { value: "12mt", label: "Đông Nam" },
   ]
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -508,32 +547,117 @@ const SearchBar = ({ provinces }: Props) => {
                   </Select>
                 </FormControl>
               </div>
-              {[
-                "Dự án",
-                "Số phòng ngủ",
-                "Hướng nhà",
-                "Đường rộng",
-                "Mặt tiền",
-              ].map((title) => (
-                <div
-                  key={title}
-                  className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
-                >
-                  {/* <Select
-                    placeholder={title}
-                    isSearchable={false}
-                    // options={provinces}
-                  /> */}
-                  {/* <button
-                    id="dropdownTypeSearch"
-                    className="justify-center w-full inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                    type="button"
+              <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                <FormControl fullWidth>
+                  <InputLabel id="label-input-ward">Số phòng ngủ</InputLabel>
+                  <Select
+                    labelId="label-input-street"
+                    id="input-ward"
+                    value={search.bedroom}
+                    label="Số phòng ngủ"
+                    onChange={(event: SelectChangeEvent) => {
+                      if (search != undefined) {
+                        setSearch({
+                          ...search,
+                          bedroom: event.target.value.toString(),
+                        })
+                      }
+                    }}
                   >
-                    <p className="text-xs sm:text-sm md:text-base">{title}</p>
-                    <span className="material-icons">arrow_drop_down</span>
-                  </button> */}
-                </div>
-              ))}
+                    {bedroom.map((num) => {
+                      return (
+                        <MenuItem key={num.value} value={num.value}>
+                          {num.label}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                <FormControl fullWidth>
+                  <InputLabel id="label-input-ward">Hướng nhà</InputLabel>
+                  <Select
+                    labelId="label-input-street"
+                    id="input-ward"
+                    value={search.orientation}
+                    label="Hướng nhà"
+                    onChange={(event: SelectChangeEvent) => {
+                      if (search != undefined) {
+                        setSearch({
+                          ...search,
+                          orientation: event.target.value.toString(),
+                        })
+                      }
+                    }}
+                  >
+                    {orientation.map((orientation) => {
+                      return (
+                        <MenuItem
+                          key={orientation.value}
+                          value={orientation.value}
+                        >
+                          {orientation.label}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                <FormControl fullWidth>
+                  <InputLabel id="label-input-ward">Đường rộng</InputLabel>
+                  <Select
+                    labelId="label-input-street"
+                    id="input-ward"
+                    value={search.streetWidth}
+                    label="Đường rộng"
+                    onChange={(event: SelectChangeEvent) => {
+                      if (search != undefined) {
+                        setSearch({
+                          ...search,
+                          streetWidth: event.target.value.toString(),
+                        })
+                      }
+                    }}
+                  >
+                    {streetWidth.map((width) => {
+                      return (
+                        <MenuItem key={width.value} value={width.value}>
+                          {width.label}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+                <FormControl fullWidth>
+                  <InputLabel id="label-input-ward">Mặt tiền</InputLabel>
+                  <Select
+                    labelId="label-input-street"
+                    id="input-ward"
+                    value={search.width}
+                    label="Mặt tiền"
+                    onChange={(event: SelectChangeEvent) => {
+                      if (search != undefined) {
+                        setSearch({
+                          ...search,
+                          width: event.target.value.toString(),
+                        })
+                      }
+                    }}
+                  >
+                    {width.map((width) => {
+                      return (
+                        <MenuItem key={width.value} value={width.value}>
+                          {width.label}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
             </div>
           ) : null}
         </div>
