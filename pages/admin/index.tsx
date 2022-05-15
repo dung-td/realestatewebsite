@@ -213,6 +213,7 @@ const Home = () => {
       <div className="min-h-screen">
         {select == "post" ? <AdminPost type={selectPostType} /> : null}
       </div>
+      
       <Footer />
     </div>
   )

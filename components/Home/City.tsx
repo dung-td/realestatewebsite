@@ -4,9 +4,10 @@ import { Province } from "../../interfaces/Province"
 
 type Props = {
   provinces: Province[]
+  smallProvines: Province[]
 }
 
-const City = ({ provinces }: Props) => {
+const City = ({ provinces, smallProvines }: Props) => {
   const smallPopularCity = [
     {
       title: "HÀ NỘI",
@@ -35,16 +36,16 @@ const City = ({ provinces }: Props) => {
   ]
 
   return (
-    <div>
+    <div className="mt-8">
       <div>
         <h3 className="section-title font-bold text-sm sm:text-base md:text-lg lg:text-xl">
           BẤT ĐỘNG SẢN Ở THÀNH PHỐ LỚN
         </h3>
-        <div className="seperate-line border-b-2 border-indigo-500 w-1/4 mt-1 mb-4"></div>
+        <div className="seperate-line border-b-2 border-indigo-500 w-1/4 mb-4"></div>
       </div>
       <div className="grid px-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <Link passHref href="/ho-chi-minh">
-          <div className="city-container relative xl:row-span-2 xl:col-span-2 aspect-w-16 aspect-h-9">
+          <div className="img-hover-zoom city-container relative xl:row-span-2 xl:col-span-2 aspect-w-16 aspect-h-9">
             <div className="absolute todiv-0 left-0 p-2 city-title z-10">
               <p className="text-base font-semibold hover:underline uppercase">
                 TP. Hồ Chí Minh
@@ -65,7 +66,7 @@ const City = ({ provinces }: Props) => {
         {smallPopularCity.map((city) => {
           return (
             <Link key={city.slug} passHref href="/ho-chi-minh">
-              <div className="city-container relative aspect-w-16 aspect-h-9">
+              <div className="img-hover-zoom city-container relative aspect-w-16 aspect-h-9">
                 <div className="absolute todiv-0 left-0 p-2 city-title z-10">
                   <p className="text-base font-semibold hover:underline uppercase">
                     {city.title}
@@ -88,7 +89,7 @@ const City = ({ provinces }: Props) => {
       </div>
 
       <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-7 gap-4 mt-4">
-        {provinces.map((province) => (
+        {smallProvines.map((province) => (
           <a
             key={province.slug}
             href={province.slug}

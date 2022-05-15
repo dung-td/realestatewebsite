@@ -15,9 +15,10 @@ import EditInformation from "../components/User/Account/EditInformation"
 
 type Props = {
   provinces: Province[]
+  smallProvinces: Province[]
 }
 
-const Home = ({ provinces }: Props) => {
+const Home = ({ provinces, smallProvinces }: Props) => {
   const [scrollTop, setScrollTop] = useState(0)
 
   const onScroll = () => {
@@ -42,7 +43,7 @@ const Home = ({ provinces }: Props) => {
           </div>
         </div>
 
-        <City provinces={provinces} />
+        <City provinces={provinces} smallProvines={smallProvinces} />
 
         {/* ELEMENTS GO HERE PLEASE */}
         {/* <UploadPost post_type="" provinces={provinces} /> */}
@@ -59,22 +60,32 @@ const Home = ({ provinces }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  console.log("Getting post list from Server...")
   const res = await fetch(`${server}/a/province/get`)
   let data = await res.json()
   data = data.data
   let provinces = new Array()
-  let bigCity = ["SG", "HN", "DDN", "BD", "DN"]
+  let smallProvinces = new Array()
+  let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
   data.forEach((province: any) => {
     let obj = {
       value: province._id,
       label: province.provinceName,
       slug: province.slug,
     }
-
     provinces.push(obj)
   })
-  return { props: { provinces } }
+  let count = 0
+
+  while (count < 7) {
+    let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
+
+    if (!bigCites.includes(provinces[i])) {
+      smallProvinces.push(provinces[i])
+      count++
+    }
+  }
+
+  return { props: { provinces, smallProvinces } }
 }
 
 export default Home
