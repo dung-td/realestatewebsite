@@ -4,6 +4,8 @@ import Drawer from "@mui/material/Drawer"
 import List from "@mui/material/List"
 import Box from "@mui/material/Box"
 import server from "../interfaces/server"
+import Logo from "../public/img/logo.png"
+import Image from "next/image"
 
 type EstateType = {
   _id: string
@@ -252,13 +254,13 @@ const Header = () => {
               </button>
 
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
-                  <span className="sr-only">Workflow</span>
+                <a className="inline-flex items-center" href="\">
                   <img
-                    className="h-8 w-auto"
+                    className="h-8 w-auto mr-2"
                     src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
                     alt=""
                   />
+                  <Image src={Logo} alt="logo.png" />
                 </a>
               </div>
 

@@ -1,10 +1,11 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Fragment, MouseEvent, KeyboardEvent } from "react"
 import Filter from "../../components/User/Filter"
 import Item from "../../components/User/Item"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
+import Drawer from "@mui/material/Drawer"
 import Typography from "@mui/material/Typography"
 import Pagination from "@mui/material/Pagination"
 import server from "../../interfaces/server"
@@ -57,7 +58,6 @@ const UserPost = ({ type }: any) => {
   const [data, setData] = useState<Array<any>>([])
   const [postTypes, setPostTypes] = useState<Array<any>>([])
   const [postType, setPostType] = useState("627ba24aea534ab591781729")
-
   const [alertType, setAlertType] = useState("success")
   const [alertMessage, setAlertMessage] = useState("Tin đã được duyệt")
   const [alertOpen, setAlertOpen] = useState(false)
@@ -65,7 +65,7 @@ const UserPost = ({ type }: any) => {
   const [isChange, setIsChange] = useState(false)
 
   useEffect(() => {
-    fetch(`${server}/post-type/get?owner._id=62640dfaa4b7d5cedcf0166d`)
+    fetch(`${server}/post-type/get?oid=62640dfaa4b7d5cedcf0166d`)
       .then((res) => res.json())
       .then((data) => {
         let arr = new Array()
@@ -117,7 +117,9 @@ const UserPost = ({ type }: any) => {
   useEffect(() => {
     setIsLoading(true)
     let isCancelled = false
-    fetch(`${server}/post/get?owner._id=62640dfaa4b7d5cedcf0166d&s=${type}&pt=${postType}`)
+    fetch(
+      `${server}/post/get?oid=62640dfaa4b7d5cedcf0166d&s=${type}&pt=${postType}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setData(data.data)
@@ -136,6 +138,10 @@ const UserPost = ({ type }: any) => {
         break
       case "decline":
         decline(id)
+        break
+      case "delete":
+        deletePost(id)
+        break
       default:
         break
     }
@@ -177,6 +183,46 @@ const UserPost = ({ type }: any) => {
         setIsChange(!isChange)
       })
     setAlertMessage("Tin đã được duyệt")
+    setAlertOpen(true)
+    setIsLoading(false)
+  }
+
+  const deletePost = (id: string) => {
+    let body = { id: id }
+    console.log(body)
+    fetch(`${server}/admin/post/delete`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data: any) => {
+        setIsChange(!isChange)
+      })
+    setAlertMessage("Tin đã được xóa")
+    setAlertOpen(true)
+    setIsLoading(false)
+  }
+
+  const draft = (id: string) => {
+    let body = { id: id }
+    console.log(body)
+    fetch(`${server}/admin/post/draft`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data: any) => {
+        setIsChange(!isChange)
+      })
+    setAlertMessage("Tin đã được chuyển vào tin nháp")
     setAlertOpen(true)
     setIsLoading(false)
   }

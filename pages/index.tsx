@@ -1,4 +1,5 @@
 import type { NextPage, GetServerSideProps } from "next"
+import Image from "next/image"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
@@ -26,9 +27,6 @@ const Home = ({ provinces, smallProvinces }: Props) => {
     console.log(`onScroll`)
   }
 
-  const onCallBackMap = (lat: number, lng: number) => {
-    console.log(lat + "/" + lng)
-  }
   return (
     <div onScroll={onScroll}>
       <Header />
@@ -36,7 +34,10 @@ const Home = ({ provinces, smallProvinces }: Props) => {
       <div className="grid-full">
         <div className="relative">
           <div className="home-banner">
-            <img src="https://phathung.vn/wp-content/uploads/2019/02/ecogreen-banner.jpg" />
+            <img
+              alt="banner"
+              src="https://phathung.vn/wp-content/uploads/2019/02/ecogreen-banner.jpg"
+            />
           </div>
           <div className="w-4/5 ml-auto mr-auto md:absolute md:w-full md:top-10">
             <SearchBar provinces={provinces} />
@@ -46,6 +47,7 @@ const Home = ({ provinces, smallProvinces }: Props) => {
         <City provinces={provinces} smallProvines={smallProvinces} />
 
         {/* ELEMENTS GO HERE PLEASE */}
+
         {/* <UploadPost post_type="" provinces={provinces} /> */}
         {/* <ListEstate />
         <ListEstateOnHome />

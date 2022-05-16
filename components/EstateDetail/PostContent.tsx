@@ -12,6 +12,7 @@ const Separator: React.FC = () => {
 interface IPost {
   post: PostDto
 }
+
 const PostContent = (props: IPost) => {
   const { post } = props
   const PriceComponent = () => {
@@ -63,7 +64,7 @@ const PostContent = (props: IPost) => {
   ]
 
   return (
-    <div>
+    <div className="w-full">
       <ImageCarousel
         imageList={post.images}
         className="border-2xl overflow-clip rounded-lg"
