@@ -355,12 +355,13 @@ const Header = () => {
                       favorite_border
                     </span>
                   </a>
-                  <a
-                    href="/post/upload-post"
-                    className="border-2 rounded-md border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-                  >
-                    Đăng tin
-                  </a>
+                  <Link href="/post/upload-post">
+                    <a
+                      className="border-2 rounded-md border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+                    >
+                      Đăng tin
+                    </a>
+                  </Link>
                   <span
                     className="h-6 w-px bg-gray-200"
                     aria-hidden="true"
