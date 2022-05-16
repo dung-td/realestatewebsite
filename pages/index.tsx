@@ -1,4 +1,5 @@
 import type { NextPage, GetServerSideProps } from "next"
+import Image from "next/image"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
@@ -10,9 +11,10 @@ import server from "../interfaces/server"
 
 type Props = {
   provinces: Province[]
+  smallProvinces: Province[]
 }
 
-const Home = ({ provinces }: Props) => {
+const Home = ({ provinces, smallProvinces }: Props) => {
   const [scrollTop, setScrollTop] = useState(0)
 
   const onScroll = () => {
@@ -20,9 +22,6 @@ const Home = ({ provinces }: Props) => {
     console.log(`onScroll`)
   }
 
-  const onCallBackMap = (lat: number, lng: number) => {
-    console.log(lat + "/" + lng)
-  }
   return (
     <div onScroll={onScroll}>
       <Header />
@@ -30,14 +29,17 @@ const Home = ({ provinces }: Props) => {
       <div className="grid-full">
         <div className="relative">
           <div className="home-banner">
-            <img src="https://phathung.vn/wp-content/uploads/2019/02/ecogreen-banner.jpg" />
+            <img
+              alt="banner"
+              src="https://phathung.vn/wp-content/uploads/2019/02/ecogreen-banner.jpg"
+            />
           </div>
           <div className="w-4/5 ml-auto mr-auto md:absolute md:w-full md:top-10">
             <SearchBar provinces={provinces} />
           </div>
         </div>
 
-        <City provinces={provinces} />
+        <City provinces={provinces} smallProvines={smallProvinces} />
 
         {/* ELEMENTS GO HERE PLEASE */}
         <ListEstateOnHome/>
@@ -52,22 +54,32 @@ const Home = ({ provinces }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  console.log("Getting post list from Server...")
   const res = await fetch(`${server}/a/province/get`)
   let data = await res.json()
   data = data.data
   let provinces = new Array()
-  let bigCity = ["SG", "HN", "DDN", "BD", "DN"]
+  let smallProvinces = new Array()
+  let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
   data.forEach((province: any) => {
     let obj = {
       value: province._id,
       label: province.provinceName,
       slug: province.slug,
     }
-
     provinces.push(obj)
   })
-  return { props: { provinces } }
+  let count = 0
+
+  while (count < 7) {
+    let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
+
+    if (!bigCites.includes(provinces[i])) {
+      smallProvinces.push(provinces[i])
+      count++
+    }
+  }
+
+  return { props: { provinces, smallProvinces } }
 }
 
 export default Home
