@@ -1,17 +1,12 @@
 import { useState, Fragment, MouseEvent, KeyboardEvent, useEffect } from "react"
 import Link from "next/link"
-import Drawer from "@mui/material/Drawer"
 import List from "@mui/material/List"
+import Drawer from "@mui/material/Drawer"
 import Box from "@mui/material/Box"
 import server from "../interfaces/server"
 import Logo from "../public/img/logo.png"
+import { EstateType } from "../interfaces/estateType"
 import Image from "next/image"
-
-type EstateType = {
-  _id: string
-  name: string
-  slug: string
-}
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false)

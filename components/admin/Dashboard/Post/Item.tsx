@@ -1,21 +1,50 @@
-import Script from "next/script"
-import Head from "next/head"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, Fragment, MouseEvent, KeyboardEvent } from "react"
 import Image from "next/image"
 import Chip from "@mui/material/Chip"
+import Drawer from "@mui/material/Drawer"
+import Box from "@mui/material/Box"
 import server from "../../../../interfaces/server"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import InputLabel from "@mui/material/InputLabel"
 import FormControl from "@mui/material/FormControl"
 import MenuItem from "@mui/material/MenuItem"
+import PostContent from "../../../../components/EstateDetail/PostContent"
+import moment from "moment"
 
+const modalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 600,
+  bgcolor: "background.paper",
+  border: "2px solid #fff",
+  boxShadow: 24,
+  p: 2,
+}
 const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
+  const [modalOpen, setModalOpen] = useState(false)
   const [expandDetail, setExpandDetail] = useState(false)
+  const [previewDrawler, setPreviewDrawler] = useState(false)
+  const [postDuration, setPostDuration] = useState(0)
+  const post_durations = ["7", "10", "14", "21"]
+  const Swal = require("sweetalert2")
 
   const expand = () => {
     setExpandDetail(!expandDetail)
   }
+
+  const toggleDrawer =
+    (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as KeyboardEvent).key === "Tab" ||
+          (event as KeyboardEvent).key === "Shift")
+      ) {
+        return
+      }
+      setPreviewDrawler(open)
+    }
 
   return (
     <div className="mb-4 p-4 grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
@@ -77,26 +106,30 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={toggleDrawer(true)}
               >
                 Chi tiết
               </button>
             </div>
 
             <div className="col-span-2 md:col-span-1">
-              <button
+              <a
+                href={data.slug}
                 type="button"
+                target="_blank"
+                rel="noreferrer"
                 className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Xem tin
-              </button>
+              </a>
             </div>
 
             <div className="col-span-2 md:col-span-1">
               <button
                 type="button"
-                className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="w-full text-white bg-red-700 hover:bg-red-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Xem tin
+                Gỡ tin
               </button>
             </div>
           </>
@@ -106,6 +139,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={toggleDrawer(true)}
               >
                 Chi tiết
               </button>
@@ -141,6 +175,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={toggleDrawer(true)}
               >
                 Chi tiết
               </button>
@@ -227,7 +262,8 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               Số bài đã đăng: <span className="font-bold">304</span> bài
             </div>
             <div className="col-span-6 font-medium">
-              Loại tin đăng: <span className="font-bold">{data.postType.name}</span>
+              Loại tin đăng:{" "}
+              <span className="font-bold">{data.postType.name}</span>
             </div>
             <div className="col-span-12 md:col-span-6 font-medium">
               <button
@@ -248,6 +284,55 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
           </>
         )
       ) : null}
+
+      <Fragment>
+        <Drawer
+          anchor="right"
+          open={previewDrawler}
+          onClose={toggleDrawer(false)}
+        >
+          <Box
+            sx={{ minWidth: 500 }}
+            role="presentation"
+            // onClick={toggleDrawer(false)}
+            onKeyDown={toggleDrawer(false)}
+          >
+            <div className="max-w-2xl relative bg-white pb-12 flex flex-col">
+              <div className="inline-flex items-center justify-center px-4 py-4 fixed bg-white z-10 w-[42rem]">
+                <button
+                  type="button"
+                  className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
+                  onClick={toggleDrawer(false)}
+                >
+                  <span className="sr-only">Close menu</span>
+                  <svg
+                    className="h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-strokeLinecap="round"
+                      stroke-strokeLinejoin="round"
+                      stroke-strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+                <p className="ml-auto mr-auto font-bold text-xl">
+                  Thông tin xem trước
+                </p>
+              </div>
+
+              <div className="px-4 pt-5 pb-2 flex">
+                <PostContent post={data} />
+              </div>
+            </div>
+          </Box>
+        </Drawer>
+      </Fragment>
     </div>
   )
 }
