@@ -1,4 +1,4 @@
-import type { NextPage } from "next"
+import type { GetServerSideProps, NextPage } from "next"
 import { useState, useEffect } from "react"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
@@ -7,9 +7,11 @@ import Alert from "@mui/material/Alert"
 import AlertTitle from "@mui/material/AlertTitle"
 import Backdrop from "@mui/material/Backdrop"
 import CircularProgress from "@mui/material/CircularProgress"
-import server from "../interfaces/server"
-import Map from "../components/Map"
-import MoneyFormat from "../util/MoneyFormat"
+import server from "../../interfaces/server"
+import Map from "../../components/Map"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+import MoneyFormat from "../../util/MoneyFormat"
 import {
   getProvinceName,
   getDistrictName,
@@ -20,11 +22,10 @@ import {
   getWardId,
   getWardName,
   getWardPrefix,
-} from "../util/Address"
-import { Province } from "../interfaces/Province"
+} from "../../util/Address"
+import { Province } from "../../interfaces/Province"
 
 type Props = {
-  post_type: string
   provinces: Province[]
 }
 
@@ -59,11 +60,14 @@ const UploadPost = (props: Props) => {
   const [direction, setDirection] = useState("")
   const [furniture, setFuniture] = useState("")
   const [images, setImages] = useState(new Array())
+  const [mapMarker, setMapMarker] = useState([0, 0])
 
   const [postTypeIndex, setPostTypeIndex] = useState(0)
   const [postDuration, setPostDuration] = useState(0)
   const [postType, setPostType] = useState("")
   const [startDate, setStartDate] = useState("")
+  const [expireDate, setExpireDate] = useState("")
+  const [falseDate, setFalseDate] = useState(false)
 
   const [backdrop, setBackDrop] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
@@ -80,6 +84,7 @@ const UploadPost = (props: Props) => {
 
   const onMapLngLatCallback = (lng: any, lat: any) => {
     console.log(lng + "/" + lat)
+    setMapMarker([lng, lat])
   }
 
   const fetchDistrict = async (provinceId: string | undefined) => {
@@ -147,6 +152,30 @@ const UploadPost = (props: Props) => {
     var charStr = String.fromCharCode(charCode)
     if (!regex.test(charStr)) {
       e.preventDefault()
+    }
+  }
+
+  const handleDateSelected = (e: any) => {
+    const today = new Date()
+    const selected = new Date(e.target.value)
+    var expire = new Date(e.target.value)
+    expire.setDate(selected.getDate() + postDuration)
+
+    if (selected < today) {
+        e.preventDefault()
+        setFalseDate(true)
+    } else {
+        setStartDate(
+            selected.getDate() + "/" +
+            (selected.getMonth() + 1).toString() + "/" +
+            selected.getFullYear()
+        )
+        setExpireDate(
+            expire.getDate() + "/" +
+            (expire.getMonth() + 1).toString() +
+            "/" + expire.getFullYear()
+        )
+        setFalseDate(false)
     }
   }
 
@@ -232,8 +261,8 @@ const UploadPost = (props: Props) => {
             "WardPrefix": getWardPrefix(quarter, wards),
           },
           "cor": {
-            "lat": 0,
-            "Lng": 0,
+            "lat": mapMarker[1],
+            "Lng": mapMarker[0],
           },
           "belongToProject": {
             "projectId": 0,
@@ -242,8 +271,8 @@ const UploadPost = (props: Props) => {
           "description": description,
           "images": urlArr.data,
           "legalDocuments": document,
-          "publishedDate": "13/05/2022",
-          "expiredDate": "23/05/2022",
+          "publishedDate": startDate,
+          "expiredDate": expireDate,
           "price": price,
           "priceType": priceUnit,
           "area": areaSqr,
@@ -257,6 +286,7 @@ const UploadPost = (props: Props) => {
           "roadWidth": roadWidth,
           "facade": 0,
           "status": "waiting",
+          "slug": "slug"
         }), // string or object
         headers: {
           "Content-Type": "application/json",
@@ -296,6 +326,7 @@ const UploadPost = (props: Props) => {
       price == 0 ||
       priceUnit == "" ||
       document == "" ||
+      falseDate ||
       images.length < 1
     ) {
       return false
@@ -369,6 +400,9 @@ const UploadPost = (props: Props) => {
 
   return (
     <>
+      <Header/>
+
+      {/* Upload post */}
       <div className="bg-white">
         <div
           className="max-w-2xl mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8"
@@ -632,17 +666,20 @@ const UploadPost = (props: Props) => {
                     </FormControl>
                   </div>
                 </div>
-              </div>
 
-              <p> Đánh dấu trên bản đồ</p>
-
-              <div className="h-[32rem]">
-                <Map
-                  type="edit"
-                  lng={106.80309701313547}
-                  lat={10.870314445802961}
-                  callback={onMapLngLatCallback}
-                />
+                {/* Map and Marker */}
+                <div className="mt-4 mb-1">
+                  <label className="block mb-2 text-sm font-medium text-black">Đánh dấu trên bản đồ</label>
+                  
+                  <div className="mt-2">
+                    <Map
+                      type="edit"
+                      lng={106.80309701313547}
+                      lat={10.870314445802961}
+                      callback={onMapLngLatCallback}
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Thông tin bài viết */}
@@ -1229,10 +1266,16 @@ const UploadPost = (props: Props) => {
                     className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700"
                     placeholder="Select date"
                     style={{ width: "98%" }}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={(e) => {handleDateSelected(e)}}
                   />
                 </div>
               </div>
+
+              {
+                falseDate ?
+                    <p className="text-red-700 text-sm">* Ngày bắt đầu phải từ hôm nay trở đi</p>
+                : null
+              }
 
               <div className="bg-blue-200 w-full h-40 py-1 px-3 mt-4 rounded-lg">
                 <div className="flex flex-row justify-between mt-2 mt-2 mb-3">
@@ -1332,6 +1375,8 @@ const UploadPost = (props: Props) => {
         </div>
       </div>
 
+      <Footer/>
+
       <Backdrop
         className="flex flex-col"
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -1344,6 +1389,25 @@ const UploadPost = (props: Props) => {
       </Backdrop>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    console.log("Getting post list from Server...")
+    const res = await fetch(`${server}/a/province/get`)
+    let data = await res.json()
+    data = data.data
+    let provinces = new Array()
+    let bigCity = ["SG", "HN", "DDN", "BD", "DN"]
+    data.forEach((province: any) => {
+      let obj = {
+        value: province._id,
+        label: province.provinceName,
+        slug: province.slug,
+      }
+  
+      provinces.push(obj)
+    })
+    return { props: { provinces } }
 }
 
 export default UploadPost
