@@ -23,11 +23,12 @@ const EstateCard = (props : Props) => {
     }
 
     return (
-        <div className="flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
+        <div className="group flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
             <div className="w-3/5 xl:max-h-72 aspect-w-1 aspect-h-1 bg-gray-200 rounded-tl-lg rounded-bl-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                 <img
-                    className="w-full h-full object-cover xl:max-h-72"
+                    className="w-full h-full object-cover xl:max-h-72 transition group-hover:-translate-y-1 group-hover:scale-110 duration-300"
                     src={props.imageUrl}
+                    style={{imageRendering: '-webkit-optimize-contrast'}}
                     alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
                 />
             </div>
@@ -41,7 +42,8 @@ const EstateCard = (props : Props) => {
                         wordWrap: 'break-word',
                         overflow: 'hidden',
                         maxHeight: '3em',
-                        lineHeight: '1.5em'
+                        lineHeight: '1.5em',
+                        color: props.titleColor
                     }}
                 >
                     {props.title}
@@ -87,7 +89,7 @@ const EstateCard = (props : Props) => {
                     <p className="text-black text-sm font-bold">Đăng bởi: </p>
                     <p className="text-black text-sm ml-1">{props.author}</p>
                 </div>
-                <div className="flex flex-col items-center lg:flex-row mt-3 mb-3 justify-between">
+                <div className="group flex flex-col items-center lg:flex-row mt-3 mb-3 justify-between">
                     <div className="w-4/5 md:w-9/12 border-solid border border-gray-300 rounded-lg px-2 py-1 flex flex-row justify-center items-center">
                         <span className="material-icons-outlined mr-2">phone</span>
                         <p className="text-black text-sm font-medium">{props.author_phone_number}</p>
@@ -96,8 +98,8 @@ const EstateCard = (props : Props) => {
                         title={favourite ? 'Bỏ lưu' : 'Lưu'}
                         className={
                             !favourite ? 
-                            "group mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-gray-300 rounded-lg px-2 py-1 flex items-center justify-center hover:border-rose-500"
-                            : "group mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-rose-500 rounded-lg px-2 py-1 flex items-center justify-center hover:border-rose-300"
+                            "mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-gray-300 rounded-lg px-2 py-1 flex items-center justify-center hover:bg-gray-100"
+                            : "mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-rose-500 rounded-lg px-2 py-1 flex items-center justify-center hover:bg-gray-100"
                         }
                         onClick={() => {
                             handleFavouriteClick(props.id)
@@ -106,8 +108,8 @@ const EstateCard = (props : Props) => {
                         <span
                             className={
                                 !favourite ?
-                                "material-icons group-hover:text-rose-500"
-                                : "material-icons text-rose-500 group-hover:text-rose-300"
+                                "material-icons"
+                                : "material-icons text-rose-500"
                             }
                         >favorite_border</span>
                     </button>

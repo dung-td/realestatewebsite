@@ -1,5 +1,6 @@
 import type { NextPage } from "next"
 import { useEffect, useState } from "react";
+import server from "../../interfaces/server";
 import CardOnHome from "./CardOnHome";
 import MoneyFormat from "../../util/MoneyFormat";
 
@@ -7,93 +8,10 @@ import MoneyFormat from "../../util/MoneyFormat";
 const ListEstateOnHome: NextPage = () => {
     const [posts, setPosts] = useState(new Array())
 
-    const list = [
-        {
-            id: 'id1',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://static.chotot.com/storage/chotot-kinhnghiem/nha/2021/10/cfa88710-mua-ban-nha-dat-1.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id2',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://dat24h.com/uploads/news/2018/nha-dat.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn Văn Dũng',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id3',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://happynest.vn/storage/uploads/2021/04/8d46d17e81cce979ee586c3f447c8c39.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id4',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'http://xhomeviet.vn/Uploads/Images/z2255614633805-7e55ff5c8e3dcec942d717d5cebf0567.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id5',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://dat24h.com/uploads/news/2018/nha-dat.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id6',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://happynest.vn/storage/uploads/2021/04/8d46d17e81cce979ee586c3f447c8c39.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id7',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://dat24h.com/uploads/news/2018/nha-dat.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-        {
-            id: 'id8',
-            title: 'BÁN NHÀ MỚI XÂY MỘT MẶT TIỀN - AEON BÌNH DƯƠNG',
-            imageUrl: 'https://happynest.vn/storage/uploads/2021/04/8d46d17e81cce979ee586c3f447c8c39.jpg',
-            price: '2 tỷ ',
-            areaSqr: '40 m²',
-            address: 'Đại lộ Bình Dương, Thuận Giao, Thuận An, Bình Dương',
-            author: 'Nguyễn A',
-            upload_date: '2 ngày trước'
-        },
-    ];
-
     useEffect(() => {
         const fetchPosts = async () => {
             console.log("Getting post list from Server...")
-            const res = await fetch(`http://localhost:3001/api/post/get`)
+            const res = await fetch(`${server}/post/get`)
             let data = await res.json()
             
             data = data.data
@@ -112,7 +30,8 @@ const ListEstateOnHome: NextPage = () => {
                     bedroom: post.bedroomNumber,
                     ownerName: post.owner.name,
                     ownerPhone: post.owner.phone,
-                    publishDate: post.publishedDate
+                    publishDate: post.publishedDate,
+                    titleColor: post.postType.title_color
                 }
                 posts.push(obj)
             })
@@ -146,6 +65,7 @@ const ListEstateOnHome: NextPage = () => {
                                         address={item.address}
                                         author={item.ownerName}
                                         upload_date={item.publishDate}
+                                        titleColor={item.titleColor}
                                     />
                                 )
                             })

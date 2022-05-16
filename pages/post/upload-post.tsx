@@ -1,4 +1,4 @@
-import type { NextPage } from "next"
+import type { GetServerSideProps, NextPage } from "next"
 import { useState, useEffect } from "react"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
@@ -7,9 +7,11 @@ import Alert from "@mui/material/Alert"
 import AlertTitle from "@mui/material/AlertTitle"
 import Backdrop from "@mui/material/Backdrop"
 import CircularProgress from "@mui/material/CircularProgress"
-import server from "../interfaces/server"
-import Map from "../components/Map"
-import MoneyFormat from "../util/MoneyFormat"
+import server from "../../interfaces/server"
+import Map from "../../components/Map"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+import MoneyFormat from "../../util/MoneyFormat"
 import {
   getProvinceName,
   getDistrictName,
@@ -20,11 +22,10 @@ import {
   getWardId,
   getWardName,
   getWardPrefix,
-} from "../util/Address"
-import { Province } from "../interfaces/Province"
+} from "../../util/Address"
+import { Province } from "../../interfaces/Province"
 
 type Props = {
-  post_type: string
   provinces: Province[]
 }
 
@@ -59,11 +60,14 @@ const UploadPost = (props: Props) => {
   const [direction, setDirection] = useState("")
   const [furniture, setFuniture] = useState("")
   const [images, setImages] = useState(new Array())
+  const [mapMarker, setMapMarker] = useState([0, 0])
 
   const [postTypeIndex, setPostTypeIndex] = useState(0)
   const [postDuration, setPostDuration] = useState(0)
   const [postType, setPostType] = useState("")
   const [startDate, setStartDate] = useState("")
+  const [expireDate, setExpireDate] = useState("")
+  const [falseDate, setFalseDate] = useState(false)
 
   const [backdrop, setBackDrop] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
@@ -80,6 +84,7 @@ const UploadPost = (props: Props) => {
 
   const onMapLngLatCallback = (lng: any, lat: any) => {
     console.log(lng + "/" + lat)
+    setMapMarker([lng, lat])
   }
 
   const fetchDistrict = async (provinceId: string | undefined) => {
@@ -124,7 +129,7 @@ const UploadPost = (props: Props) => {
 
   const fetchStreet = async (districtId: string | undefined) => {
     if (districtId !== undefined) {
-      fetch(`${server}/api/a/street/get?d=${districtId}`)
+      fetch(`${server}/a/street/get?d=${districtId}`)
         .then((res) => res.json())
         .then((data) => {
           let ss = new Array()
@@ -147,6 +152,30 @@ const UploadPost = (props: Props) => {
     var charStr = String.fromCharCode(charCode)
     if (!regex.test(charStr)) {
       e.preventDefault()
+    }
+  }
+
+  const handleDateSelected = (e: any) => {
+    const today = new Date()
+    const selected = new Date(e.target.value)
+    var expire = new Date(e.target.value)
+    expire.setDate(selected.getDate() + postDuration)
+
+    if (selected < today) {
+        e.preventDefault()
+        setFalseDate(true)
+    } else {
+        setStartDate(
+            selected.getDate() + "/" +
+            (selected.getMonth() + 1).toString() + "/" +
+            selected.getFullYear()
+        )
+        setExpireDate(
+            expire.getDate() + "/" +
+            (expire.getMonth() + 1).toString() +
+            "/" + expire.getFullYear()
+        )
+        setFalseDate(false)
     }
   }
 
@@ -193,10 +222,10 @@ const UploadPost = (props: Props) => {
         base64Arr.push(img)
       }
 
-      const imgResponse = await fetch("${server}/image-upload/multiple", {
+      const imgResponse = await fetch(`${server}/image-upload/multiple`, {
         method: "POST",
         body: JSON.stringify({
-          files: base64Arr,
+          "files": base64Arr,
         }), // string or object
         headers: {
           "Content-Type": "application/json",
@@ -206,57 +235,58 @@ const UploadPost = (props: Props) => {
       const urlArr = await imgResponse.json() //extract JSON from the http response
 
       // Creating post
-      const response = await fetch("${server}/post/upload", {
+      const response = await fetch(`${server}/post/upload`, {
         method: "POST",
         body: JSON.stringify({
-          title: title,
-          address: displayAddress,
-          ownerId: "6263a81788bcf34dbe3030cd",
-          postTypeId: postType,
-          estateTypeId: category,
-          forSaleOrRent: purpose == "BÁN" ? "sale" : "rent",
-          location: {
-            CityCode: city,
-            CityName: getProvinceName(city, props.provinces),
-            DistrictId: getDistrictId(district, districts),
-            DistrictName: getDistrictName(district, districts),
-            DistrictPrefix: getDistrictPrefix(district, districts),
-            Label: displayAddress,
-            ShortName: "?",
-            StreetId: getStreetId(street, streets),
-            StreetName: getStreetName(street, streets),
-            StreetPrefix: "Đường",
-            TextSearch: displayAddress,
-            WardId: getWardId(quarter, wards),
-            WardName: getWardName(quarter, wards),
-            WardPrefix: getWardPrefix(quarter, wards),
+          "title": title,
+          "address": displayAddress,
+          "ownerId": "6263a81788bcf34dbe3030cd",
+          "postTypeId": postType,
+          "estateTypeId": category,
+          "forSaleOrRent": purpose == "BÁN" ? "sale" : "rent",
+          "location": {
+            "CityCode": city,
+            "CityName": getProvinceName(city, props.provinces),
+            "DistrictId": getDistrictId(district, districts),
+            "DistrictName": getDistrictName(district, districts),
+            "DistrictPrefix": getDistrictPrefix(district, districts),
+            "Label": displayAddress,
+            "ShortName": "?",
+            "StreetId": getStreetId(street, streets),
+            "StreetName": getStreetName(street, streets),
+            "StreetPrefix": "Đường",
+            "TextSearch": displayAddress,
+            "WardId": getWardId(quarter, wards),
+            "WardName": getWardName(quarter, wards),
+            "WardPrefix": getWardPrefix(quarter, wards),
           },
-          cor: {
-            lat: 0,
-            Lng: 0,
+          "cor": {
+            "lat": mapMarker[1],
+            "Lng": mapMarker[0],
           },
-          belongToProject: {
-            projectId: 0,
-            projectName: "SMART",
+          "belongToProject": {
+            "projectId": 0,
+            "projectName": "SMART",
           },
-          description: description,
-          images: urlArr.data,
-          legalDocuments: document,
-          publishedDate: "13/05/2022",
-          expiredDate: "23/05/2022",
-          price: price,
-          priceType: priceUnit,
-          area: areaSqr,
-          floorNumber: floor,
-          bathroomNumber: bathrooms,
-          bedroomNumber: bedrooms,
-          direction: direction,
-          furniture: furniture,
-          width: width,
-          depth: depth,
-          roadWidth: roadWidth,
-          facade: 0,
-          status: "waiting",
+          "description": description,
+          "images": urlArr.data,
+          "legalDocuments": document,
+          "publishedDate": startDate,
+          "expiredDate": expireDate,
+          "price": price,
+          "priceType": priceUnit,
+          "area": areaSqr,
+          "floorNumber": floor,
+          "bathroomNumber": bathrooms,
+          "bedroomNumber": bedrooms,
+          "direction": direction,
+          "furniture": furniture,
+          "width": width,
+          "depth": depth,
+          "roadWidth": roadWidth,
+          "facade": 0,
+          "status": "waiting",
+          "slug": "slug"
         }), // string or object
         headers: {
           "Content-Type": "application/json",
@@ -265,6 +295,7 @@ const UploadPost = (props: Props) => {
 
       const myJson = await response.json()
       console.log("Create post result: " + myJson.token)
+
       setBackDrop(false)
       setShowAlert(true)
     } else {
@@ -272,13 +303,12 @@ const UploadPost = (props: Props) => {
     }
   }
 
-  const toBase64 = (obj: any) =>
-    new Promise((resolve, reject) => {
+  const toBase64 = (obj: any) => new Promise((resolve, reject) => {
       const reader = new FileReader()
       reader.readAsDataURL(obj)
       reader.onload = () => resolve(reader.result?.toString())
       reader.onerror = (error) => reject(error)
-    })
+  })
 
   const checkSubmitFields = () => {
     if (
@@ -296,7 +326,8 @@ const UploadPost = (props: Props) => {
       price == 0 ||
       priceUnit == "" ||
       document == "" ||
-      images.length < 0
+      falseDate ||
+      images.length < 1
     ) {
       return false
     }
@@ -369,6 +400,9 @@ const UploadPost = (props: Props) => {
 
   return (
     <>
+      <Header/>
+
+      {/* Upload post */}
       <div className="bg-white">
         <div
           className="max-w-2xl mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8"
@@ -576,6 +610,7 @@ const UploadPost = (props: Props) => {
                       </label>
                       <span className="text-sm text-rose-800">&nbsp;(*)</span>
                     </div>
+
                     <FormControl fullWidth>
                       <Select
                         displayEmpty
@@ -608,6 +643,7 @@ const UploadPost = (props: Props) => {
                       </label>
                       <span className="text-sm text-rose-800">&nbsp;(*)</span>
                     </div>
+
                     <FormControl fullWidth>
                       <Select
                         displayEmpty
@@ -630,17 +666,20 @@ const UploadPost = (props: Props) => {
                     </FormControl>
                   </div>
                 </div>
-              </div>
 
-              <p> Đánh dấu trên bản đồ</p>
-
-              <div className="h-[32rem]">
-                <Map
-                  type="edit"
-                  lng={106.80309701313547}
-                  lat={10.870314445802961}
-                  callback={onMapLngLatCallback}
-                />
+                {/* Map and Marker */}
+                <div className="mt-4 mb-1">
+                  <label className="block mb-2 text-sm font-medium text-black">Đánh dấu trên bản đồ</label>
+                  
+                  <div className="mt-2">
+                    <Map
+                      type="edit"
+                      lng={106.80309701313547}
+                      lat={10.870314445802961}
+                      callback={onMapLngLatCallback}
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Thông tin bài viết */}
@@ -1104,33 +1143,36 @@ const UploadPost = (props: Props) => {
                   />
                 </div>
 
-                {images.length > 0 ? (
-                  <div className="mt-3 w-full flex flex-row flex-wrap items-center justify-between">
-                    {images.map((item, index) => {
-                      return (
-                        <div
-                          className="w-[30%] mt-1 mb-1 relative hover:cursor-pointer"
-                          key={index}
-                        >
-                          <img
-                            src={item}
-                            className="rounded-lg hover:opacity-90"
-                            alt="Ảnh đã chọn"
-                          />
-
-                          <button
-                            onClick={() => updateDisplayImages(index)}
-                            className="group absolute top-1 right-1 bg-white w-6 h-6 rounded-full hover:bg-blue-500"
+                {
+                  images.length > 0 ?
+                  (
+                    <div className="mt-3 w-full flex flex-row flex-wrap items-center justify-between">
+                      {images.map((item, index) => {
+                        return (
+                          <div
+                            className="w-[30%] mt-1 mb-1 relative hover:cursor-pointer"
+                            key={index}
                           >
-                            <span className="text-sm material-icons-outlined text-gray-600 group-hover:text-white">
-                              close
-                            </span>
-                          </button>
-                        </div>
-                      )
-                    })}
-                  </div>
-                ) : null}
+                            <img
+                              src={item}
+                              className="rounded-lg hover:opacity-90"
+                              alt="Ảnh đã chọn"
+                            />
+
+                            <button
+                              onClick={() => updateDisplayImages(index)}
+                              className="group absolute top-1 right-1 bg-white w-6 h-6 rounded-full hover:bg-blue-500"
+                            >
+                              <span className="text-sm material-icons-outlined text-gray-600 group-hover:text-white">
+                                close
+                              </span>
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : null
+                }
               </div>
             </div>
 
@@ -1224,10 +1266,16 @@ const UploadPost = (props: Props) => {
                     className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700"
                     placeholder="Select date"
                     style={{ width: "98%" }}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={(e) => {handleDateSelected(e)}}
                   />
                 </div>
               </div>
+
+              {
+                falseDate ?
+                    <p className="text-red-700 text-sm">* Ngày bắt đầu phải từ hôm nay trở đi</p>
+                : null
+              }
 
               <div className="bg-blue-200 w-full h-40 py-1 px-3 mt-4 rounded-lg">
                 <div className="flex flex-row justify-between mt-2 mt-2 mb-3">
@@ -1279,47 +1327,56 @@ const UploadPost = (props: Props) => {
           </div>
 
           {/* Upload button */}
-          {!showAlert ? (
-            <div className="w-full text-center">
-              <button
-                className="bg-blue-700 w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
-                onClick={() => handleCreatePost()}
-              >
-                <p className="text-white text-center">Đăng tin {">"}</p>
-              </button>
-            </div>
-          ) : (
-            <div className="w-full lg:w-1/2 mx-auto mt-6">
-              <Alert
-                severity="success"
-                onClose={() => {
-                  setShowAlert(false)
-                }}
-              >
-                <AlertTitle>Thành công</AlertTitle>
-                Tin đăng của bạn đã được ghi nhận —{" "}
-                <strong>Vui lòng chờ kiểm duyệt của QTV!</strong>
-              </Alert>
-            </div>
-          )}
+          {
+            !showAlert ?
+            (
+              <div className="w-full text-center">
+                <button
+                  className="bg-blue-700 w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
+                  onClick={() => handleCreatePost()}
+                >
+                  <p className="text-white text-center">Đăng tin {">"}</p>
+                </button>
+              </div>
+            )
+            :
+            (
+              <div className="w-full lg:w-1/2 mx-auto mt-6">
+                <Alert
+                  severity="success"
+                  onClose={() => {
+                    setShowAlert(false)
+                  }}
+                >
+                  <AlertTitle>Thành công</AlertTitle>
+                    Tin đăng của bạn đã được ghi nhận —{" "} <strong>Vui lòng chờ kiểm duyệt của QTV!</strong>
+                </Alert>
+              </div>
+            )
+          }
 
           {/* /* Check all fields alert */}
-          {checkFieldsAlert ? (
-            <div className="w-full lg:w-1/2 mx-auto mt-6">
-              <Alert
-                severity="error"
-                onClose={() => {
-                  setCheckFieldsAlert(false)
-                }}
-              >
-                <AlertTitle>Thất bại</AlertTitle>
-                Kiểm tra lại tất cả thông tin —{" "}
-                <strong>Vui lòng thử lại!</strong>
-              </Alert>
-            </div>
-          ) : null}
+          {
+            checkFieldsAlert ?
+            (
+              <div className="w-full lg:w-1/2 mx-auto mt-6">
+                <Alert
+                  severity="error"
+                  onClose={() => {
+                    setCheckFieldsAlert(false)
+                  }}
+                >
+                  <AlertTitle>Thất bại</AlertTitle>
+                    Kiểm tra lại tất cả thông tin — {" "} <strong>Vui lòng thử lại!</strong>
+                </Alert>
+              </div>
+            ) : null
+          }
         </div>
       </div>
+
+      <Footer/>
+
       <Backdrop
         className="flex flex-col"
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -1332,6 +1389,25 @@ const UploadPost = (props: Props) => {
       </Backdrop>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    console.log("Getting post list from Server...")
+    const res = await fetch(`${server}/a/province/get`)
+    let data = await res.json()
+    data = data.data
+    let provinces = new Array()
+    let bigCity = ["SG", "HN", "DDN", "BD", "DN"]
+    data.forEach((province: any) => {
+      let obj = {
+        value: province._id,
+        label: province.provinceName,
+        slug: province.slug,
+      }
+  
+      provinces.push(obj)
+    })
+    return { props: { provinces } }
 }
 
 export default UploadPost
