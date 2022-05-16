@@ -43,11 +43,11 @@ const Map = ({ type, lng, lat, callback }: any) => {
 
     // Clean up on unmount
     return () => map.remove()
-  })
+  }, [])
 
   return (
     <div>
-      <div className="h-[32rem] w-full" id="mapConatainer" />
+      <div className="h-[32rem] w-full rounded-md" id="mapConatainer" />
     </div>
   )
 }
