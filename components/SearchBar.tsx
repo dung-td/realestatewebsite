@@ -90,11 +90,11 @@ const SearchBar = ({ provinces }: Props) => {
   ]
 
   const areas = [
-    { value: "mat-tien", label: "< 30m" },
-    { value: "mat-tien2", label: "30 - 100 m2" },
-    { value: "mat-tien3", label: "100m2 - 200m2" },
-    { value: "mat-tien4", label: "200m2 - 500m2" },
-    { value: "mat-tien5", label: "> 500m2" },
+    { value: "mat-tien", label: "< 30 m²" },
+    { value: "mat-tien2", label: "30m² - 100 m²" },
+    { value: "mat-tien3", label: "100m² - 200m²" },
+    { value: "mat-tien4", label: "200m² - 500m²" },
+    { value: "mat-tien5", label: "> 500m²" },
   ]
 
   const projects = [

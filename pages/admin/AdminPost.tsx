@@ -13,39 +13,6 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert"
 import Backdrop from "@mui/material/Backdrop"
 import CircularProgress from "@mui/material/CircularProgress"
 
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  }
-}
-
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -64,6 +31,7 @@ const AdminPost = ({ type }: any) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isChange, setIsChange] = useState(false)
 
+  // Get tab name
   useEffect(() => {
     fetch(`${server}/post-type/get`)
       .then((res) => res.json())
@@ -136,6 +104,19 @@ const AdminPost = ({ type }: any) => {
         break
       case "decline":
         decline(id)
+        break
+      case "terminate":
+        terminate(id)
+        break
+      case "delete":
+        _delete(id)
+        break
+      // case "ban":
+      //   ban(id)
+      // break
+      case "remove":
+        decline(id)
+        break
       default:
         break
     }
@@ -156,7 +137,7 @@ const AdminPost = ({ type }: any) => {
       .then((data: any) => {
         setIsChange(!isChange)
       })
-    setAlertMessage("Tin đã bị từ chối duyệt")
+    setAlertMessage("Tin đã được xóa duyệt")
     setAlertOpen(true)
     setIsLoading(false)
   }
@@ -181,6 +162,46 @@ const AdminPost = ({ type }: any) => {
     setIsLoading(false)
   }
 
+  const _delete = (id: string) => {
+    let body = { id: id }
+    console.log(body)
+    fetch(`${server}/admin/post/delete`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data: any) => {
+        setIsChange(!isChange)
+      })
+    setAlertMessage("Tin đã được xóa")
+    setAlertOpen(true)
+    setIsLoading(false)
+  }
+
+  const terminate = (id: string) => {
+    let body = { id: id }
+    console.log(body)
+    fetch(`${server}/admin/post/terminate`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data: any) => {
+        setIsChange(!isChange)
+      })
+    setAlertMessage("Tin đã được gỡ bỏ")
+    setAlertOpen(true)
+    setIsLoading(false)
+  }
+
   return (
     <div className="ml-72 p-8 min-h-screen">
       <div className="grid grid-full">
@@ -201,10 +222,13 @@ const AdminPost = ({ type }: any) => {
               onChange={handleTabChange}
               aria-label="basic tabs example"
             >
-              <Tab label={`VIP3`} {...a11yProps(0)} />
-              <Tab label={`VIP2`} {...a11yProps(1)} />
-              <Tab label={`VIP1`} {...a11yProps(2)} />
-              <Tab label={`Tin thường`} {...a11yProps(3)} />
+              {postTypes.map((type: any) => (
+                <Tab key={type.id} label={type.label} />
+              ))}
+              <Tab label={`VIP3`} />
+              <Tab label={`VIP2`} />
+              <Tab label={`VIP1`} />
+              <Tab label={`Tin thường`} />
             </Tabs>
           </Box>
 

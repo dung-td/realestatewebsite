@@ -46,6 +46,23 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
       setPreviewDrawler(open)
     }
 
+  const terminate = () => {
+    Swal.fire({
+      title: "Gỡ bài viết?",
+      text: "Bài viết sẽ được chuyển vào mục chờ xử lý",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#B4161B",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Đồng ý",
+      cancelButtonText: "Hủy",
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        callback(data._id, "terminate")
+      }
+    })
+  }
+
   return (
     <div className="mb-4 p-4 grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
       <div className="col-span-12 md:col-span-3 lg:col-span-3">
@@ -128,6 +145,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="w-full text-white bg-red-700 hover:bg-red-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={terminate}
               >
                 Gỡ tin
               </button>
@@ -185,6 +203,9 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="w-full text-white bg-red-700 hover:bg-red-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={() => {
+                  callback(data._id, "delete")
+                }}
               >
                 Xóa tin
               </button>
@@ -194,6 +215,9 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="w-full text-white bg-red-700 hover:bg-red-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={() => {
+                  callback(data._id, "ban")
+                }}
               >
                 Cấm đăng
               </button>

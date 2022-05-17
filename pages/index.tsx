@@ -10,11 +10,12 @@ import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 
 type Props = {
+  postCounts: any[]
   provinces: Province[]
   smallProvinces: Province[]
 }
 
-const Home = ({ provinces, smallProvinces }: Props) => {
+const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
   const [scrollTop, setScrollTop] = useState(0)
 
   const onScroll = () => {
@@ -39,11 +40,10 @@ const Home = ({ provinces, smallProvinces }: Props) => {
           </div>
         </div>
 
-        <City provinces={provinces} smallProvines={smallProvinces} />
+        <City postCounts={postCounts} smallProvines={smallProvinces} />
 
         {/* ELEMENTS GO HERE PLEASE */}
-        <ListEstateOnHome/>
-        
+        <ListEstateOnHome />
       </div>
 
       <div className="h-96"></div>
@@ -54,6 +54,7 @@ const Home = ({ provinces, smallProvinces }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  // Getting provinces
   const res = await fetch(`${server}/a/province/get`)
   let data = await res.json()
   data = data.data
@@ -69,7 +70,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
     provinces.push(obj)
   })
   let count = 0
-
+  let postCounts = new Array<any>()
+  bigCites.forEach(async (city) => {
+    const res = await fetch(`${server}/admin/post/count?p=${city}`)
+    let data = await res.json()
+    data = data.data
+    postCounts.push(data)
+  })
   while (count < 7) {
     let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
 
@@ -79,7 +86,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   }
 
-  return { props: { provinces, smallProvinces } }
+  // Getting big province count
+
+  return { props: { postCounts, provinces, smallProvinces } }
 }
+
+const getSmallProvince = () => {}
 
 export default Home

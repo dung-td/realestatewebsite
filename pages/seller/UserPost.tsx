@@ -65,7 +65,7 @@ const UserPost = ({ type }: any) => {
   const [isChange, setIsChange] = useState(false)
 
   useEffect(() => {
-    fetch(`${server}/post-type/get?oid=62640dfaa4b7d5cedcf0166d`)
+    fetch(`${server}/post-type/get`)
       .then((res) => res.json())
       .then((data) => {
         let arr = new Array()
