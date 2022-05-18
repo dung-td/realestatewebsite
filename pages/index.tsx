@@ -24,7 +24,7 @@ const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
   }
 
   return (
-    <div onScroll={onScroll}>
+    <div className="relative" onScroll={onScroll}>
       <Header />
 
       <div className="grid-full">

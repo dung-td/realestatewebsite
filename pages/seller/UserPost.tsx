@@ -56,6 +56,12 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const UserPost = ({ type }: any) => {
   const [data, setData] = useState<Array<any>>([])
+  const [queryData, setQueryData] = useState<Array<any>>([])
+
+  const [pageCount, setPageCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
+
   const [postTypes, setPostTypes] = useState<Array<any>>([])
   const [postType, setPostType] = useState("627ba24aea534ab591781729")
   const [alertType, setAlertType] = useState("success")
@@ -84,15 +90,18 @@ const UserPost = ({ type }: any) => {
     setTabValue(newValue)
     switch (newValue) {
       case 0:
-        setPostType("627ba24aea534ab591781729")
+        setPostType("")
         break
       case 1:
-        setPostType("627ba1eeea534ab591781728")
+        setPostType("627ba24aea534ab591781729")
         break
       case 2:
-        setPostType("627b993cea534ab591781727")
+        setPostType("627ba1eeea534ab591781728")
         break
       case 3:
+        setPostType("627b993cea534ab591781727")
+        break
+      case 4:
         setPostType("627ba283ea534ab59178172a")
       default:
         break
@@ -114,6 +123,34 @@ const UserPost = ({ type }: any) => {
     setAlertOpen(false)
   }
 
+  const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const firstPageIndex = (value - 1) * 5
+    const lastPageIndex = firstPageIndex + 5
+    setCurrentPageData(queryData.slice(firstPageIndex, lastPageIndex))
+    window.scroll(0, 0)
+  }
+
+  const onSearch = (query: string) => {
+    console.log(query)
+    let queryArray = new Array<any>()
+    data.forEach((post) => {
+      if (
+        post.title.toLowerCase().includes(query) ||
+        post._id.includes(query)
+      ) {
+        queryArray.push(post)
+      }
+    })
+    console.log(queryArray)
+
+    setQueryData(queryArray)
+    let count = queryArray.length / 5
+    setPageCount(
+      Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+    )
+    setCurrentPageData(queryArray.slice(0, 5))
+  }
+
   useEffect(() => {
     setIsLoading(true)
     let isCancelled = false
@@ -123,6 +160,14 @@ const UserPost = ({ type }: any) => {
       .then((res) => res.json())
       .then((data) => {
         setData(data.data)
+        let count = data.data.length / 5
+        setPageCount(
+          Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+        )
+        const firstPageIndex = 0
+        const lastPageIndex = firstPageIndex + 5
+        setCurrentPageData(data.data.slice(firstPageIndex, lastPageIndex))
+        setQueryData(data.data)
         setIsLoading(false)
       })
     return () => {
@@ -235,7 +280,7 @@ const UserPost = ({ type }: any) => {
           <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
         </div>
 
-        <Filter />
+        <Filter callback={onSearch} />
 
         <Box sx={{ width: "100%" }}>
           <Box
@@ -254,7 +299,7 @@ const UserPost = ({ type }: any) => {
             </Tabs>
           </Box>
 
-          {data.map((item: any) => {
+          {queryData.map((item: any) => {
             return <Item callback={removeCallback} key={item._id} data={item} />
           })}
         </Box>
@@ -262,7 +307,8 @@ const UserPost = ({ type }: any) => {
         {data.length > 0 ? (
           <Pagination
             className="center"
-            count={1}
+            count={pageCount}
+            onChange={onPageChange}
             showFirstButton
             showLastButton
           />

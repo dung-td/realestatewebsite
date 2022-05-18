@@ -3,13 +3,8 @@ import Image from "next/image"
 import Chip from "@mui/material/Chip"
 import Drawer from "@mui/material/Drawer"
 import Box from "@mui/material/Box"
-import server from "../../../../interfaces/server"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
-import InputLabel from "@mui/material/InputLabel"
-import FormControl from "@mui/material/FormControl"
-import MenuItem from "@mui/material/MenuItem"
 import PostContent from "../../../../components/EstateDetail/PostContent"
-import moment from "moment"
+import Avatar from "@mui/material/Avatar"
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -22,7 +17,11 @@ const modalStyle = {
   boxShadow: 24,
   p: 2,
 }
-const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
+const Item: React.FC<{ data: any; callback: any; postType: string }> = ({
+  data,
+  callback,
+  postType,
+}) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [expandDetail, setExpandDetail] = useState(false)
   const [previewDrawler, setPreviewDrawler] = useState(false)
@@ -75,13 +74,19 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
         />
       </div>
       <div className="col-span-12 md:col-span-9">
-        <a href="#" className="text-xl font-bold text-gray-700">
-          {data.title}
-        </a>
+        <div className="inline-flex items-center">
+          {postType == "" ? (
+            <Chip className="mr-1" size="small" color="error" label={data.postType.name} />
+          ) : null}
+          <a href="#" className="text-xl font-bold text-gray-700">
+            {data.title}
+          </a>
+        </div>
         <p className="text-gray-700">
           <span className="font-semibold">{data.estateType}</span> -{" "}
           {data.address}
         </p>
+
         <div className="grid grid-cols-4 gap-4 mt-6 w-full">
           <div className="col-span-2">
             <p>Trạng thái</p>
@@ -278,12 +283,6 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
             </p>
             <div className="col-span-6 font-medium">
               Người đăng: <span className="font-bold">{data.owner.name}</span>
-            </div>
-            <div className="col-span-6 font-medium">
-              Loại tài khoản: <span className="font-bold">VIP1</span>
-            </div>
-            <div className="col-span-6 font-medium">
-              Số bài đã đăng: <span className="font-bold">304</span> bài
             </div>
             <div className="col-span-6 font-medium">
               Loại tin đăng:{" "}

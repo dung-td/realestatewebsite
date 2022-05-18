@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Filter from "../../components/User/Filter"
 import Item from "../../components/admin/Dashboard/Post/Item"
 import Tabs from "@mui/material/Tabs"
@@ -22,8 +22,15 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const AdminPost = ({ type }: any) => {
   const [data, setData] = useState<Array<any>>([])
+  const [queryData, setQueryData] = useState<Array<any>>([])
+
+  const [pageCount, setPageCount] = useState(0)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
+
   const [postTypes, setPostTypes] = useState<Array<any>>([])
-  const [postType, setPostType] = useState("627ba24aea534ab591781729")
+  const [postType, setPostType] = useState("")
 
   const [alertType, setAlertType] = useState("success")
   const [alertMessage, setAlertMessage] = useState("Tin đã được duyệt")
@@ -32,18 +39,18 @@ const AdminPost = ({ type }: any) => {
   const [isChange, setIsChange] = useState(false)
 
   // Get tab name
-  useEffect(() => {
-    fetch(`${server}/post-type/get`)
-      .then((res) => res.json())
-      .then((data) => {
-        let arr = new Array()
-        data.data.forEach((item: any) => {
-          let obj = { id: item._id, label: item.name }
-          arr.push(obj)
-        })
-        setPostTypes(arr)
-      })
-  }, [])
+  // useEffect(() => {
+  //   fetch(`${server}/post-type/get`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       let arr = new Array()
+  //       data.data.forEach((item: any) => {
+  //         let obj = { id: item._id, label: item.name }
+  //         arr.push(obj)
+  //       })
+  //       setPostTypes(arr)
+  //     })
+  // }, [])
 
   const [tabValue, setTabValue] = useState(0)
 
@@ -52,15 +59,18 @@ const AdminPost = ({ type }: any) => {
     setTabValue(newValue)
     switch (newValue) {
       case 0:
-        setPostType("627ba24aea534ab591781729")
+        setPostType("")
         break
       case 1:
-        setPostType("627ba1eeea534ab591781728")
+        setPostType("627ba24aea534ab591781729")
         break
       case 2:
-        setPostType("627b993cea534ab591781727")
+        setPostType("627ba1eeea534ab591781728")
         break
       case 3:
+        setPostType("627b993cea534ab591781727")
+        break
+      case 4:
         setPostType("627ba283ea534ab59178172a")
       default:
         break
@@ -82,6 +92,31 @@ const AdminPost = ({ type }: any) => {
     setAlertOpen(false)
   }
 
+  const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const firstPageIndex = (value - 1) * 5
+    const lastPageIndex = firstPageIndex + 5
+    setCurrentPageData(queryData.slice(firstPageIndex, lastPageIndex))
+    window.scroll(0, 0)
+  }
+
+  const onSearch = (query: string) => {
+    console.log(query)
+    let queryArray = new Array<any>()
+    data.forEach((post) => {
+      if (post.title.toLowerCase().includes(query) || post._id.includes(query)) {
+        queryArray.push(post)
+      }
+    })
+    console.log(queryArray)
+
+    setQueryData(queryArray)
+    let count = queryArray.length / 5
+    setPageCount(
+      Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+    )
+    setCurrentPageData(queryArray.slice(0, 5))
+  }
+
   useEffect(() => {
     setIsLoading(true)
     let isCancelled = false
@@ -89,6 +124,14 @@ const AdminPost = ({ type }: any) => {
       .then((res) => res.json())
       .then((data) => {
         setData(data.data)
+        let count = data.data.length / 5
+        setPageCount(
+          Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+        )
+        const firstPageIndex = 0
+        const lastPageIndex = firstPageIndex + 5
+        setCurrentPageData(data.data.slice(firstPageIndex, lastPageIndex))
+        setQueryData(data.data)
         setIsLoading(false)
       })
     return () => {
@@ -210,7 +253,7 @@ const AdminPost = ({ type }: any) => {
           <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
         </div>
 
-        <Filter />
+        <Filter callback={onSearch} />
 
         <Box sx={{ width: "100%" }}>
           <Box
@@ -225,6 +268,7 @@ const AdminPost = ({ type }: any) => {
               {postTypes.map((type: any) => (
                 <Tab key={type.id} label={type.label} />
               ))}
+              <Tab label={`Tất cả`} />
               <Tab label={`VIP3`} />
               <Tab label={`VIP2`} />
               <Tab label={`VIP1`} />
@@ -232,15 +276,23 @@ const AdminPost = ({ type }: any) => {
             </Tabs>
           </Box>
 
-          {data.map((item: any) => {
-            return <Item callback={removeCallback} key={item._id} data={item} />
+          {currentPageData.map((item: any) => {
+            return (
+              <Item
+                postType={postType}
+                callback={removeCallback}
+                key={item._id}
+                data={item}
+              />
+            )
           })}
         </Box>
 
         {data.length > 0 ? (
           <Pagination
             className="center"
-            count={1}
+            count={pageCount}
+            onChange={onPageChange}
             showFirstButton
             showLastButton
           />
