@@ -21,12 +21,10 @@ import { visuallyHidden } from "@mui/utils"
 
 import CheckIcon from "@mui/icons-material/Check"
 import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import CloseIcon from "@mui/icons-material/Close"
-import BlockIcon from "@mui/icons-material/Block"
-import server from "../../interfaces/server"
-import { AnyArray } from "immer/dist/internal"
-import moment from "moment"
+import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined"
 
 interface Column {
   id:
@@ -37,6 +35,7 @@ interface Column {
     | "address"
     | "status"
     | "postCount"
+    | "action"
   minWidth?: number
   maxWidth?: number
   align?: "right" | "left"
@@ -47,7 +46,7 @@ const columns: readonly Column[] = [
   { id: "name", minWidth: 150 },
   { id: "username", minWidth: 150 },
   { id: "phone", minWidth: 150 },
-  { id: "email", minWidth: 100 },
+  { id: "email", minWidth: 70 },
   { id: "address", minWidth: 150 },
 
   {
@@ -73,7 +72,7 @@ const columns: readonly Column[] = [
         <Chip
           variant="outlined"
           color="warning"
-          icon={<BlockIcon />}
+          icon={<BlockOutlinedIcon />}
           label="Cấm đăng"
         />
       ),
@@ -82,6 +81,27 @@ const columns: readonly Column[] = [
     id: "postCount",
     minWidth: 150,
     align: "right",
+  },
+  {
+    id: "action",
+    minWidth: 80,
+    maxWidth: 100,
+    align: "right",
+    format: () => (
+      <>
+        <Tooltip title="Xóa" arrow>
+          <IconButton aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Chỉnh sửa" arrow placement="right">
+          <IconButton aria-label="delete">
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      </>
+    ),
   },
 ]
 
@@ -159,6 +179,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "Bài viết đã đăng",
   },
+  {
+    id: "action",
+    numeric: false,
+    disablePadding: false,
+    label: "",
+  },
 ]
 
 interface EnhancedTableProps {
@@ -229,12 +255,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number
-  callback: any
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const { numSelected } = props
-  const { callback } = props
 
   return (
     <Toolbar
@@ -261,35 +285,11 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : null}
       {numSelected > 0 ? (
-        <>
-          <Tooltip title="Xóa mục đã chọn" arrow>
-            <IconButton>
-              <DeleteIcon
-                onClick={() => {
-                  callback("delete")
-                }}
-              />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Gỡ cấm đăng" arrow>
-            <IconButton>
-              <CheckIcon
-                onClick={() => {
-                  callback("unban")
-                }}
-              />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Cấm đăng" arrow>
-            <IconButton>
-              <BlockIcon
-                onClick={() => {
-                  callback("ban")
-                }}
-              />
-            </IconButton>
-          </Tooltip>
-        </>
+        <Tooltip title="Xóa mục đã chọn" arrow>
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
@@ -309,6 +309,7 @@ interface Data {
   address: string
   status: string
   postCount: number
+  action: any
 }
 
 function createData(
@@ -318,7 +319,8 @@ function createData(
   email: string,
   address: string,
   status: string,
-  postCount: number
+  postCount: number,
+  action: any
 ): Data {
   return {
     name,
@@ -328,10 +330,44 @@ function createData(
     address,
     status,
     postCount,
+    action,
   }
 }
 
-const AdminUser = () => {
+const rows = [
+  createData(
+    "Tống Đức Dũng",
+    "tngcdng",
+    "0932696361",
+    "tngcdng@gmail.com",
+    "Bình Dương",
+    "active",
+    10,
+    null
+  ),
+  createData(
+    "Mai Công Danh",
+    "danhmc",
+    "0932999999",
+    "danhmc1252@gmail.com",
+    "Bình Dương",
+    "disactive",
+    10,
+    null
+  ),
+  createData(
+    "Nguyễn Thành Nội",
+    "ntnvlog",
+    "0932999999",
+    "ntnvlog@gmail.com",
+    "TP. HCM",
+    "ban",
+    10,
+    null
+  ),
+]
+
+const Datatable = () => {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
@@ -339,60 +375,6 @@ const AdminUser = () => {
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name")
   const [selected, setSelected] = React.useState<readonly string[]>([])
   const [dense, setDense] = React.useState(false)
-  const [rows, setRows] = React.useState<Array<Data>>([])
-
-  const callback = (action: string) => {
-    let url = `${server}/admin/user/`
-    switch (action) {
-      case "ban":
-        url += "ban"
-        break
-      case "unban":
-        url += "unban"
-        break
-      default:
-        break
-    }
-    var today = new Date()
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        _id: selected[0],
-        period: moment(today.setDate(today.getDate() + 7)).format("DD/MM/YYYY"),
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-      })
-  }
-
-  React.useEffect(() => {
-    let isCancelled = false
-    fetch(`${server}/admin/user/get`)
-      .then((res) => res.json())
-      .then((data: any) => {
-        let users = data.users
-        let newRows = new Array<Data>()
-        users.forEach((user: any) => {
-          newRows.push(
-            createData(
-              user.fullname,
-              user.username,
-              user.phone,
-              user.email,
-              user.cityId,
-              user.accountStatus,
-              user.postCount
-            )
-          )
-        })
-        setRows(newRows)
-      })
-    return () => {
-      isCancelled = true
-    }
-  }, [])
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -423,12 +405,12 @@ const AdminUser = () => {
     setSelected([])
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, username: string) => {
-    const selectedIndex = selected.indexOf(username)
+  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name)
     let newSelected: readonly string[] = []
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, username)
+      newSelected = newSelected.concat(selected, name)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1))
     } else if (selectedIndex === selected.length - 1) {
@@ -459,10 +441,7 @@ const AdminUser = () => {
         <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
       </div>
       <Paper>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          callback={callback}
-        />
+        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table
             stickyHeader
@@ -482,13 +461,13 @@ const AdminUser = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .sort(getComparator(order, orderBy))
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.username)
+                  const isItemSelected = isSelected(row.name)
                   const labelId = `enhanced-table-checkbox-${index}`
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.username)}
+                      onClick={(event) => handleClick(event, row.name)}
                       aria-checked={isItemSelected}
                       role="checkbox"
                       tabIndex={-1}
@@ -512,9 +491,7 @@ const AdminUser = () => {
                             align={column.align}
                             width={column.minWidth}
                           >
-                            {column.format
-                              ? column.format(value.toString())
-                              : value}
+                            {column.format ? column.format(value) : value}
                           </TableCell>
                         )
                       })}
@@ -547,4 +524,4 @@ const AdminUser = () => {
   )
 }
 
-export default AdminUser
+export default Datatable
