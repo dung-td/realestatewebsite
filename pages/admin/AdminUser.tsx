@@ -1,5 +1,6 @@
 import * as React from "react"
 import { alpha } from "@mui/material/styles"
+import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import Paper from "@mui/material/Paper"
 import Table from "@mui/material/Table"
@@ -14,7 +15,11 @@ import Checkbox from "@mui/material/Checkbox"
 import Toolbar from "@mui/material/Toolbar"
 import Tooltip from "@mui/material/Tooltip"
 import Typography from "@mui/material/Typography"
-import { getCalendarPickerSkeletonUtilityClass } from "@mui/x-date-pickers"
+import Backdrop from "@mui/material/Backdrop"
+import Modal from "@mui/material/Modal"
+import TextField from "@mui/material/TextField"
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker"
+import CircularProgress from "@mui/material/CircularProgress"
 import Chip from "@mui/material/Chip"
 import IconButton from "@mui/material/IconButton"
 import { visuallyHidden } from "@mui/utils"
@@ -25,8 +30,8 @@ import FilterListIcon from "@mui/icons-material/FilterList"
 import CloseIcon from "@mui/icons-material/Close"
 import BlockIcon from "@mui/icons-material/Block"
 import server from "../../interfaces/server"
-import { AnyArray } from "immer/dist/internal"
 import moment from "moment"
+import Swal from "sweetalert2"
 
 interface Column {
   id:
@@ -35,12 +40,12 @@ interface Column {
     | "phone"
     | "email"
     | "address"
-    | "status"
+    | "accountStatus"
     | "postCount"
   minWidth?: number
   maxWidth?: number
   align?: "right" | "left"
-  format?: (value: string) => JSX.Element | string
+  format?: (value: string | any) => JSX.Element | string
 }
 
 const columns: readonly Column[] = [
@@ -51,11 +56,11 @@ const columns: readonly Column[] = [
   { id: "address", minWidth: 150 },
 
   {
-    id: "status",
+    id: "accountStatus",
     minWidth: 70,
     align: "left",
-    format: (value: string) =>
-      value == "active" ? (
+    format: (value: any) =>
+      value.status == "active" ? (
         <Chip
           variant="outlined"
           color="success"
@@ -70,12 +75,14 @@ const columns: readonly Column[] = [
           label="Không còn hoạt động"
         />
       ) : (
-        <Chip
-          variant="outlined"
-          color="warning"
-          icon={<BlockIcon />}
-          label="Cấm đăng"
-        />
+        <Tooltip title={`Tới ${value.date}`} arrow>
+          <Chip
+            variant="outlined"
+            color="warning"
+            icon={<BlockIcon />}
+            label="Cấm đăng"
+          />
+        </Tooltip>
       ),
   },
   {
@@ -101,8 +108,8 @@ function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
 ): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
+  a: { [key in Key]: number | string | any },
+  b: { [key in Key]: number | string | any }
 ) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -262,7 +269,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       ) : null}
       {numSelected > 0 ? (
         <>
-          <Tooltip title="Xóa mục đã chọn" arrow>
+          <Tooltip title="Cấm người dùng" arrow>
             <IconButton>
               <DeleteIcon
                 onClick={() => {
@@ -307,7 +314,10 @@ interface Data {
   phone: string
   email: string
   address: string
-  status: string
+  accountStatus: {
+    status: string
+    date?: string
+  }
   postCount: number
 }
 
@@ -318,6 +328,7 @@ function createData(
   email: string,
   address: string,
   status: string,
+  date: string,
   postCount: number
 ): Data {
   return {
@@ -326,7 +337,10 @@ function createData(
     phone,
     email,
     address,
-    status,
+    accountStatus: {
+      status,
+      date,
+    },
     postCount,
   }
 }
@@ -340,34 +354,102 @@ const AdminUser = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([])
   const [dense, setDense] = React.useState(false)
   const [rows, setRows] = React.useState<Array<Data>>([])
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [isChange, setIsChange] = React.useState(false)
+  const [period, setPeriod] = React.useState(new Date())
+  const [isOpenModal, setIsOpenModal] = React.useState(false)
 
   const callback = (action: string) => {
-    let url = `${server}/admin/user/`
     switch (action) {
       case "ban":
-        url += "ban"
+        setIsOpenModal(true)
         break
       case "unban":
-        url += "unban"
+        Swal.fire({
+          title: `Gỡ cấm đăng`,
+          text: "Người dùng sẽ được sử dụng lại tính năng đăng bài!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Đồng ý!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`${server}/admin/user/unban`, {
+              method: "POST",
+              body: JSON.stringify({
+                _id: selected[0],
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                setIsChange(!isChange)
+                setSelected([])
+              })
+          }
+        })
+        break
+      case "delete":
+        Swal.fire({
+          title: `Xóa người dùng!`,
+          text: "Thao tác này không thể hoàn tác!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Đồng ý!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`${server}/admin/user/delete`, {
+              method: "POST",
+              body: JSON.stringify({
+                _id: selected[0],
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                setIsChange(!isChange)
+                setSelected([])
+              })
+          }
+        })
         break
       default:
         break
     }
     var today = new Date()
-    fetch(url, {
+  }
+
+  const confirmBan = () => {
+    setIsOpenModal(false)
+    setIsLoading(true)
+    fetch(`${server}/admin/user/ban`, {
       method: "POST",
       body: JSON.stringify({
         _id: selected[0],
-        period: moment(today.setDate(today.getDate() + 7)).format("DD/MM/YYYY"),
+        period: moment(period).format("DD/MM/YYYY"),
       }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        setIsChange(!isChange)
+        setIsLoading(false)
+        setSelected([])
       })
   }
 
+  // fetchData
   React.useEffect(() => {
+    setIsLoading(true)
     let isCancelled = false
     fetch(`${server}/admin/user/get`)
       .then((res) => res.json())
@@ -382,17 +464,23 @@ const AdminUser = () => {
               user.phone,
               user.email,
               user.cityId,
-              user.accountStatus,
+              user.accountStatus.status,
+              user.accountStatus.date,
               user.postCount
             )
           )
         })
         setRows(newRows)
+        setIsLoading(false)
       })
     return () => {
       isCancelled = true
     }
-  }, [])
+  }, [isChange])
+
+  const handleChange = (event: any) => {
+    setPeriod(event.target.value)
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -453,7 +541,7 @@ const AdminUser = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   return (
-    <div className="mt-12 ml-72">
+    <div className="relative mt-12 ml-72">
       <div className="mb-4">
         <p className="font-bold text-xl">Danh sách người dùng</p>
         <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
@@ -463,7 +551,7 @@ const AdminUser = () => {
           numSelected={selected.length}
           callback={callback}
         />
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 600 }}>
           <Table
             stickyHeader
             aria-label="sticky table"
@@ -513,7 +601,9 @@ const AdminUser = () => {
                             width={column.minWidth}
                           >
                             {column.format
-                              ? column.format(value.toString())
+                              ? column.id == "accountStatus"
+                                ? column.format(value)
+                                : column.format(value.toString())
                               : value}
                           </TableCell>
                         )
@@ -543,8 +633,63 @@ const AdminUser = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+        className="flex flex-col"
+        // onClick={handleCloseLoading}
+      >
+        <p>Đang tải...</p>
+        <CircularProgress className="mt-4" color="inherit" />
+      </Backdrop>
+
+      <Modal
+        open={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <div className="w-full">
+            <p className="mb-4">Cấm đăng tới</p>
+            <DesktopDatePicker
+              inputFormat="DD/MM/YYYY"
+              value={period}
+              onChange={(newValue: any) => {
+                if (newValue) setPeriod(new Date(newValue))
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <div className="mt-4 w-full flex justify-end">
+              <Button
+                onClick={() => setIsOpenModal(false)}
+                className="mr-2"
+                variant="outlined"
+              >
+                Hủy
+              </Button>
+              <Button onClick={confirmBan} variant="outlined">
+                Đồng ý
+              </Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </div>
   )
+}
+
+const modalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #fff",
+  boxShadow: 24,
+  p: 4,
 }
 
 export default AdminUser
