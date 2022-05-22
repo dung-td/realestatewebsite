@@ -5,17 +5,17 @@ import TextField from "@mui/material/TextField"
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker"
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker"
 
-const Filter = () => {
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+const Filter = ({ callback }: any) => {
+  // const [startDate, setStartDate] = useState(new Date())
+  // const [endDate, setEndDate] = useState(new Date())
 
-  const handleDateChange = (newValue: Date | null) => {
-    if (newValue != null) setEndDate(newValue)
-  }
+  // const handleDateChange = (newValue: Date | null) => {
+  //   if (newValue != null) setEndDate(newValue)
+  // }
 
   return (
-    <div className="grid grid-cols-12 mt-1 gap-4 ml-0 inline-flex items-center ">
-      <div className="col-span-4">
+    <div className="w-full grid grid-cols-12 mt-1 gap-4 ml-0 inline-flex items-center sticky top-0">
+      <div className="col-span-6">
         <div className="relative w-full h-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <span className="material-icons">search</span>
@@ -25,11 +25,14 @@ const Filter = () => {
             id="table-search"
             className="w-full h-full rounded-lg py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 "
             placeholder="Tìm kiếm theo mã tin hoặc tiêu đề"
+            onChange={(event) => {
+              callback(event.target.value)
+            }}
           />
         </div>
       </div>
 
-      <div className="col-span-2">
+      {/* <div className="col-span-2">
         <DesktopDatePicker
           label="Ngày bắt đầu"
           inputFormat="DD/MM/yyyy"
@@ -46,9 +49,9 @@ const Filter = () => {
           onChange={handleDateChange}
           renderInput={(params) => <TextField {...params} />}
         />
-      </div>
+      </div> */}
 
-      <div className="col-span-2">
+      {/* <div className="col-span-2">
         <button
           id="dropdownTypeSearch"
           data-dropdown-toggle="dropdown"
@@ -60,7 +63,7 @@ const Filter = () => {
           </span>
           <p className="text-xs sm:text-sm md:text-base">Bộ lọc</p>
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

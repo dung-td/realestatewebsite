@@ -21,11 +21,12 @@ const Home = () => {
   }
 
   return (
-    <div className="">
+    <div className="relative">
       <Header />
 
-      <aside className="absolute w-72" aria-label="Sidebar">
-        <div className="overflow-y-auto h-screen py-4 px-3 bg-gray-50 rounded">
+      {/* Sidebar */}
+      <div className="absolute w-72 min-h-screen">
+        <div className="py-4 px-3 bg-gray-50 rounded">
           <ul className="space-y-2">
             {/* User */}
             <li>
@@ -89,10 +90,10 @@ const Home = () => {
                       <a
                         onClick={() => {
                           setSelect("post")
-                          setSelectPostType("handle")
+                          setSelectPostType("terminated")
                         }}
                         className={`${
-                          select == "post" && selectPostType == "handle"
+                          select == "post" && selectPostType == "terminated"
                             ? `border-r-4 border-[#1976d2] bg-blue-50`
                             : ``
                         }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
@@ -208,12 +209,12 @@ const Home = () => {
             </li>
           </ul>
         </div>
-      </aside>
-
-      <div className="min-h-screen">
-        {select == "post" ? <AdminPost type={selectPostType} /> : null}
       </div>
-      
+
+      <div className="min-h-screen ">
+        {select == "post" ? <AdminPost type={selectPostType} /> : <AdminUser />}
+      </div>
+
       <Footer />
     </div>
   )

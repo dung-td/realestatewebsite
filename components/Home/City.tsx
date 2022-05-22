@@ -1,36 +1,37 @@
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Province } from "../../interfaces/Province"
 
 type Props = {
-  provinces: Province[]
+  postCounts: any[]
   smallProvines: Province[]
 }
 
-const City = ({ provinces, smallProvines }: Props) => {
+const City = ({ postCounts, smallProvines }: Props) => {
   const smallPopularCity = [
     {
       title: "HÀ NỘI",
-      count: 1234,
       slug: "ha-noi",
+      count: postCounts[1],
       img: "https://file4.batdongsan.com.vn/images/newhome/cities1/HN-web-3.jpg",
     },
     {
       title: "Bình Dương",
-      count: 1234,
       slug: "binh-duong",
+      count: postCounts[2],
       img: "https://file4.batdongsan.com.vn/images/newhome/cities1/BD-web-1.jpg",
     },
     {
       title: "Đà Nẵng",
-      count: 1234,
       slug: "da-nang",
+      count: postCounts[3],
       img: "https://file4.batdongsan.com.vn/images/newhome/cities1/DDN-web-1.jpg",
     },
     {
       title: "Đồng Nai",
-      count: 1234,
       slug: "dong-nai",
+      count: postCounts[4],
       img: "https://file4.batdongsan.com.vn/images/newhome/cities1/DNA-web-3.jpg",
     },
   ]
@@ -38,7 +39,7 @@ const City = ({ provinces, smallProvines }: Props) => {
   return (
     <div className="mt-8">
       <div>
-        <h3 className="section-title font-bold text-sm sm:text-base md:text-lg lg:text-xl">
+        <h3 className="section-title font-bold text-sm sm:text-base">
           BẤT ĐỘNG SẢN Ở THÀNH PHỐ LỚN
         </h3>
         <div className="seperate-line border-b-2 border-indigo-500 w-1/4 mb-4"></div>
@@ -50,9 +51,7 @@ const City = ({ provinces, smallProvines }: Props) => {
               <p className="text-base font-semibold hover:underline uppercase">
                 TP. Hồ Chí Minh
               </p>
-              <p className="text-sm font-semibold hover:underline">
-                182 tin đăng
-              </p>
+              <p className="text-s hover:underline">{postCounts[0]} tin đăng</p>
             </div>
             <Image
               alt="Hồ Chí Minh"
@@ -70,9 +69,6 @@ const City = ({ provinces, smallProvines }: Props) => {
                 <div className="absolute todiv-0 left-0 p-2 city-title z-10">
                   <p className="text-base font-semibold hover:underline uppercase">
                     {city.title}
-                  </p>
-                  <p className="text-sm font-semibold hover:underline">
-                    {city.count} tin đăng
                   </p>
                 </div>
                 <Image
