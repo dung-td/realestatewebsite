@@ -6,10 +6,9 @@ import CollapseDescription from '../../components/EstateDetail/CollapseDescripti
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
 import { PhoneIcon } from '@heroicons/react/solid'
 import {Unit} from '../../Enum'
-import PostContent from '../../components/EstateDetail/PostContent'
-import PostDto from '../../interfaces/PostDTO'
 import style from "../../public/css/Estate.module.css"
-
+import ProjectContent from '../../components/ProjectDetail/ProjectContent'
+import ProjectDTO from '../../interfaces/ProjectDTO'
 interface TitleSectionProps{
     title: string,
     issuedDate?: string,
@@ -31,27 +30,26 @@ const TitleSection = (props: TitleSectionProps)=>{
         </div>
     )
 }
-interface IPost{
-    post: PostDto
+interface IProject{
+    project: ProjectDTO
 }
-const EstateDetail: NextPage<IPost> = (props)=>{
-
-    const {owner} = props.post
+const EstateProject: NextPage<IProject> = (props)=>{
+    const { investor } = props.project
     return (    
-        <div className={`sm:w-[1200px] mx-auto my-3 sm:flex rounded-lg border-black overflow-clip ${style.default}`}>
+        <div className={`${style.default} sm:w-[1200px] mx-auto my-3 sm:flex rounded-lg border-black overflow-clip`}>
             <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
-                <PostContent post={props.post}/>
+                <ProjectContent project={props.project}/>
                 
 
             </div>
             <div className="md:border-gray-300 md:w-1/4 md:border md:rounded-top-xl" id="sideContent">
                 <div className='md:h-[50vh] container flex md:flex-col md:justify-center items-center justify-around'>
                     <img className="w-20 h-20 rounded-full bg-cyan-500"
-                    src={owner.avatar}/>
-                    <p className="my-1">{owner.name}</p>
+                    src={investor?.avatar}/>
+                    <p className="my-1">{investor?.name}</p>
                     <a className="italic cursor-pointer">Xem thêm bài đăng khác</a>
-                    <a href={`tel:${owner.phone}`} className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static">
-                        <PhoneIcon className='inline h-5 w-5'/>{owner.phone}
+                    <a href={`tel:${investor?.phone}`} className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static">
+                        <PhoneIcon className='inline h-5 w-5'/>{investor?.phone}
                     </a>
                 </div>
                 
@@ -62,21 +60,23 @@ const EstateDetail: NextPage<IPost> = (props)=>{
         </div>        
     )
 }
-export default EstateDetail
+export default EstateProject
 
 
 interface IPathParam{
     params:{
-        estateTypeSlug: string,
-        estatePostSlug: string
+        estateProjectSlug: string
     }
 }
 
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
-    const res = await fetch('http://vn-real-estate-api.herokuapp.com/api/post/slug')
+    const res = await fetch('http://vn-real-estate-api.herokuapp.com/api/project/get')
     const data = await res.json()
-    const {slugs} = data
+    const posts = data.data
+    const slugs = posts.map( (el: { slug: any }) => { return {params: {
+        estateProjectSlug: el.slug
+    }}})
     console.log(slugs)
     // We'll pre-render only these paths at build time.
     // { fallback: false } means other routes should 404.
@@ -86,15 +86,16 @@ export async function getStaticPaths() {
 
 export async function getStaticProps (pathParam: IPathParam) {
     const { params } = pathParam
-    const res = await fetch(`http://vn-real-estate-api.herokuapp.com/api/post/slug?slug=${params.estatePostSlug}`)
+    const res = await fetch(`http://vn-real-estate-api.herokuapp.com/api/project/get`)
     const data = await res.json()
-    const {post} =data
-    console.log(post)
+    const posts = data.data
+    const project = posts.filter((el: { slug: string }) => el.slug == params.estateProjectSlug)[0]
+    console.log(project)
     // By returning { props: { posts } }, the Blog component
     // will receive `posts` as a prop at build time
     return {
       props: {
-        post,
+        project,
       },
     }
   }

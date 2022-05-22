@@ -9,7 +9,7 @@ interface CarouselProps{
 const ImageCarousel: React.FC<CarouselProps> = ({imageList, className}) =>{
     return (
         <Carousel showArrows={true} >
-            {imageList.map((val)=>
+            {imageList && imageList.map((val)=>
             <div key={val} className='w-full h-[400px] object-center rounded-lg overflow-clip '>
                 <img width={"200px"} height={"300px"} src={val}/>
             </div>)}
