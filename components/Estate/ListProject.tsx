@@ -1,14 +1,14 @@
 import type { NextPage, GetServerSideProps } from "next"
 import { useState, useEffect } from "react"
-import EstateCard from "./EstateCard"
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import server from "../../interfaces/server";
 import MoneyFormat from "../../util/MoneyFormat";
+import ProjectCard from "./ProjectCard";
 
 
-const ListEstate: NextPage = () => {
+const ListProject: NextPage = () => {
     const [posts, setPosts] = useState(new Array())
     const [sort, setSort] = useState('Thông thường')
 
@@ -28,19 +28,17 @@ const ListEstate: NextPage = () => {
             data.forEach((post: any) => {
                 let obj = {
                     _id: post._id,
-                    title: post.title,
+                    name: post.name,
                     address: post.address,
-                    estateType: post.estateType,
+                    projectType: post.projectType,
                     thumbnail: post.images[0],
-                    price: MoneyFormat(post.price) + " " + post.priceType,
+                    price: MoneyFormat(post.price) + "/m2",
                     area: post.area,
-                    bathroom: post.bathroomNumber,
-                    bedroom: post.bedroomNumber,
-                    ownerName: post.owner.name,
-                    ownerPhone: post.owner.phone,
+                    apartments: post.aparmentNumber,
+                    buildings: post.buildingNumber,
+                    investorName: post.investor.name,
                     titleColor: post.postType.title_color,
                     slug: post.slug,
-                    purpose: post.forSaleOrRent,
                 }
                 posts.push(obj)
             })
@@ -85,21 +83,21 @@ const ListEstate: NextPage = () => {
                         {
                             posts.map((item) => {
                                 return (
-                                    <EstateCard
+                                    <ProjectCard
                                         key={item._id}
                                         id={item._id}
-                                        title={item.title}
-                                        estateType={item.estateType}
+                                        name={item.name}
+                                        projectType={item.projectType}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
                                         areaSqr={item.area}
-                                        rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
                                         titleColor={item.titleColor}
                                         slug={item.slug}
-                                        purpose={item.purpose}
-                                        author={item.ownerName}
-                                        author_phone_number={item.ownerPhone}
+                                        status={item.status}
+                                        apartments={item.apartments}
+                                        buildings={item.buildings}
+                                        investor={item.investorName}
                                     />
                                 )
                             })
@@ -139,4 +137,4 @@ const ListEstate: NextPage = () => {
     )
 }
 
-export default ListEstate
+export default ListProject

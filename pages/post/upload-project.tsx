@@ -31,7 +31,6 @@ import {
   getWardPrefix,
 } from "../../util/Address"
 import { Province } from "../../interfaces/Province"
-import { escape } from "querystring"
 
 type Props = {
   provinces: Province[]

@@ -13,7 +13,10 @@ export default interface PostDto{
         name: string,
         title_color: string
     },
-    estateType: string,
+    estateType: {
+        name: string,
+        slug: string
+    },
     forSaleOrRent: string,
     location: {
         CityName: string,

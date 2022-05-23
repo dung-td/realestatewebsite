@@ -24,6 +24,7 @@ const ListEstateOnHome: NextPage = () => {
                     address: post.address,
                     estateType: post.estateType,
                     thumbnail: post.images[0],
+                    purpose: post.forSaleOrRent,
                     price: MoneyFormat(post.price) + " " + post.priceType,
                     area: post.area,
                     bathroom: post.bathroomNumber,
@@ -31,7 +32,8 @@ const ListEstateOnHome: NextPage = () => {
                     ownerName: post.owner.name,
                     ownerPhone: post.owner.phone,
                     publishDate: post.publishedDate,
-                    titleColor: post.postType.title_color
+                    titleColor: post.postType.title_color,
+                    slug: post.slug
                 }
                 posts.push(obj)
             })
@@ -59,6 +61,7 @@ const ListEstateOnHome: NextPage = () => {
                                         key={item._id}
                                         id={item._id}
                                         title={item.title}
+                                        purpose={item.purpose}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
                                         areaSqr={item.area}
@@ -66,6 +69,8 @@ const ListEstateOnHome: NextPage = () => {
                                         author={item.ownerName}
                                         upload_date={item.publishDate}
                                         titleColor={item.titleColor}
+                                        estateType={item.estateType}
+                                        slug={item.slug}
                                     />
                                 )
                             })

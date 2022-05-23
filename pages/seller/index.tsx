@@ -6,6 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import UserPost from "./UserPost"
 import Footer from "../../components/Footer"
 import Header from "../../components/Header"
+import EditInformation from "../../components/User/Account/EditInformation"
+import ChangePassword from "../../components/User/Account/ChangePassword"
 import Filter from "../../components/User/Filter"
 import Item from "../../components/User/Item"
 import Sidebar from "../../components/User/Sidebar"
@@ -29,7 +31,7 @@ const Home = () => {
                 className="flex space-x-4 items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100"
               >
                 <div className="rounded-full bg-black h-10 w-10"></div>
-                <p className="font-medium text-lg">batdongsan88 - Admin</p>
+                <p className="font-medium text-lg">batdongsan88 - User</p>
               </a>
             </li>
             {/* Quản lý tin đăng */}
@@ -120,29 +122,29 @@ const Home = () => {
                     <li>
                       <a
                         onClick={() => {
-                          setSelect("userList")
+                          setSelect("editInfo")
                         }}
                         className={`${
-                          select == "userList"
+                          select == "editInfo"
                             ? `border-r-4 border-[#1976d2] bg-blue-50`
                             : ``
                         }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
                       >
-                        Danh sách người dùng
+                        Thông tin cá nhân
                       </a>
                     </li>
                     <li>
                       <a
                         onClick={() => {
-                          setSelect("userWrong")
+                          setSelect("changePassword")
                         }}
                         className={`${
-                          select == "userWrong"
+                          select == "changePassword"
                             ? `border-r-4 border-[#1976d2] bg-blue-50`
                             : ``
                         }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
                       >
-                        Xử lý vi phạm
+                        Mật khẩu
                       </a>
                     </li>
                     <li>
@@ -170,6 +172,8 @@ const Home = () => {
 
       <div className="min-h-screen">
         {select == "post" ? <UserPost type={selectPostType} /> : null}
+        {select == "editInfo" ? <EditInformation /> : null}
+        {select == "changePassword" ? <ChangePassword /> : null}
       </div>
 
       <Footer />

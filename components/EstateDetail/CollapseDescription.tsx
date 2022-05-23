@@ -3,7 +3,7 @@ import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/outline'
 const CollapseDescription: React.FC = ({children})=>{
     const [readMoreShown, setReadMoreShown] = useState(true)
     return <>
-        <div className={`relative ${readMoreShown && "max-h-[50vh]"} overflow-hidden border-b-black mb-5`}>
+        <div className={`relative ${readMoreShown && "max-h-[50vh]"} overflow-hidden whitespace-pre-wrap border-b-black mb-5`}>
             {children}
         </div>
         <div className='text-center'>
