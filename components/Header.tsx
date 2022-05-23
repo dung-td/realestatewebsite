@@ -62,13 +62,21 @@ const Header = () => {
   const logout = () => {
     sessionStorage.clear()
     setIsLogin(false)
-    window.location.reload()
+    window.location.href = "/"
   }
 
   useEffect(() => {
     if (sessionStorage.getItem("jwt")) {
       setIsLogin(true)
     }
+  }, [])
+
+  useEffect(() => {
+    fetch(`${server}/a/estate-type/get`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTypeLinks(data.data)
+      })
   }, [])
 
   useEffect(() => {
@@ -255,20 +263,18 @@ const Header = () => {
                             <p>Quản lý tin đăng</p>
                           </div>
                         </Link>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">person</span>
-                          <p>Thông tin cá nhân</p>
-                        </a>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">lock</span>
-                          <p>Đổi mật khẩu</p>
-                        </a>
+                        <Link href="/seller?s=editInfo" passHref={true}>
+                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center">
+                            <span className="material-icons mr-2">person</span>
+                            <p>Thông tin cá nhân</p>
+                          </div>
+                        </Link>
+                        <Link href="/seller?s=changePassword" passHref={true}>
+                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center">
+                            <span className="material-icons mr-2">lock</span>
+                            <p>Đổi mật khẩu</p>
+                          </div>
+                        </Link>
                         <div className="border-t border-gray-200 m-2" />
                         <div
                           onClick={() => {
