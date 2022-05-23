@@ -17,7 +17,7 @@ const ThiTruong: NextPage = () => {
                     <div className="container pt-4 space-y-2 grid">
                         <h2 className="font-semibold">Tăng giá đất bất chấp</h2>
                         <p>Vừa qua, thông tin về việc có đề xuất đưa 2 huyện Củ Chi và Hóc Môn lên thành phố và việc TP. Hồ Chí Minh đang chuẩn bị để tổ chức hội nghị xúc tiến đầu tư nhằm kêu gọi đầu tư vào 55 dự án tại 2 huyện trên, tổng mức vốn giao động khoảng 285.000 tỷ đồng. Qua đó, nhiều người từ các vùng khác liên tục đổ về hai địa phương này săn lùng quỹ đất, khiến giá đất bỗng dưng tăng vọt.</p>
-                        <p>Vài tuần trước, ông Long (sống tại TP. Thủ Đức) và một vài người bạn liên tục tới Hóc Môn và Củ Chi để tìm kiếm và mua đất. Ông cho biết: "Sau khi nghe mọi người bàn tán về việc TP. Hồ Chí Minh chuẩn bị công bố thông tin phát triển về phía Bắc, tôi và một vài người quen đã nhanh chóng lên Hóc Môn và Củ Chi khảo sát tình hình, tìm cơ hội đầu tư". </p>
+                        <p>Vài tuần trước, ông Long (sống tại TP. Thủ Đức) và một vài người bạn liên tục tới Hóc Môn và Củ Chi để tìm kiếm và mua đất. Ông cho biết: Sau khi nghe mọi người bàn tán về việc TP. Hồ Chí Minh chuẩn bị công bố thông tin phát triển về phía Bắc, tôi và một vài người quen đã nhanh chóng lên Hóc Môn và Củ Chi khảo sát tình hình, tìm cơ hội đầu tư. </p>
                         <div>
                             <img className="w-full" id="content img 1" alt="content-img-1" src="https://news.mogi.vn/wp-content/uploads/2019/09/nhadatcuchi1.jpg"></img>
                         </div>
@@ -27,7 +27,7 @@ const ThiTruong: NextPage = () => {
 
                         <p>Chị Hằng - Một nhà đầu tư khác ngụ tại Quận 7 TP. Hồ Chí Minh cho biết, tháng một vừa qua chị mới tìm hiểu được mảnh đất trồng cây lâu năm khoảng 1.000m2 trên đường Lâm Thị Ngành thuộc xã An Nhơn Tây, huyện Củ Chi. Khu đất này có thể chuyển sang đất thổ cư và được chủ sở hữu chào bán giá 2,8 tỷ đồng. Được biết, khi chị liên lạc lại chủ đất vào hôm qua thì giá đã tăng tới 3,3 tỷ đồng, chủ đất cho biết phải tăng giá theo giá thị trường. Được biết, cách đây một năm, giá đất nông nghiệp tại khu vực này chỉ giao động khoảng 1,5 - 1,6 tỷ đồng/ sào.</p>
 
-                        <p>Khảo sát thực tế cho thấy, một vài mảnh đất nông nghiệp trong khu dân cư hiện hữu, đã lên thổ cư đang bị "hét" giá lên đến 15 - 17 triệu đồng/m2. Con số này so với mức trước Tết Nguyên đán 2022 đã tăng 10 - 15%, có nới tăng hẳn lên 30 - 50%. Tại khu vực huyện Hóc Môn, các quỹ đất khá hiếm nên giá đất bị đẩy cao chót vót. Bà Nguyễn Hoàng Hà (ngụ tại xã Tân Hiệp) chia sẻ: "Mới hai đến ba tuần nay, cứ đến cuối tuần là khu vực này lại nườm nượp người đến tìm mua đất. Có nhiều mảnh người dân để trống lâu năm không biết ai là chủ nhưng gần đây có người đến mua bán, dựng hàng rào tấp nập".</p>
+                        <p>Khảo sát thực tế cho thấy, một vài mảnh đất nông nghiệp trong khu dân cư hiện hữu, đã lên thổ cư đang bị hét giá lên đến 15 - 17 triệu đồng/m2. Con số này so với mức trước Tết Nguyên đán 2022 đã tăng 10 - 15%, có nới tăng hẳn lên 30 - 50%. Tại khu vực huyện Hóc Môn, các quỹ đất khá hiếm nên giá đất bị đẩy cao chót vót. Bà Nguyễn Hoàng Hà (ngụ tại xã Tân Hiệp) chia sẻ: Mới hai đến ba tuần nay, cứ đến cuối tuần là khu vực này lại nườm nượp người đến tìm mua đất. Có nhiều mảnh người dân để trống lâu năm không biết ai là chủ nhưng gần đây có người đến mua bán, dựng hàng rào tấp nập.</p>
                         <div className="bg-gray-200 w-fit pl-4 pr-4 rounded justify-self-end">Theo dungtd</div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ const ThiTruong: NextPage = () => {
             </div>
             <div className="flex space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                    <path fill-Rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-Rule="evenodd" />
                 </svg>
                 <span className="bg-gray-200 pl-2 pr-2 rounded cursor-pointer">thi truong</span>
                 <span className="bg-gray-200 pl-2 pr-2 rounded cursor-pointer">thi truong</span>

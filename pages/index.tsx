@@ -9,6 +9,7 @@ import { useState } from "react"
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 
+
 type Props = {
   postCounts: any[]
   provinces: Province[]
@@ -17,14 +18,10 @@ type Props = {
 
 const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
   const [scrollTop, setScrollTop] = useState(0)
-
-  const onScroll = () => {
-    const scrollY = window.scrollY
-    console.log(`onScroll`)
-  }
+  
 
   return (
-    <div className="relative" onScroll={onScroll}>
+    <div className="relative">
       <Header />
 
       <div className="grid-full">
@@ -44,6 +41,7 @@ const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
 
         {/* ELEMENTS GO HERE PLEASE */}
         <ListEstateOnHome />
+
       </div>
 
       <div className="h-96"></div>

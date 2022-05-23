@@ -13,6 +13,7 @@ yarn install
 ```
 
 Then, run the development server:
+
 ```bash
 npm run dev
 # or
@@ -26,5 +27,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can find out our backend service for this project [here](https://github.com/nointh/real-estate-backend).
 
 ## Demo Website
+
+You can login and use further features using these accounts
+
+| Role  |  Username   |  Password   |
+| :---: | :---------: | :---------: |
+| Admin | updating... | updating... |
+| User  |   dungtd    |   123456    |
 
 Visit [https://batdongsan88.vercel.app/](https://batdongsan88.vercel.app/)!
