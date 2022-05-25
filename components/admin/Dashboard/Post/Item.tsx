@@ -83,7 +83,7 @@ const Item: React.FC<{ data: any; callback: any; postType: string }> = ({
           </a>
         </div>
         <p className="text-gray-700">
-          <span className="font-semibold">{data.estateType}</span> -{" "}
+          <span className="font-semibold">{data.estateType.name}</span> -{" "}
           {data.address}
         </p>
 

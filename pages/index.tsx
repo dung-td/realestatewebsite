@@ -1,31 +1,33 @@
-import type { NextPage, GetServerSideProps } from "next"
+import type { GetServerSideProps } from "next"
 import Image from "next/image"
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
 import City from "../components/Home/City"
+import NewsSection from "../components/News/Section"
 import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
 import { useState } from "react"
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
-
+import News from "../interfaces/news"
 
 type Props = {
+  news: News[]
   postCounts: any[]
   provinces: Province[]
   smallProvinces: Province[]
 }
 
-const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
+const Home = ({ postCounts, provinces, smallProvinces, news }: Props) => {
   const [scrollTop, setScrollTop] = useState(0)
-  
 
   return (
     <div className="relative">
       <Header />
 
+      {/* Search bar */}
       <div className="grid-full">
-        <div className="relative">
+        <div className="relative mb-8">
           <div className="home-banner">
             <img
               alt="banner"
@@ -37,11 +39,14 @@ const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
           </div>
         </div>
 
-        <City postCounts={postCounts} smallProvines={smallProvinces} />
+        {/* Section */}
+        <div className="space-y-16">
+          <NewsSection news={news} />
 
-        {/* ELEMENTS GO HERE PLEASE */}
-        <ListEstateOnHome />
+          <City postCounts={postCounts} smallProvines={smallProvinces} />
 
+          <ListEstateOnHome />
+        </div>
       </div>
 
       <div className="h-96"></div>
@@ -53,6 +58,13 @@ const Home = ({ postCounts, provinces, smallProvinces }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Getting provinces
+  const { postCounts, provinces, smallProvinces } = await getProvince()
+  // Getting news
+  const { news } = await getNews()
+  return { props: { postCounts, provinces, smallProvinces, news } }
+}
+
+const getProvince = async () => {
   const res = await fetch(`${server}/a/province/get`)
   let data = await res.json()
   data = data.data
@@ -84,11 +96,21 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   }
 
-  // Getting big province count
-
-  return { props: { postCounts, provinces, smallProvinces } }
+  return { postCounts, provinces, smallProvinces }
 }
 
-const getSmallProvince = () => {}
+const getNews = async () => {
+  const res = await fetch(`${server}/news/get`)
+
+  let data = await res.json()
+  data = data.data
+
+  let news = new Array()
+  data.forEach((n: any) => {
+    news.push(n)
+  })
+
+  return { news }
+}
 
 export default Home

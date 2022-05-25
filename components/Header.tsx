@@ -16,6 +16,8 @@ const Header = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [state, setState] = useState(false)
   const [typeLinks, setTypeLinks] = useState([])
+  const [newsLinks, setNewsLinks] = useState([])
+
 
   const [fullname, setFullname] = useState("")
 
@@ -80,6 +82,14 @@ const Header = () => {
   }, [])
 
   useEffect(() => {
+    fetch(`${server}/news/type`)
+      .then((res) => res.json())
+      .then((data) => {
+        setNewsLinks(data.data)
+      })
+  }, [])
+
+  useEffect(() => {
     if (isLogin) {
       fetch(`${server}/user/currentUser`, {
         method: "GET",
@@ -132,11 +142,15 @@ const Header = () => {
 
               <div className="ml-4 flex lg:ml-0">
                 <a className="inline-flex items-center" href="\">
-                  <img
-                    className="h-8 w-auto mr-2"
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
-                    alt=""
-                  />
+                  <div className="mr-2">
+                    <Image
+                      className="h-8 w-auto"
+                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+                      alt="logo.png"
+                      height={30}
+                      width={30}
+                    />
+                  </div>
                   <Image src={Logo} alt="logo.png" />
                 </a>
               </div>
@@ -212,6 +226,27 @@ const Header = () => {
                       >
                         Khu đô thị mới
                       </a>
+                    </div>{" "}
+                  </div>
+                  <div className="flex items-center nav-item">
+                    <a
+                      href="#"
+                      className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
+                    >
+                      Tin tức
+                    </a>
+                    <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                      {newsLinks.map((newsLink: any) => {
+                        return (
+                          <a
+                            key={newsLink._id}
+                            href={`/tin-tuc/${newsLink.slug}`}
+                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                          >
+                            {newsLink.name}
+                          </a>
+                        )
+                      })}
                     </div>{" "}
                   </div>
                 </div>
@@ -308,24 +343,6 @@ const Header = () => {
                       </div>
                     </>
                   )}
-                </div>
-
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a
-                    href="#"
-                    className="text-gray-700 hover:text-gray-800 flex items-center"
-                  >
-                    <img
-                      src="https://flagicons.lipis.dev/flags/4x3/vn.svg"
-                      alt=""
-                      className="w-5 h-auto block flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">
-                      {" "}
-                      VIE{" "}
-                    </span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
                 </div>
               </div>
             </div>
