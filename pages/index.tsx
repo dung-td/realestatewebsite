@@ -10,15 +10,23 @@ import { useState } from "react"
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 import News from "../interfaces/news"
+import MoneyFormat from "../util/MoneyFormat"
 
 type Props = {
   news: News[]
   postCounts: any[]
   provinces: Province[]
   smallProvinces: Province[]
+  estateOnHome: any[]
 }
 
-const Home = ({ postCounts, provinces, smallProvinces, news }: Props) => {
+const Home = ({
+  postCounts,
+  provinces,
+  smallProvinces,
+  news,
+  estateOnHome,
+}: Props) => {
   const [scrollTop, setScrollTop] = useState(0)
 
   return (
@@ -44,8 +52,9 @@ const Home = ({ postCounts, provinces, smallProvinces, news }: Props) => {
           <NewsSection news={news} />
 
           <City postCounts={postCounts} smallProvines={smallProvinces} />
+          {/* ELEMENTS GO HERE PLEASE */}
 
-          <ListEstateOnHome />
+          <ListEstateOnHome posts={estateOnHome} />
         </div>
       </div>
 
@@ -61,7 +70,37 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const { postCounts, provinces, smallProvinces } = await getProvince()
   // Getting news
   const { news } = await getNews()
-  return { props: { postCounts, provinces, smallProvinces, news } }
+
+  const fetchPost = await fetch(`${server}/post/get`)
+  let posts = await fetchPost.json()
+
+  posts = posts.data
+  let estateOnHome = new Array()
+
+  posts.forEach((post: any) => {
+    let obj = {
+      _id: post._id,
+      title: post.title,
+      address: post.address,
+      estateType: post.estateType,
+      thumbnail: post.images[0],
+      purpose: post.forSaleOrRent,
+      price: MoneyFormat(post.price) + " " + post.priceType,
+      area: post.area,
+      bathroom: post.bathroomNumber,
+      bedroom: post.bedroomNumber,
+      ownerName: post.owner.name,
+      ownerPhone: post.owner.phone,
+      publishDate: post.publishedDate,
+      titleColor: post.postType.title_color,
+      slug: post.slug,
+    }
+    if (estateOnHome.length < 6) {
+      estateOnHome.push(obj)
+    }
+  })
+
+  return { props: { postCounts, provinces, smallProvinces, news, estateOnHome } }
 }
 
 const getProvince = async () => {

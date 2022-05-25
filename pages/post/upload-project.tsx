@@ -54,6 +54,7 @@ const UploadProject = (props: Props) => {
   const [wards, setWards] = useState(new Array())
   const [streets, setStreets] = useState(new Array())
 
+  const [usrId, setUsrId] = useState("")
   const [currentCap, setCurrentCap] = useState("")
   const [currentCapIndex, setCurrentCapIndex] = useState(-1)
   const [category, setCategory] = useState("")
@@ -77,6 +78,7 @@ const UploadProject = (props: Props) => {
   const [yQuarterEnd, setYQuarterEnd] = useState("")
   const [startYear, setStartYear] = useState("")
   const [endYear, setEndYear] = useState("")
+  const [prjStatus, setPrjStatus] = useState("")
   const [images, setImages] = useState(new Array())
   const [currentParagraph, setCurrentParagraph] = useState("")
   const [showParagraphInput, setShowParagraphInput] = useState(false)
@@ -96,6 +98,21 @@ const UploadProject = (props: Props) => {
   const [checkFieldsAlert, setCheckFieldsAlert] = useState(false)
 
   const documents = ["Sổ đỏ/ Sổ hồng", "Hợp đồng mua bán", "Đang chờ sổ"]
+
+  const status = [
+    {
+      label: "Đang mở bán",
+      val: "open"
+    },
+    {
+      label: "Sắp mở bán",
+      val: "pre-open"
+    },
+    {
+      label: "Đã bàn giao",
+      val: "finish"
+    }
+  ]
 
   const yearQuarters = ["Q1", "Q2", "Q3", "Q4"]
 
@@ -352,8 +369,8 @@ const UploadProject = (props: Props) => {
           "address": displayAddress,
           "projectTypeId": category,
           "postTypeId": postType,
-          "investorId": "62640dfaa4b7d5cedcf0166d",
-          "projectStatus": "open",
+          "investorId": usrId,
+          "projectStatus": prjStatus,
           "location": {
             "CityCode": city,
             "CityName": getProvinceName(city, props.provinces),
@@ -481,8 +498,25 @@ const UploadProject = (props: Props) => {
       setPostTypes(types)
     }
 
+    const fetchCurrentUser = async () => {
+      await
+      fetch(`${server}/user/currentUser`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+        },
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUsrId(data.user._id)
+        console.log("UserID: " + data.user._id)
+      })
+    }
+
     fetchProjectTypes()
     fetchPostTypes()
+    fetchCurrentUser()
   }, [])
 
   return (
@@ -757,7 +791,7 @@ const UploadProject = (props: Props) => {
                 </div>
 
                 <div className="mt-2 mb-2">
-                  <div className="flex flex-row mb-2 items-center justify-between">
+                  <div className="flex flex-col lg:flex-row mb-2 lg:items-center justify-between">
                     <div className="flex flex-row">
                       <label
                         htmlFor="countries"
@@ -927,6 +961,43 @@ const UploadProject = (props: Props) => {
                   <p className="text-sm">Thông tin có dấu</p>
                   <p className="text-sm text-rose-800">&nbsp;(*)&nbsp;</p>
                   <p className="text-sm">là bắt buộc</p>
+                </div>
+
+                {/* Trạng thái dự án */}
+                <div className="mt-4">
+                  <div className="flex flex-row">
+                    <label
+                      htmlFor="categories"
+                      className="block mb-2 text-sm font-medium text-black"
+                    >
+                      Trạng thái dự án
+                    </label>
+                    <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                  </div>
+
+                  <FormControl className="w-1/3">
+                    <Select
+                      displayEmpty
+                      value={prjStatus}
+                      style={{ height: 38, fontSize: 14 }}
+                      className="text-sm"
+                      onChange={(e) => {
+                        setPrjStatus(e.target.value)
+                      }}
+                    >
+                      {status.map((item, index) => {
+                        return (
+                          <MenuItem
+                            key={index}
+                            value={item.val}
+                            style={{ fontSize: 14 }}
+                          >
+                            {item.label}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
                 </div>
 
                 {/* Đơn vị quản lý */}
