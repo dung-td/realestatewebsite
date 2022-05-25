@@ -38,6 +38,7 @@ const UploadPost = (props: Props) => {
   const [streets, setStreets] = useState(new Array())
   const [priceUnits, setPriceUnits] = useState(new Array())
 
+  const [usrId, setUsrId] = useState("")
   const [purpose, setPurpose] = useState("sell")
   const [category, setCategory] = useState("")
   const [displayAddress, setDisplayAdress] = useState("")
@@ -251,7 +252,7 @@ const UploadPost = (props: Props) => {
         body: JSON.stringify({
           "title": title,
           "address": displayAddress,
-          "ownerId": "6263a81788bcf34dbe3030cd",
+          "ownerId": usrId,
           "postTypeId": postType,
           "estateTypeId": category,
           "forSaleOrRent": purpose == "BÁN" ? "sale" : "rent",
@@ -406,9 +407,26 @@ const UploadPost = (props: Props) => {
       setPriceUnits(units)
     }
 
+    const fetchCurrentUser = async () => {
+      await
+      fetch(`${server}/user/currentUser`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+        },
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUsrId(data.user._id)
+        console.log("UserID: " + data.user._id)
+      })
+    }
+
     fetchEstateTypes()
     fetchPostTypes()
     fetchPriceUnits()
+    fetchCurrentUser()
   }, [])
 
   return (

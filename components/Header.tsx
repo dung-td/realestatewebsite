@@ -250,31 +250,33 @@ const Header = () => {
                       </div>
                       <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                         <Link href="/seller" passHref={true}>
-                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center">
+                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center">
                             <span className="material-icons mr-2">list</span>
                             <p>Quản lý tin đăng</p>
                           </div>
                         </Link>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">person</span>
-                          <p>Thông tin cá nhân</p>
-                        </a>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">lock</span>
-                          <p>Đổi mật khẩu</p>
-                        </a>
+                        <Link href="/seller" passHref={true}>
+                          <a
+                            className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center"
+                          >
+                            <span className="material-icons mr-2">person</span>
+                            <p>Thông tin cá nhân</p>
+                          </a>
+                        </Link>
+                        <Link href="/seller" passHref={true}>
+                          <a
+                            className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center"
+                          >
+                            <span className="material-icons mr-2">lock</span>
+                            <p>Đổi mật khẩu</p>
+                          </a>
+                        </Link>
                         <div className="border-t border-gray-200 m-2" />
                         <div
                           onClick={() => {
                             logout()
                           }}
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center"
                         >
                           <span className="material-icons mr-2">logout</span>
                           <p>Đăng xuất</p>

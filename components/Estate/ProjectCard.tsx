@@ -13,7 +13,7 @@ type Props = {
     address: string;
     investor: string;
     slug: string;
-    status: string;
+    statusCode: string;
     titleColor: string;
     projectType: {
         name: string;
@@ -32,6 +32,51 @@ const ProjectCard = (props : Props) => {
         e.preventDefault()
     }
 
+    const getStatusLabel = (val: string) => {
+        var label = ""
+        switch (val) {
+            case "open":
+                label = "Đang mở bán"
+                break
+            case "pre-open":
+                label = "Sắp mở bán"
+                break
+            default:
+                label = "Đã bàn giao"
+        }
+        return label
+    }
+
+    const getStatusColor = () => {
+        var color = ""
+        switch (props.statusCode) {
+            case "open":
+                color = "#006D3C"
+                break
+            case "pre-open":
+                color = "#961B12"
+                break
+            default:
+                color = "#563968"
+        }
+        return color
+    }
+
+    const getStatusDivBgColor = () => {
+        var color = ""
+        switch (props.statusCode) {
+            case "open":
+                color = "#E7FFF4"
+                break
+            case "pre-open":
+                color = "#FFECEB"
+                break
+            default:
+                color = "#F0EAF4"
+        }
+        return color
+    }
+
     return (
         <Link href={`/${projectSlug}/${postSlug}`}>
             <div className="group flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
@@ -46,7 +91,7 @@ const ProjectCard = (props : Props) => {
                 
                 <div className="ml-4 w-8/12 mr-4">
                     <h3
-                        className="mt-2 text-black text-sm font-bold"
+                        className="mt-2 text-black text-sm font-bold uppercase"
                         style={{
                             textOverflow: 'ellipsis',
                             display: 'block',
@@ -65,7 +110,7 @@ const ProjectCard = (props : Props) => {
                             <p className="text-black text-sm ml-1">{props.price}</p>
                         </div>
 
-                        <div className="flex flex-row items-center">
+                        <div className="hidden lg:flex flex-row items-center">
                             <span className="material-icons-outlined">
                             check_box_outline_blank
                             </span>
@@ -78,7 +123,7 @@ const ProjectCard = (props : Props) => {
                     </div>
                     <div className="flex flex-row mt-2 items-center">
                         <span className="material-icons-outlined">door_sliding</span>
-                        <p className="text-black text-sm ml-1">{props.buildings}</p>
+                        <p className="text-black text-sm ml-1">{props.buildings} tòa nhà</p>
                     </div>
                     <div className="flex flex-row mt-2 items-center">
                         <span className="material-icons-outlined">navigation</span>
@@ -97,13 +142,24 @@ const ProjectCard = (props : Props) => {
                         </p>
                     </div>
                     <div className="flex flex-row mt-2 items-center">
-                        <p className="text-black text-sm font-bold">{props.investor}</p>
-                        {/* <p className="text-black text-sm ml-1">{props.investor}</p> */}
+                        <p
+                            className="text-black text-sm font-medium"
+                            style={{
+                                textOverflow: 'ellipsis',
+                                display: 'block',
+                                wordWrap: 'break-word',
+                                overflow: 'hidden',
+                                maxHeight: '3em',
+                                lineHeight: '1.5em',
+                                color: '#000'
+                            }}
+                        >
+                            Chủ đầu tư: {props.investor}
+                        </p>
                     </div>
                     <div className="group flex flex-col items-center lg:flex-row mt-3 mb-3 justify-between">
-                        <div className="w-4/5 md:w-9/12 border-solid border border-gray-300 rounded-lg px-2 py-1 flex flex-row justify-center items-center">
-                            <span className="material-icons-outlined mr-2">phone</span>
-                            <p className="text-black text-sm font-medium">{props.status}</p>
+                        <div className={`w-4/5 md:w-9/12 h-[34px] bg-[${getStatusDivBgColor()}] border-solid border border-gray-300 rounded-lg px-2 py-1 flex flex-row justify-center items-center`}>
+                            <p className={`text-[${getStatusColor()}] text-sm font-medium`}>{getStatusLabel(props.statusCode)}</p>
                         </div>
                         <div
                             title={favourite ? 'Bỏ lưu' : 'Lưu'}

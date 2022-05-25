@@ -118,7 +118,7 @@ export default function Login(props: ModalProps) {
                         </svg>
                       </span>
                       <input
-                        className="px-3 py-3 placeholder-slate-400 text-slate-600 relative bg-white rounded text-sm border border-inherit outline-none focus:outline-none focus:border-black w-full pl-10"
+                        className="px-3 py-3 placeholder-slate-400 text-slate-600 relative bg-white rounded text-sm border border-inherit outline-none focus:outline-none w-full pl-10 hover:border-black focus:border-cyan-700"
                         type="text"
                         placeholder="Tên đăng nhập/Email"
                         value={usernameEmail}
@@ -144,7 +144,7 @@ export default function Login(props: ModalProps) {
                       </svg>
                     </span>
                     <input
-                      className="px-3 py-3 placeholder-slate-400 text-slate-600 relative bg-white rounded text-sm border border-inherit outline-none focus:outline-none focus:border-black w-full pl-10"
+                      className="px-3 py-3 placeholder-slate-400 text-slate-600 relative bg-white rounded text-sm border border-inherit outline-none focus:outline-none w-full pl-10 hover:border-black focus:border-cyan-700"
                       type={showPassword ? "text" : "password"}
                       placeholder="Mật khẩu"
                       value={password}

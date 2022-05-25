@@ -1,63 +1,35 @@
 import type { NextPage, GetServerSideProps } from "next"
 import { useState, useEffect } from "react"
-import EstateCard from "./EstateCard"
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import server from "../../interfaces/server";
-import MoneyFormat from "../../util/MoneyFormat";
+import ProjectCard from "../../components/Estate/ProjectCard"
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import server from "../../interfaces/server"
+import MoneyFormat from "../../util/MoneyFormat"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
 
+type Props = {
+    posts: any[]
+}
 
-const ListEstate: NextPage = () => {
-    const [posts, setPosts] = useState(new Array())
+const ListProject = (props: Props) => {
     const [sort, setSort] = useState('Thông thường')
 
     const handleSortResults = (e: any) => {
 
     }
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            console.log("Getting post list from Server...")
-            const res = await fetch(`${server}/post/get`)
-            let data = await res.json()
-            
-            data = data.data
-            let posts = new Array()
-
-            data.forEach((post: any) => {
-                let obj = {
-                    _id: post._id,
-                    title: post.title,
-                    address: post.address,
-                    estateType: post.estateType,
-                    thumbnail: post.images[0],
-                    price: MoneyFormat(post.price) + " " + post.priceType,
-                    area: post.area,
-                    bathroom: post.bathroomNumber,
-                    bedroom: post.bedroomNumber,
-                    ownerName: post.owner.name,
-                    ownerPhone: post.owner.phone,
-                    titleColor: post.postType.title_color,
-                    slug: post.slug,
-                    purpose: post.forSaleOrRent,
-                }
-                posts.push(obj)
-            })
-            
-            setPosts(posts)
-        }
-
-        fetchPosts()
-    }, [])
-
     return (
         <>
+            <Header/>
+
+            {/* List posts */}
             <div className="bg-white w-full">
                 <div className="max-w-full mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:px-8" style={{maxWidth: '1200'}}>
                     <div className="grid">
                         <div className="flex flex-row mb-4 items-center justify-between">
-                            <h2 className="font-bold text-base">Nhà bán/ Trang 1</h2>
+                            <h2 className="font-bold text-base">Dự án/ Trang 1</h2>
 
                             <div className="w-[34%] sm:w-[20%] md:w-[20%] lg:w-[14%]">
                                 <FormControl fullWidth>
@@ -83,23 +55,23 @@ const ListEstate: NextPage = () => {
                 
                     <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-2 xl:grid-cols-2 xl:gap-x-8">
                         {
-                            posts.map((item) => {
+                            props.posts.map((item) => {
                                 return (
-                                    <EstateCard
+                                    <ProjectCard
                                         key={item._id}
                                         id={item._id}
-                                        title={item.title}
-                                        estateType={item.estateType}
+                                        name={item.name}
+                                        projectType={item.projectType}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
                                         areaSqr={item.area}
-                                        rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
                                         titleColor={item.titleColor}
                                         slug={item.slug}
-                                        purpose={item.purpose}
-                                        author={item.ownerName}
-                                        author_phone_number={item.ownerPhone}
+                                        statusCode={item.status}
+                                        apartments={item.apartments}
+                                        buildings={item.buildings}
+                                        investor={item.investorName}
                                     />
                                 )
                             })
@@ -135,8 +107,40 @@ const ListEstate: NextPage = () => {
                     </div>
                 </div>
             </div>
+
+            <Footer/>
         </>
     )
 }
 
-export default ListEstate
+export const getServerSideProps: GetServerSideProps = async () => {
+    console.log("Getting post list from Server...")
+    const res = await fetch(`${server}/project/get`)
+    let data = await res.json()
+    
+    data = data.data
+    let posts = new Array()
+
+    data.forEach((post: any) => {
+        let obj = {
+            _id: post._id,
+            name: post.name,
+            address: post.address,
+            status: post.projectStatus,
+            projectType: post.projectType,
+            thumbnail: post.images[0],
+            price: MoneyFormat(post.price) + " VNĐ / m2",
+            area: post.area,
+            apartments: post.aparmentNumber,
+            buildings: post.buildingNumber,
+            investorName: post.investor.name,
+            titleColor: post.postType.title_color,
+            slug: post.slug,
+        }
+        posts.push(obj)
+    })
+
+    return { props: { posts } }
+}
+
+export default ListProject
