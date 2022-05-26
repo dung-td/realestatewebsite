@@ -188,19 +188,19 @@ const Header = () => {
                     <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300"
                       >
                         Căn hộ chung cư
                       </a>
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300"
                       >
                         Cao ốc văn phòng
                       </a>
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300"
                       >
                         Khu đô thị mới
                       </a>

@@ -105,6 +105,25 @@ const EditInformation = () => {
             setProvinces(provinces)
         }
 
+        const getUserInformation = async () => {
+            await
+            fetch(`${server}/user/currentUser`, {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+                },
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                setFullname(data.user.username)
+                setEmail(data.user.email)
+                setPhone(data.user.phone)
+                setDateOfBirth(data.user.dateOfBirth)
+            })
+        }
+
+        getUserInformation()
         fetchProvinces()
     }, [])
 
@@ -146,10 +165,11 @@ const EditInformation = () => {
                 </div>
                 <input type="date" className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-cyan-700" placeholder="Select date" style={{width: '98%'}}
                     onChange={(e) => setDateOfBirth(e.target.value)}
+                    value={"2012-01-08"}
                 />
             </div>
 
-            <div className="mt-4 w-full">
+            <div className="mt-4 mb-3 w-full">
                 <div className="flex flex-row">
                     <label htmlFor="phone" className="block mb-2 text-sm font-medium text-black">Số điện thoại</label>
                 </div>
@@ -294,7 +314,7 @@ const EditInformation = () => {
             </div>
 
             <button
-                className="w-full md:w-36 xl:w-36 h-10 mt-4 self-end rounded-md bg-blue-500 hover:bg-blue-700"
+                className="w-full md:w-36 xl:w-36 h-10 mt-2 self-end rounded-md bg-blue-500 hover:bg-blue-700"
                 title="Cập nhật thay đổi"
                 onClick={() => {
 
