@@ -1,11 +1,11 @@
-import { ClockIcon, HeartIcon, HomeIcon } from "@heroicons/react/outline"
+import { ClockIcon, HomeIcon } from "@heroicons/react/outline"
 import { Unit, getUnitComponent } from "../../Enum"
 import ProjectDto from "../../interfaces/ProjectDTO"
 import DetailBox from "./DetailBox"
 import ImageCarousel from "../EstateDetail/ImageCarousel"
 import ContentSegment from "./ContentSegment"
 import Map from "../Map"
-
+import FavoriteButton from '../EstateDetail/FavoriteButton'
 const Separator: React.FC = () => {
   return <div className="my-3 border-b border-y-gray-300 container"></div>
 }
@@ -31,42 +31,6 @@ const ProjectContent = (props: IProject) => {
     </div>)
   }
 
-//   const PriceComponent = () => {
-//     const price =
-//       project.price > 1000
-//         ? (Math.round((project.price / 1000) * 100) / 100).toString() + " tỷ"
-//         : project.price.toString() + " triệu"
-//     switch (project.priceType) {
-//       case "VNĐ":
-//         return <span>{`${price} đồng`}</span>
-//       case "Thỏa thuận":
-//         return <span>Thỏa thuận</span>
-//       default:
-//         return (
-//           <span>
-//             {price}/m<sup>2</sup>
-//           </span>
-//         )
-//     }
-//   }
-//   const RoomSection = () => {
-//     if (project.bathroomNumber == 0 && project.bedroomNumber == 0) return null
-//     const roomString =
-//       project.bathroomNumber > 0 && project.bedroomNumber > 0
-//         ? `${project.bedroomNumber} PN + ${project.bathroomNumber} PT`
-//         : project.bathroomNumber
-//         ? `${project.bathroomNumber} PT`
-//         : `${project.bedroomNumber} PN `
-//     console.log(roomString)
-//     return (
-//       <>
-//         <div className="flex-1">
-//           <p>Phòng</p>
-//           <p className="font-bold">{roomString}</p>
-//         </div>
-//       </>
-//     )
-//   }
 let detailList = [
   { name: "Diện tích", value: project.area, unit: Unit.AREA },
   { name: "Số căn hộ", value: project.aparmentNumber },
@@ -125,7 +89,8 @@ let detailList = [
           </div>          
           <div className="flex items-center justify-center">
             <span>
-              <HeartIcon className="w-6 h-6 inline-block font-light" /> Lưu tin
+              {/* <HeartIcon className="w-6 h-6 inline-block font-light" /> */}
+              <FavoriteButton onclick={()=>{}}/>
             </span>
           </div>
         </div>

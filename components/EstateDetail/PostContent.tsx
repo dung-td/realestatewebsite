@@ -4,6 +4,7 @@ import PostDto from "../../interfaces/PostDTO"
 import CollapseDescription from "./CollapseDescription"
 import DetailBox from "./DetailBox"
 import ImageCarousel from "./ImageCarousel"
+import FavoriteButton from './FavoriteButton'
 import Map from "../Map"
 
 const Separator: React.FC = () => {
@@ -105,7 +106,7 @@ const PostContent = (props: IPost) => {
           {RoomSection()}
           <div className="flex items-center justify-center">
             <span>
-              <HeartIcon className="w-6 h-6 inline-block font-light" /> Lưu tin
+              <FavoriteButton/>
             </span>
           </div>
         </div>

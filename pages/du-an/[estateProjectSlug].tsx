@@ -90,7 +90,6 @@ export async function getStaticProps (pathParam: IPathParam) {
     const data = await res.json()
     const posts = data.data
     const project = posts.filter((el: { slug: string }) => el.slug == params.estateProjectSlug)[0]
-    console.log(project)
     // By returning { props: { posts } }, the Blog component
     // will receive `posts` as a prop at build time
     return {

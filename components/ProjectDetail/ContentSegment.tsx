@@ -11,8 +11,7 @@ const ContentSegment = (props: IProp)=>{
     const { segment } = props
     return (<>
         <div>
-            {segment?.caption && <h1 className="font-medium text-black text-xl">{segment.caption}</h1>}
-            {segment.type == 'image' ? <img src={segment.content}/> : <p className="whitespace-pre-line">{segment.content}</p>}
+            {segment.type == 'image' ? <p><img className="container" src={segment.content}/>{segment?.caption && <p className="font-small text-sm text-black text-center italic">{segment.caption}</p>}</p> : <p className="whitespace-pre-line">{segment.content}</p>}
         </div>
     </>)
 }
