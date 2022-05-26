@@ -154,9 +154,6 @@ const AdminPost = ({ type }: any) => {
       case "delete":
         _delete(id)
         break
-      // case "ban":
-      //   ban(id)
-      // break
       case "remove":
         decline(id)
         break

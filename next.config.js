@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    dangerouslyAllowSVG: true,
     domains: [
       "file4.batdongsan.com.vn",
       "sprudge.com",
@@ -9,6 +10,7 @@ const nextConfig = {
       "images.adsttc.com",
       "www.build-review.com",
       "res.cloudinary.com",
+      "tailwindui.com",
     ],
   },
 }

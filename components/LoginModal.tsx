@@ -72,6 +72,9 @@ export default function Login(props: ModalProps) {
         console.log(data.userDto)
         if (data.userDto) {
           sessionStorage.setItem("jwt", data.userDto.token)
+          sessionStorage.setItem("id", data.userDto._id)
+          // sessionStorage.setItem("fullname", data.userDto.fullname)
+
           window.location.reload()
         }
       })
