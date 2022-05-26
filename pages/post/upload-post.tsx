@@ -304,6 +304,7 @@ const UploadPost = (props: Props) => {
         }), // string or object
         headers: {
           "Content-Type": "application/json",
+          // "Authorization": `Bearer ${token}`
         },
       })
 
