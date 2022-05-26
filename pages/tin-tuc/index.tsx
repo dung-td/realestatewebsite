@@ -9,18 +9,20 @@ import server from "../../interfaces/server"
 import News from "../../interfaces/news"
 
 type Props = {
-  news: News[]
+  popularNews: News[]
 }
 
-const NewsHome = ({ news }: Props) => {
+const NewsHome = ({ popularNews }: Props) => {
   return (
     <>
       <Header />
 
       <div className="space-y-16 mt-8">
-        {news.length > 0 ? <NewsSection news={news} /> : null}
+        {popularNews.length > 0 ? (
+          <NewsSection typeSlug="tin-noi-bat" news={popularNews} />
+        ) : null}
 
-        <ListNews news={news} title="Tin nổi bật" />
+        {/* <ListNews news={news} title="Tin nổi bật" /> */}
       </div>
     </>
   )
@@ -28,17 +30,16 @@ const NewsHome = ({ news }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Getting news
-  console.log("Getting news....")
-  const res = await fetch(`${server}/news/get`)
-  // console.log(await res.json())
-  let data = await res.json()
-  let news = new Array()
-  data = data.data
-  data.forEach((n: any) => {
-    news.push(n)
-  })
+  const popularNews = await (await getPopularNews()).news
+  return { props: { popularNews } }
+}
 
-  return { props: { news } }
+const getPopularNews = async () => {
+  const res = await fetch(`${server}/news/popular?limit=7`)
+  let data = await res.json()
+  const news = data.data
+
+  return { news }
 }
 
 export default NewsHome

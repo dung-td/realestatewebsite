@@ -37,9 +37,21 @@ const Detail = ({ news }: Props) => {
                       })}
                     </div>
                   )
+                  else if (item.type == "heading") 
+                  return (
+                    <div key={item.src}>
+                      {item.src.split("\n").map((para) => {
+                        return (
+                          <p className="mb-2 text-base font-bold" key={para}>
+                            {para}
+                          </p>
+                        )
+                      })}
+                    </div>
+                  )
                 else
                   return (
-                    <div>
+                    <div className="py-2">
                       <Image
                         src={item.src}
                         layout="responsive"

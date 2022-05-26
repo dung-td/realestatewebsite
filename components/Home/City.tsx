@@ -84,7 +84,7 @@ const City = ({ postCounts, smallProvines }: Props) => {
         })}
       </div>
 
-      <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-7 gap-4 mt-4">
+      <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-6 gap-4 mt-4">
         {smallProvines.map((province) => (
           <a
             key={province.slug}

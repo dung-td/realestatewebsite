@@ -61,7 +61,7 @@ const ListNews = ({ title, news }: Props) => {
                     <Image
                       className="rounded-md"
                       alt="alt"
-                      src={n.thumnail}
+                      src={n.thumbnail}
                       height={500}
                       width={900}
                     />
