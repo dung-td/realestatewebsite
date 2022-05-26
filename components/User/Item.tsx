@@ -88,7 +88,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
           {data.title}
         </a>
         <p className="text-gray-700">
-          <span className="font-semibold">{data.estateType}</span> -{" "}
+          <span className="font-semibold">{data.estateType.name}</span> -{" "}
           {data.address}
         </p>
         <div className="grid grid-cols-4 gap-4 mt-6 w-full">
@@ -153,7 +153,11 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
 
             <div className="col-span-2 md:col-span-1">
               <a
-                href={data.slug}
+                href={
+                  data.forSaleOrRent == "sale"
+                    ? `ban-${data.estateType.slug}/${data.slug}`
+                    : `thue-${data.estateType.slug}/${data.slug}`
+                }
                 type="button"
                 target="_blank"
                 rel="noreferrer"
@@ -445,7 +449,9 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
                     type="date"
                     className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700"
                     placeholder="Select date"
-                    value={moment('22/12/2022', "DD-MM-YYYY").format('YYYY-MM-DD')}
+                    value={moment("22/12/2022", "DD-MM-YYYY").format(
+                      "YYYY-MM-DD"
+                    )}
                     style={{ width: "98%" }}
                   />
                 </div>

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import server from "../../../interfaces/server"
 
 const EditInformation = () => {
     const [fullname, setFullname] = useState('');
@@ -30,7 +31,7 @@ const EditInformation = () => {
 
     const fetchDistrict = async (provinceId: string | undefined) => {
         if (provinceId !== undefined) {
-          fetch(`http://localhost:3001/api/a/district/get?p=${provinceId}`)
+          fetch(`${server}/a/district/get?p=${provinceId}`)
             .then((res) => res.json())
             .then((data) => {
               let ds = new Array()
@@ -50,7 +51,7 @@ const EditInformation = () => {
     
     const fetchWard = async (districtId: string | undefined) => {
         if (districtId !== undefined) {
-            fetch(`http://localhost:3001/api/a/ward/get?d=${districtId}`)
+            fetch(`${server}/a/ward/get?d=${districtId}`)
             .then((res) => res.json())
             .then((data) => {
                 let ws = new Array()
@@ -70,7 +71,7 @@ const EditInformation = () => {
     
     const fetchStreet = async (districtId: string | undefined) => {
         if (districtId !== undefined) {
-            fetch(`http://localhost:3001/api/a/street/get?d=${districtId}`)
+            fetch(`${server}/a/street/get?d=${districtId}`)
             .then((res) => res.json())
             .then((data) => {
                 let ss = new Array()
@@ -89,7 +90,7 @@ const EditInformation = () => {
 
     useEffect(() => {
         const fetchProvinces = async () => {
-            const res = await fetch(`http://localhost:3001/api/a/province/get`)
+            const res = await fetch(`${server}/a/province/get`)
             let data = await res.json()
             data = data.data
             let provinces = new Array()
@@ -108,7 +109,7 @@ const EditInformation = () => {
     }, [])
 
     return (
-        <div className="flex flex-col px-6 py-3 w-[80%] xl:w-1/3 lg:w-1/3 md:w-1/2 h-max mt-8 mx-auto drop-shadow-md border-solid border border-gray-200 rounded-lg">
+        <div className="flex flex-col px-6 py-3 w-[80%] xl:w-1/3 lg:w-1/3 md:w-1/2 h-max mt-8 mx-auto border-solid border border-gray-200 rounded-lg">
             <p className="text-black text-base font-medium">Thông tin tài khoản</p>
 
             <div className="mt-4 w-full">

@@ -6,8 +6,14 @@ import Select from "@mui/material/Select"
 import Alert from "@mui/material/Alert"
 import AlertTitle from "@mui/material/AlertTitle"
 import Backdrop from "@mui/material/Backdrop"
-import SendIcon from '@mui/icons-material/Send';
+import Checkbox from "@mui/material/Checkbox"
+import ListItemText from "@mui/material/ListItemText"
 import CircularProgress from "@mui/material/CircularProgress"
+import TextSnippetIcon from '@mui/icons-material/TextSnippet'
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto'
+import CheckIcon from '@mui/icons-material/Check'
+import CancelIcon from '@mui/icons-material/Cancel'
+import SendIcon from '@mui/icons-material/Send'
 import server from "../../interfaces/server"
 import Map from "../../components/Map"
 import Header from "../../components/Header"
@@ -30,16 +36,27 @@ type Props = {
   provinces: Province[]
 }
 
-const UploadPost = (props: Props) => {
+const ITEM_HEIGHT = 100;
+const ITEM_PADDING_TOP = 0;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
+
+const UploadProject = (props: Props) => {
   const [postTypes, setPostTypes] = useState(new Array())
-  const [estateTypes, setEstateTypes] = useState(new Array())
+  const [projectTypes, setProjectTypes] = useState(new Array())
   const [districts, setDistricts] = useState(new Array())
   const [wards, setWards] = useState(new Array())
   const [streets, setStreets] = useState(new Array())
-  const [priceUnits, setPriceUnits] = useState(new Array())
 
   const [usrId, setUsrId] = useState("")
-  const [purpose, setPurpose] = useState("sell")
+  const [currentCap, setCurrentCap] = useState("")
+  const [currentCapIndex, setCurrentCapIndex] = useState(-1)
   const [category, setCategory] = useState("")
   const [displayAddress, setDisplayAdress] = useState("")
   const [city, setCity] = useState("")
@@ -47,29 +64,32 @@ const UploadPost = (props: Props) => {
   const [quarter, setQuarter] = useState("")
   const [street, setStreet] = useState("")
   const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
+  const [description, setDescription] = useState(new Array())
+  const [constructor, setConstructor] = useState("")
+  const [manager, setManager] = useState("")
   const [areaSqr, setAreaSqr] = useState(0)
   const [price, setPrice] = useState(0)
-  const [priceUnit, setPriceUnit] = useState("")
   const [document, setDocument] = useState("")
   const [isElseOptDoc, setIsElseOptDoc] = useState(false)
-  const [floor, setFloor] = useState(0)
-  const [bedrooms, setBedrooms] = useState(0)
-  const [bathrooms, setBathrooms] = useState(0)
-  const [width, setWidth] = useState(0)
-  const [depth, setDepth] = useState(0)
-  const [roadWidth, setRoadWidth] = useState(0)
-  const [direction, setDirection] = useState("")
-  const [furniture, setFuniture] = useState("")
+  const [density, setDensity] = useState(0)
+  const [apartments, setApartments] = useState(0)
+  const [buildings, setBuildings] = useState(0)
+  const [yQuarterStart, setYQuarterStart] = useState("")
+  const [yQuarterEnd, setYQuarterEnd] = useState("")
+  const [startYear, setStartYear] = useState("")
+  const [endYear, setEndYear] = useState("")
+  const [prjStatus, setPrjStatus] = useState("")
   const [images, setImages] = useState(new Array())
+  const [currentParagraph, setCurrentParagraph] = useState("")
+  const [showParagraphInput, setShowParagraphInput] = useState(false)
   const [mapMarker, setMapMarker] = useState([0, 0])
+  const [prjUtilities, setPrjUtilities] = useState(new Array())
 
   const [postTypeIndex, setPostTypeIndex] = useState(0)
   const [postDuration, setPostDuration] = useState(0)
   const [postType, setPostType] = useState("")
   const [startDate, setStartDate] = useState("")
   const [expireDate, setExpireDate] = useState("")
-  const [reviewExpireDate, setReviewExpireDate] = useState("")
   const [falseDate, setFalseDate] = useState(false)
 
   const [backdrop, setBackDrop] = useState(false)
@@ -77,13 +97,49 @@ const UploadPost = (props: Props) => {
   const [files, setFiles] = useState("")
   const [checkFieldsAlert, setCheckFieldsAlert] = useState(false)
 
-  const purposes = ["BÁN", "CHO THUÊ"]
-
   const documents = ["Sổ đỏ/ Sổ hồng", "Hợp đồng mua bán", "Đang chờ sổ"]
 
-  const furnitures = ["Đầy đủ", "Không có"]
+  const status = [
+    {
+      label: "Đang mở bán",
+      val: "open"
+    },
+    {
+      label: "Sắp mở bán",
+      val: "pre-open"
+    },
+    {
+      label: "Đã bàn giao",
+      val: "finish"
+    }
+  ]
+
+  const yearQuarters = ["Q1", "Q2", "Q3", "Q4"]
+
+  const years = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"]
 
   const post_durations = ["7", "10", "14", "21"]
+
+  const utilities = [
+    "Bãi đỗ xe",
+    "Sân bóng rổ",
+    "Công viên",
+    "Sân Tennis",
+    "Phòng Gym",
+    "Phòng Yoga",
+    "HT An ninh",
+    "HT Điều hòa",
+    "Hệ thống PCCC",
+    "Lối thoát hiểm",
+    "Hồ bơi",
+    "Vui chơi trẻ em",
+    "Siêu thị",
+    "Cửa hàng tiện lợi",
+    "Spa",
+    "Coffee",
+    "ATM & Ngân hàng",
+    "Thang máy"
+  ];
 
   const onMapLngLatCallback = (lng: any, lat: any) => {
     console.log(lng + "/" + lat)
@@ -149,6 +205,37 @@ const UploadPost = (props: Props) => {
     }
   }
 
+  const handleAddParagraph = () => {
+    if (currentParagraph != "") {
+      var arr = description
+      var obj = {
+        type: "text",
+        content: currentParagraph,
+        caption: ""
+      }
+      arr.push(obj)
+
+      setDescription(arr)
+      setShowParagraphInput(false)
+    }
+  }
+
+  const handleAddImageToDescription = (e: any) => {
+    var arr = new Array()
+    var obj = {
+      type: "image",
+      content: e.target.files[0],
+      caption: ""
+    }
+
+    description.forEach((element) => {
+      arr.push(element)
+    })
+    arr.push(obj)
+
+    setDescription(arr)
+  }
+
   const preventCharInput = (e: any) => {
     var regex = new RegExp("[0-9\b]+")
     var charCode = typeof e.which == "undefined" ? e.keyCode : e.which
@@ -159,33 +246,24 @@ const UploadPost = (props: Props) => {
   }
 
   const handleDateSelected = (e: any) => {
-    var reviewDays = 0
     const today = new Date()
     const selected = new Date(e.target.value)
     var expire = new Date(e.target.value)
     expire.setDate(selected.getDate() + postDuration)
-
-    postType == "627ba283ea534ab59178172a" ? reviewDays = 3 : reviewDays = 1
 
     if (selected < today) {
         e.preventDefault()
         setFalseDate(true)
     } else {
         setStartDate(
-          selected.getDate() + "/" +
-          (selected.getMonth() + 1).toString() + "/" +
-          selected.getFullYear()
+            selected.getDate() + "/" +
+            (selected.getMonth() + 1).toString() + "/" +
+            selected.getFullYear()
         )
         setExpireDate(
-          expire.getDate() + "/" +
-          (expire.getMonth() + 1).toString() +
-          "/" + expire.getFullYear()
-        )
-        today.setDate(today.getDate() + reviewDays)
-        setReviewExpireDate(
-          today.getDate() + "/" +
-          (today.getMonth() + 1).toString() +
-          "/" + today.getFullYear()
+            expire.getDate() + "/" +
+            (expire.getMonth() + 1).toString() +
+            "/" + expire.getFullYear()
         )
         setFalseDate(false)
     }
@@ -208,7 +286,6 @@ const UploadPost = (props: Props) => {
     for (let i: number = 0; i < files.length; i++) {
       photoUriArr.push(URL.createObjectURL(files[i]))
     }
-    console.log(e.target.files)
     setImages(photoUriArr)
 
     setFiles(files)
@@ -227,6 +304,44 @@ const UploadPost = (props: Props) => {
   const handleCreatePost = async () => {
     if (checkSubmitFields()) {
       setBackDrop(true)
+
+      // Uploading description images to server
+      var uDescription = new Array()
+      var dscBase64Arr = new Array()
+      for (let index = 0; index < description.length; index++) {
+        if (description[index].type == "image") {
+          const img = await toBase64(description[index].content)
+          dscBase64Arr.push(img)
+        }
+      }
+
+      const fResponse = await fetch(`${server}/image-upload/multiple`, {
+        method: "POST",
+        body: JSON.stringify({
+          "files": dscBase64Arr,
+        }), // string or object
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const fUrlArr = await fResponse.json() //extract JSON from the http response
+
+      // Update description array with image url
+      var imgIndex = 0
+      description.forEach((element) => {
+        if (element.type == "image") {
+          uDescription.push({
+            type: "image",
+            content: fUrlArr.data[imgIndex],
+            caption: element.caption
+          })
+          imgIndex++
+        } else {
+          uDescription.push(element)
+        }
+      })
+      console.log(fUrlArr.data)
+
       // Uploading images to server
       var base64Arr = new Array()
       for (let index = 0; index < files.length; index++) {
@@ -243,19 +358,19 @@ const UploadPost = (props: Props) => {
           "Content-Type": "application/json",
         },
       })
-
       const urlArr = await imgResponse.json() //extract JSON from the http response
 
       // Creating post
-      const response = await fetch(`${server}/post/upload`, {
+      // const response = await fetch(`${server}/post/upload`, {
+      const response = await fetch(`${server}/project/upload`, {
         method: "POST",
         body: JSON.stringify({
-          "title": title,
+          "name": title,
           "address": displayAddress,
-          "ownerId": usrId,
+          "projectTypeId": category,
           "postTypeId": postType,
-          "estateTypeId": category,
-          "forSaleOrRent": purpose == "BÁN" ? "sale" : "rent",
+          "investorId": usrId,
+          "projectStatus": prjStatus,
           "location": {
             "CityCode": city,
             "CityName": getProvinceName(city, props.provinces),
@@ -276,31 +391,24 @@ const UploadPost = (props: Props) => {
             "lat": mapMarker[1],
             "Lng": mapMarker[0],
           },
-          "belongToProject": {
-            "projectId": 0,
-            "projectName": "SMART",
-          },
-          "description": description,
+          "description": uDescription,
           "images": urlArr.data,
           "legalDocuments": document,
           "publishedDate": startDate,
           "expiredDate": expireDate,
-          "reviewExpireDate": reviewExpireDate,
           "price": price,
-          "priceType": priceUnit,
           "area": areaSqr,
-          "floorNumber": floor,
-          "bathroomNumber": bathrooms,
-          "bedroomNumber": bedrooms,
-          "direction": direction,
-          "furniture": furniture,
-          "width": width,
-          "depth": depth,
-          "roadWidth": roadWidth,
-          "facade": 0,
+          "aparmentNumber": apartments,
+          "buildingNumber": buildings,
+          "density": density,
+          "estimatedStartTime": yQuarterStart + "/" + startYear,
+          "estimatedCompletionTime": yQuarterEnd + "/" + endYear,
+          "manager": manager,
+          "constructor": constructor,
+          "utilities": prjUtilities,
           "status": "waiting",
-          "slug": "slug",
-          "declineReasonId": ""
+          "declineReasonId": "",
+          "slug": "slug"
         }), // string or object
         headers: {
           "Content-Type": "application/json",
@@ -327,7 +435,6 @@ const UploadPost = (props: Props) => {
   const checkSubmitFields = () => {
     if (
       postType == "" ||
-      purpose == "" ||
       category == "" ||
       displayAddress == "" ||
       city == "" ||
@@ -335,11 +442,14 @@ const UploadPost = (props: Props) => {
       quarter == "" ||
       street == "" ||
       title == "" ||
-      description == "" ||
+      description.length < 1 ||
+      manager == "" ||
+      constructor == "" ||
       areaSqr == 0 ||
       price == 0 ||
-      priceUnit == "" ||
       document == "" ||
+      startYear == ""  || endYear == "" ||
+      yQuarterStart == "" || yQuarterEnd == "" ||
       falseDate ||
       images.length < 1
     ) {
@@ -349,9 +459,9 @@ const UploadPost = (props: Props) => {
   }
 
   useEffect(() => {
-    const fetchEstateTypes = async () => {
-      console.log("Getting estate types from Server...")
-      const res = await fetch(`${server}/a/estate-type/get`)
+    const fetchProjectTypes = async () => {
+      console.log("Getting project types from Server...")
+      const res = await fetch(`${server}/a/project-type/get`)
       let data = await res.json()
 
       data = data.data
@@ -365,7 +475,7 @@ const UploadPost = (props: Props) => {
         types.push(obj)
       })
 
-      setEstateTypes(types)
+      setProjectTypes(types)
     }
 
     const fetchPostTypes = async () => {
@@ -388,25 +498,6 @@ const UploadPost = (props: Props) => {
       setPostTypes(types)
     }
 
-    const fetchPriceUnits = async () => {
-      console.log("Getting price units from Server...")
-      const res = await fetch(`${server}/a/price-unit/get`)
-      let data = await res.json()
-
-      data = data.data
-      let units = new Array()
-
-      data.forEach((unit: any) => {
-        let obj = {
-          _id: unit._id,
-          label: unit.label,
-        }
-        units.push(obj)
-      })
-
-      setPriceUnits(units)
-    }
-
     const fetchCurrentUser = async () => {
       await
       fetch(`${server}/user/currentUser`, {
@@ -423,9 +514,8 @@ const UploadPost = (props: Props) => {
       })
     }
 
-    fetchEstateTypes()
+    fetchProjectTypes()
     fetchPostTypes()
-    fetchPriceUnits()
     fetchCurrentUser()
   }, [])
 
@@ -439,7 +529,7 @@ const UploadPost = (props: Props) => {
           className="max-w-2xl mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8"
           style={{ maxWidth: "1200" }}
         >
-          <h2 className="font-bold text-xl text-center mb-4">Đăng tin</h2>
+          <h2 className="font-bold text-xl text-center mb-4">Đăng dự án</h2>
 
           <div className="flex flex-col lg:flex-row justify-center">
             {/* Form thông tin bài đăng */}
@@ -453,56 +543,13 @@ const UploadPost = (props: Props) => {
                   <p className="text-sm">là bắt buộc</p>
                 </div>
 
-                <div className="mt-4">
-                  <fieldset className="flex flex-row">
-                    <legend className="sr-only">Post type</legend>
-                    <div className="flex items-center mb-4">
-                      <input
-                        id="type-option-1"
-                        type="radio"
-                        name="types"
-                        value="sell"
-                        className="w-5 h-5 border-gray-300"
-                        aria-labelledby="country-option-1"
-                        aria-describedby="country-option-1"
-                        onClick={() => setPurpose(purposes[0])}
-                      />
-                      <label
-                        htmlFor="type-option-1"
-                        className="block ml-2 text-sm text-black"
-                      >
-                        {purposes[0].toUpperCase()}
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mb-4 ml-12">
-                      <input
-                        id="type-option-2"
-                        type="radio"
-                        name="types"
-                        value="rent"
-                        className="w-5 h-5 border-gray-300"
-                        aria-labelledby="country-option-2"
-                        aria-describedby="country-option-2"
-                        onClick={() => setPurpose(purposes[1])}
-                      />
-                      <label
-                        htmlFor="type-option-2"
-                        className="block ml-2 text-sm text-black"
-                      >
-                        {purposes[1].toUpperCase()}
-                      </label>
-                    </div>
-                  </fieldset>
-                </div>
-
-                <div className="mt-2 mb-2">
+                <div className="mt-4 mb-2">
                   <div className="flex flex-row">
                     <label
                       htmlFor="categories"
                       className="block mb-2 text-sm font-medium text-black"
                     >
-                      Loại bất động sản
+                      Loại dự án
                     </label>
                     <span className="text-sm text-rose-800">&nbsp;(*)</span>
                   </div>
@@ -517,7 +564,7 @@ const UploadPost = (props: Props) => {
                         setCategory(e.target.value)
                       }}
                     >
-                      {estateTypes.map((item, index) => {
+                      {projectTypes.map((item, index) => {
                         return (
                           <MenuItem
                             key={index}
@@ -713,9 +760,9 @@ const UploadPost = (props: Props) => {
                 </div>
               </div>
 
-              {/* Thông tin bài viết */}
+              {/* Thông tin giới thiệu */}
               <div className="flex flex-col mt-4 py-4 px-4 border border-solid border-gray-300 rounded-lg">
-                <h1 className="font-bold text-lg">Thông tin bài viết</h1>
+                <h1 className="font-bold text-lg">Thông tin giới thiệu</h1>
                 <div className="flex flex-row">
                   <p className="text-sm">Thông tin có dấu</p>
                   <p className="text-sm text-rose-800">&nbsp;(*)&nbsp;</p>
@@ -725,17 +772,16 @@ const UploadPost = (props: Props) => {
                 <div className="mt-4 mb-2">
                   <div className="flex flex-row">
                     <label className="block mb-2 text-sm font-medium text-black">
-                      Tiêu đề
+                      Tên dự án
                     </label>
                     <span className="text-sm text-rose-800">&nbsp;(*)</span>
                   </div>
-                  <textarea
+                  <input
                     name="title"
                     id="title"
-                    cols={1}
-                    rows={2}
-                    className="bg-white h-16 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
-                    placeholder="Tiêu đề hiển thị"
+                    type="text"
+                    className="bg-white h-10 border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
+                    placeholder="Tên dự án"
                     onChange={(e) => setTitle(e.target.value)}
                     required
                   />
@@ -744,119 +790,300 @@ const UploadPost = (props: Props) => {
                   </p>
                 </div>
 
-                <div className="mt-4 mb-2">
-                  <div className="flex flex-row">
-                    <label
-                      htmlFor="countries"
-                      className="block mb-2 text-sm font-medium text-black"
-                    >
-                      Mô tả
-                    </label>
-                    <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                <div className="mt-2 mb-2">
+                  <div className="flex flex-col lg:flex-row mb-2 lg:items-center justify-between">
+                    <div className="flex flex-row">
+                      <label
+                        htmlFor="countries"
+                        className="block mb-2 text-sm font-medium text-black"
+                      >
+                        Thông tin mô tả
+                      </label>
+                      <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                    </div>
+
+                    {/* Clear description stack button */}
+                    {
+                      description.length > 0 ?
+                      <button
+                        className="bg-red-700 w-full lg:w-28 px-2 py-2 rounded-md cursor-pointer hover:bg-red-800"
+                        onClick={() => setDescription(new Array())}
+                      >
+                        <div className="flex flex-row items-center justify-center">
+                          <p className="text-white text-sm text-center">Xóa mô tả</p>
+                          <CancelIcon fontSize="small" style={{color: '#fff'}} className="ml-2"/>
+                        </div>
+                      </button>
+                      : null
+                    }
+                    
                   </div>
-                  <textarea
-                    name="title"
-                    id="title"
-                    cols={1}
-                    rows={2}
-                    className="bg-white h-44 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
-                    placeholder="Nhập mô tả về bất động sản của bạn"
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  />
-                  <p className="text-xs mt-2">
-                    Tối thiểu 30 ký tự, tối đa 4000 ký tự
-                  </p>
+                  
+                  {/* DescriptionStack */}
+                  <div className="flex flex-col w-full">
+                    {
+                      description.map((item, index) => {
+                        return (
+                          item.type == "text" ?
+                          <p key={item.content} className="text-sm text-black text-justify whitespace-pre-wrap mt-2 mb-2">{item.content}</p>
+                          :
+                          <>
+                            <img
+                                src={URL.createObjectURL(item.content)}
+                                key={item.content}
+                                className="rounded-lg w-full mt-2 mb-2 hover:opacity-90"
+                                alt="Ảnh đã chọn"
+                            />
+                            <div className="flex flex-row w-full items-center justify-center">
+                              <input
+                                type="text"
+                                placeholder="Caption ảnh"
+                                className="border border-gray-300 text-center rounded-md text-sm h-8 w-2/3 self-center hover:border-black focus:border-blue-700"
+                                onChange={(e) => {
+                                  setCurrentCap(e.target.value)
+                                }}
+                                onClick={(e) => setCurrentCapIndex(index)}
+                              />
+
+                              {
+                                currentCapIndex == index ?
+                                <button
+                                  className="bg-blue-700 w-7 h-7 px-2 py-2 ml-2 rounded-full cursor-pointer hover:bg-blue-800"
+                                  onClick={() => {
+                                    var arr = new Array()
+                                    description.forEach((element, i) => {
+                                      if (i == index) {
+                                        var obj = {
+                                          type: element.type,
+                                          content: element.content,
+                                          caption: currentCap
+                                        }
+                                        arr.push(obj)
+                                      } else {
+                                        arr.push(element)
+                                      }
+                                    })
+                                    setDescription(arr)
+                                    setCurrentCapIndex(-1)
+                                    console.log(arr)
+                                  }}
+                                >
+                                  <CheckIcon fontSize="small" style={{color: '#fff'}} className="-mt-3 -ml-1"/>
+                                </button>
+                                : null
+                              }
+                              
+                            </div>
+                          </>
+                        )
+                      })
+                    }
+                  </div>
+
+                  {
+                    showParagraphInput ?
+                    <textarea
+                        cols={1}
+                        rows={2}
+                        className="bg-white h-44 mt-2 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
+                        placeholder="Nhập mô tả dự án"
+                        onChange={(e) => setCurrentParagraph(e.target.value)}
+                        required
+                    />
+                    : null
+                  }
+
+                  {/* Add and submit button */}
+                  {
+                    !showParagraphInput ?
+                      <div className="flex flex-row mt-4 justify-center">
+                        <button
+                            className="bg-blue-700 w-full lg:w-36 px-2 py-2 rounded-md text-center cursor-pointer hover:bg-blue-800"
+                            onClick={() => {
+                              setCurrentParagraph("")
+                              setShowParagraphInput(true)
+                            }}
+                        >
+                            <div className="flex flex-row items-center justify-center">
+                                <p className="text-white text-sm text-center">Thêm đoạn văn</p>
+                                <TextSnippetIcon fontSize="small" style={{color: '#fff'}} className="ml-2"/>
+                            </div>
+                        </button>
+
+                        <button
+                          className="bg-blue-700 ml-4 w-full lg:w-28 px-2 py-2 rounded-md text-center cursor-pointer hover:bg-blue-800"
+                          onClick={() => {}}
+                        >
+                          <div className="flex flex-row items-center justify-center">
+                            <label htmlFor="image-description" className="text-white text-sm text-center cursor-pointer">Thêm ảnh</label>
+                            <InsertPhotoIcon fontSize="small" style={{color: '#fff'}} className="ml-2"/>
+                            <input
+                              className="hidden"
+                              aria-describedby="image-description"
+                              id="image-description"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handleAddImageToDescription(e)}
+                            />
+                          </div>
+                        </button>
+                      </div>
+                    :
+                      <div className="w-full text-center">
+                        <button
+                          className="bg-red-700 w-full lg:w-24 px-2 py-2 mt-4 mr-2 rounded-md cursor-pointer hover:bg-red-800"
+                          onClick={() => {setShowParagraphInput(false)}}
+                        >
+                          <div className="flex flex-row items-center justify-center">
+                            <p className="text-white text-sm text-center">Hủy</p>
+                            <CancelIcon fontSize="small" style={{color: '#fff'}} className="ml-2"/>
+                          </div>
+                        </button>
+
+                        <button
+                          className="bg-blue-700 w-full lg:w-24 px-2 py-2 mt-4 lg:ml-2 rounded-md cursor-pointer hover:bg-blue-800"
+                          onClick={() => handleAddParagraph()}
+                        >
+                          <div className="flex flex-row items-center justify-center">
+                            <p className="text-white text-sm text-center">Thêm</p>
+                            <CheckIcon fontSize="small" style={{color: '#fff'}} className="ml-2"/>
+                          </div>
+                        </button>
+                      </div>
+                  }
                 </div>
               </div>
 
-              {/* Thông tin BĐS */}
+              {/* Thông tin chi tiết */}
               <div className="flex flex-col mt-4 py-4 px-4 border border-solid border-gray-300 rounded-lg">
-                <h1 className="font-bold text-lg">Thông tin bất động sản</h1>
+                <h1 className="font-bold text-lg">Thông tin chi tiết</h1>
                 <div className="flex flex-row">
                   <p className="text-sm">Thông tin có dấu</p>
                   <p className="text-sm text-rose-800">&nbsp;(*)&nbsp;</p>
                   <p className="text-sm">là bắt buộc</p>
                 </div>
 
-                <div className="mt-4 mb-2 w-1/3">
+                {/* Trạng thái dự án */}
+                <div className="mt-4">
                   <div className="flex flex-row">
                     <label
-                      htmlFor="countries"
+                      htmlFor="categories"
                       className="block mb-2 text-sm font-medium text-black"
                     >
-                      Diện tích (m²)
+                      Trạng thái dự án
+                    </label>
+                    <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                  </div>
+
+                  <FormControl className="w-1/3">
+                    <Select
+                      displayEmpty
+                      value={prjStatus}
+                      style={{ height: 38, fontSize: 14 }}
+                      className="text-sm"
+                      onChange={(e) => {
+                        setPrjStatus(e.target.value)
+                      }}
+                    >
+                      {status.map((item, index) => {
+                        return (
+                          <MenuItem
+                            key={index}
+                            value={item.val}
+                            style={{ fontSize: 14 }}
+                          >
+                            {item.label}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
+
+                {/* Đơn vị quản lý */}
+                <div className="mt-4 mb-2">
+                  <div className="flex flex-row">
+                    <label className="block mb-2 text-sm font-medium text-black">
+                        Đơn vị quản lý
                     </label>
                     <span className="text-sm text-rose-800">&nbsp;(*)</span>
                   </div>
                   <input
                     type="text"
-                    id="areaSqr"
-                    className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
-                    placeholder="Diện tích (m²)"
+                    className="bg-white h-10 border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
+                    placeholder="Đơn vị quản lý"
+                    onChange={(e) => setManager(e.target.value)}
                     required
-                    value={
-                      isNaN(areaSqr) || areaSqr == 0 ? "" : areaSqr.toString()
-                    }
-                    onKeyDown={(e) => preventCharInput(e)}
-                    onChange={(e) => setAreaSqr(parseInt(e.target.value))}
                   />
                 </div>
 
-                <div className="mt-4 mb-2 w-full flex flex-row justify-between">
-                  <div className="w-3/5">
-                    <div className="flex flex-row">
-                      <label
-                        htmlFor="countries"
-                        className="block mb-2 text-sm font-medium text-black"
-                      >
-                        Mức giá
-                      </label>
-                      <span className="text-sm text-rose-800">&nbsp;(*)</span>
-                    </div>
-                    <input
-                      type="text"
-                      id="price"
-                      className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
-                      placeholder="Mức giá"
-                      required
-                      value={isNaN(price) || price == 0 ? "" : price.toString()}
-                      onKeyDown={(e) => preventCharInput(e)}
-                      onChange={(e) => setPrice(parseInt(e.target.value))}
-                    />
+                {/* Đơn vị thi công */}
+                <div className="mt-2 mb-2">
+                  <div className="flex flex-row">
+                    <label className="block mb-2 text-sm font-medium text-black">
+                      Đơn vị thi công
+                    </label>
+                    <span className="text-sm text-rose-800">&nbsp;(*)</span>
                   </div>
+                  <input
+                    name="title"
+                    id="title"
+                    type="text"
+                    className="bg-white h-10 border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
+                    placeholder="Đơn vị thi công"
+                    onChange={(e) => setConstructor(e.target.value)}
+                    required
+                  />
+                </div>
 
-                  <div className="w-2/6">
-                    <div className="flex flex-row">
-                      <label
-                        htmlFor="countries"
-                        className="block mb-2 text-sm font-medium text-black"
-                      >
-                        Đơn vị
-                      </label>
-                      <span className="text-sm text-rose-800">&nbsp;(*)</span>
-                    </div>
-                    <FormControl fullWidth>
-                      <Select
-                        displayEmpty
-                        value={priceUnit}
-                        style={{ height: 38, fontSize: 14 }}
-                        onChange={(e) => setPriceUnit(e.target.value)}
-                      >
-                        {priceUnits.map((item, index) => {
-                          return (
-                            <MenuItem
-                              key={index}
-                              value={item._id}
-                              style={{ fontSize: 14 }}
+                <div className="flex flex-row justify-between">
+                    {/* Diện tích */}
+                    <div className="mt-4 mb-2 w-1/3">
+                        <div className="flex flex-row">
+                            <label
+                            htmlFor="countries"
+                            className="block mb-2 text-sm font-medium text-black"
                             >
-                              {item.label}
-                            </MenuItem>
-                          )
-                        })}
-                      </Select>
-                    </FormControl>
-                  </div>
+                            Diện tích (m²)
+                            </label>
+                            <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                        </div>
+                        <input
+                            type="text"
+                            id="areaSqr"
+                            className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
+                            placeholder="Diện tích (m²)"
+                            required
+                            value={
+                            isNaN(areaSqr) || areaSqr == 0 ? "" : areaSqr.toString()
+                            }
+                            onKeyDown={(e) => preventCharInput(e)}
+                            onChange={(e) => setAreaSqr(parseInt(e.target.value))}
+                        />
+                    </div>
+
+                    {/* Mức giá */}
+                    <div className="mt-4 mb-2 w-1/2">
+                        <div className="flex flex-row">
+                            <label
+                                htmlFor="countries"
+                                className="block mb-2 text-sm font-medium text-black"
+                            >
+                                Mức giá
+                            </label>
+                            <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                        </div>
+                        <input
+                            type="text"
+                            id="price"
+                            className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
+                            placeholder="Mức giá (VNĐ / m²)"
+                            required
+                            value={isNaN(price) || price == 0 ? "" : price.toString()}
+                            onKeyDown={(e) => preventCharInput(e)}
+                            onChange={(e) => setPrice(parseInt(e.target.value))}
+                        />
+                    </div>
                 </div>
 
                 {/* Giấy tờ pháp lý */}
@@ -926,22 +1153,136 @@ const UploadPost = (props: Props) => {
 
                 {/* Số tầng, blah blah,... */}
                 <div className="mt-2 mb-1 w-full flex flex-row flex-wrap justify-between">
+                  {/* Thời điểm khởi công */}
+                  <div className="flex flex-col mt-2 mb-3 w-[45%]">
+                    <label className="block text-sm font-medium text-black">
+                      Thời điểm khởi công
+                    </label>
+
+                    <div className="flex flex-row mt-2">
+                        <FormControl className="w-2/3">
+                            <Select
+                                displayEmpty
+                                value={yQuarterStart}
+                                style={{ height: 38, fontSize: 14 }}
+                                className="text-sm"
+                                onChange={(e) => {
+                                    setYQuarterStart(e.target.value)
+                                }}
+                            >
+                                {yearQuarters.map((item, index) => {
+                                    return (
+                                    <MenuItem
+                                        key={index}
+                                        value={item}
+                                        style={{ fontSize: 14 }}
+                                    >
+                                        {item}
+                                    </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl className="w-full ml-2">
+                            <Select
+                                displayEmpty
+                                value={startYear}
+                                style={{ height: 38, fontSize: 14 }}
+                                className="text-sm"
+                                onChange={(e) => {
+                                    setStartYear(e.target.value)
+                                }}
+                            >
+                                {years.map((item, index) => {
+                                    return (
+                                    <MenuItem
+                                        key={index}
+                                        value={item}
+                                        style={{ fontSize: 14 }}
+                                    >
+                                        {item}
+                                    </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                    </div>
+                  </div>
+
+                  {/* Thời điểm hoàn thành */}
+                  <div className="flex flex-col mt-2 mb-3 w-[45%]">
+                    <label className="block text-sm font-medium text-black">
+                      Thời điểm hoàn thành
+                    </label>
+
+                    <div className="flex flex-row mt-2">
+                        <FormControl className="w-2/3">
+                            <Select
+                                displayEmpty
+                                value={yQuarterEnd}
+                                style={{ height: 38, fontSize: 14 }}
+                                className="text-sm"
+                                onChange={(e) => {
+                                    setYQuarterEnd(e.target.value)
+                                }}
+                            >
+                                {yearQuarters.map((item, index) => {
+                                    return (
+                                    <MenuItem
+                                        key={index}
+                                        value={item}
+                                        style={{ fontSize: 14 }}
+                                    >
+                                        {item}
+                                    </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl className="w-full ml-2">
+                            <Select
+                                displayEmpty
+                                value={endYear}
+                                style={{ height: 38, fontSize: 14 }}
+                                className="text-sm"
+                                onChange={(e) => {
+                                    setEndYear(e.target.value)
+                                }}
+                            >
+                                {years.map((item, index) => {
+                                    return (
+                                    <MenuItem
+                                        key={index}
+                                        value={item}
+                                        style={{ fontSize: 14 }}
+                                    >
+                                        {item}
+                                    </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                    </div>
+                  </div>
+
                   <div
                     className="flex flex-row mt-2 mb-2 items-center justify-between"
                     style={{ width: "45%" }}
                   >
                     <label className="block text-sm font-medium text-black">
-                      Số tầng
+                      Số căn hộ / nhà
                     </label>
                     <input
                       type="text"
-                      id="floors"
+                      id="apartments"
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
-                        setFloor(parseInt(e.target.value))
+                        setApartments(parseInt(e.target.value))
                       }}
                     />
                   </div>
@@ -951,27 +1292,27 @@ const UploadPost = (props: Props) => {
                     style={{ width: "45%" }}
                   >
                     <label className="block text-sm font-medium text-black">
-                      Chiều rộng
+                      Số tòa
                     </label>
                     <input
                       type="text"
-                      id="width"
+                      id="buildings"
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
-                      placeholder="(m)"
+                      placeholder="0"
                       required
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
-                        setWidth(parseInt(e.target.value))
+                        setBuildings(parseInt(e.target.value))
                       }}
                     />
                   </div>
 
                   <div
                     className="flex flex-row mt-2 mb-2 items-center justify-between"
-                    style={{ width: "45%" }}
+                    style={{ width: "57%" }}
                   >
                     <label className="block text-sm font-medium text-black">
-                      Số phòng ngủ
+                      Mật độ xây dựng (%)
                     </label>
                     <input
                       type="text"
@@ -981,174 +1322,45 @@ const UploadPost = (props: Props) => {
                       required
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
-                        setBedrooms(parseInt(e.target.value))
+                        setDensity(parseInt(e.target.value))
                       }}
                     />
                   </div>
+                </div>
 
-                  <div
-                    className="flex flex-row mt-2 mb-2 items-center justify-between"
-                    style={{ width: "45%" }}
+                <hr className="mt-2"/>
+
+                {/* Tiện ích */}
+                <div className="mt-3 mb-2 w-full flex flex-col">
+                  <label
+                    htmlFor="countries"
+                    className="block mb-2 text-sm font-medium text-black"
                   >
-                    <label className="block text-sm font-medium text-black">
-                      Chiều sâu
-                    </label>
-                    <input
-                      type="text"
-                      id="depth"
-                      className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
-                      placeholder="(m)"
-                      required
-                      onKeyDown={(e) => preventCharInput(e)}
+                    Tiện ích
+                  </label>
+
+                  <FormControl fullWidth>
+                    <Select
+                      multiple
+                      style={{ height: 38, fontSize: 14 }}
+                      value={prjUtilities}
                       onChange={(e) => {
-                        setDepth(parseInt(e.target.value))
+                        setPrjUtilities(
+                          // On autofill we get a stringified value.
+                          typeof e.target.value === "string" ? e.target.value.split(",") : e.target.value
+                        );
                       }}
-                    />
-                  </div>
-
-                  <div
-                    className="flex flex-row mt-2 mb-2 items-center justify-between"
-                    style={{ width: "45%" }}
-                  >
-                    <label className="block text-sm font-medium text-black">
-                      Số phòng tắm
-                    </label>
-                    <input
-                      type="text"
-                      id="bathrooms"
-                      className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
-                      placeholder="0"
-                      required
-                      onKeyDown={(e) => preventCharInput(e)}
-                      onChange={(e) => {
-                        setBathrooms(parseInt(e.target.value))
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    className="flex flex-row mt-2 mb-2 items-center justify-between"
-                    style={{ width: "45%" }}
-                  >
-                    <label className="block text-sm font-medium text-black">
-                      Đường rộng
-                    </label>
-                    <input
-                      type="text"
-                      id="entrance-width"
-                      className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
-                      placeholder="(m)"
-                      required
-                      onKeyDown={(e) => preventCharInput(e)}
-                      onChange={(e) => {
-                        setRoadWidth(parseInt(e.target.value))
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    className="flex flex-row mt-2 mb-2 items-center justify-between"
-                    style={{ width: "45%" }}
-                  >
-                    <label className="block text-sm font-medium text-black">
-                      Hướng nhà
-                    </label>
-                    <FormControl>
-                      <Select
-                        displayEmpty
-                        value={direction}
-                        style={{ height: 38, fontSize: 14 }}
-                        onChange={(e) => setDirection(e.target.value)}
-                      >
-                        <MenuItem
-                          key={"Đông"}
-                          value={"Đông"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Đông
+                      renderValue={(selected) => selected.join(" - ")}
+                      MenuProps={MenuProps}
+                    >
+                      {utilities.map((name) => (
+                        <MenuItem key={name} value={name} className="h-[40px] text-sm">
+                          <Checkbox checked={prjUtilities.indexOf(name) > -1} />
+                          <ListItemText primary={name} className="text-sm"/>
                         </MenuItem>
-                        <MenuItem
-                          key={"Tây"}
-                          value={"Tây"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Tây
-                        </MenuItem>
-                        <MenuItem
-                          key={"Nam"}
-                          value={"Nam"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Nam
-                        </MenuItem>
-                        <MenuItem
-                          key={"Bắc"}
-                          value={"Bắc"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Bắc
-                        </MenuItem>
-                        <MenuItem
-                          key={"Tây Bắc"}
-                          value={"Tây Bắc"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Tây Bắc
-                        </MenuItem>
-                        <MenuItem
-                          key={"Đông Bắc"}
-                          value={"Đông Bắc"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Đông Bắc
-                        </MenuItem>
-                        <MenuItem
-                          key={"Đông Nam"}
-                          value={"Đông Nam"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Đông Nam
-                        </MenuItem>
-                        <MenuItem
-                          key={"Tây Nam"}
-                          value={"Tây Nam"}
-                          style={{ fontSize: 14 }}
-                        >
-                          Tây Nam
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </div>
-
-                  <div
-                    className="flex flex-row mt-2 mb-2 items-center justify-between"
-                    style={{ width: "45%" }}
-                  >
-                    <label className="block text-sm font-medium text-black">
-                      Nội thất
-                    </label>
-
-                    <FormControl>
-                      <Select
-                        displayEmpty
-                        value={furniture}
-                        style={{ height: 38, fontSize: 14 }}
-                        onChange={(e) => setFuniture(e.target.value)}
-                      >
-                        {furnitures.map((item, index) => {
-                          return (
-                            <MenuItem
-                              key={index}
-                              value={item}
-                              style={{ fontSize: 14 }}
-                            >
-                              {item}
-                            </MenuItem>
-                          )
-                        })}
-                      </Select>
-                    </FormControl>
-                  </div>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
 
@@ -1364,7 +1576,9 @@ const UploadPost = (props: Props) => {
               <div className="w-full text-center">
                 <button
                   className="bg-blue-700 flex flex-row items-center justify-center w-full lg:w-1/12 mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
-                  onClick={() => handleCreatePost()}
+                  onClick={() => {
+                    handleCreatePost()
+                  }}
                 >
                   <p className="text-white text-center">Đăng tin</p>
                   <SendIcon fontSize="small" style={{color: '#fff'}} className="ml-1"/>
@@ -1442,4 +1656,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
     return { props: { provinces } }
 }
 
-export default UploadPost
+export default UploadProject

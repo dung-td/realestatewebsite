@@ -1,46 +1,11 @@
-import type { NextPage } from "next"
-import { useEffect, useState } from "react";
-import server from "../../interfaces/server";
+import Link from "next/link";
 import CardOnHome from "./CardOnHome";
-import MoneyFormat from "../../util/MoneyFormat";
 
+type Props = {
+    posts: any[]
+}
 
-const ListEstateOnHome: NextPage = () => {
-    const [posts, setPosts] = useState(new Array())
-
-    useEffect(() => {
-        const fetchPosts = async () => {
-            console.log("Getting post list from Server...")
-            const res = await fetch(`${server}/post/get`)
-            let data = await res.json()
-            
-            data = data.data
-            let posts = new Array()
-
-            data.forEach((post: any) => {
-                let obj = {
-                    _id: post._id,
-                    title: post.title,
-                    address: post.address,
-                    estateType: post.estateType,
-                    thumbnail: post.images[0],
-                    price: MoneyFormat(post.price) + " " + post.priceType,
-                    area: post.area,
-                    bathroom: post.bathroomNumber,
-                    bedroom: post.bedroomNumber,
-                    ownerName: post.owner.name,
-                    ownerPhone: post.owner.phone,
-                    publishDate: post.publishedDate,
-                    titleColor: post.postType.title_color
-                }
-                posts.push(obj)
-            })
-            
-            setPosts(posts)
-        }
-
-        fetchPosts()
-    }, [])
+const ListEstateOnHome = (props: Props) => {
 
     return (
         <>
@@ -53,12 +18,13 @@ const ListEstateOnHome: NextPage = () => {
                 
                     <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-6">
                         {
-                            posts.map((item) => {
+                            props.posts.map((item) => {
                                 return (
                                     <CardOnHome
                                         key={item._id}
                                         id={item._id}
                                         title={item.title}
+                                        purpose={item.purpose}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
                                         areaSqr={item.area}
@@ -66,6 +32,8 @@ const ListEstateOnHome: NextPage = () => {
                                         author={item.ownerName}
                                         upload_date={item.publishDate}
                                         titleColor={item.titleColor}
+                                        estateType={item.estateType}
+                                        slug={item.slug}
                                     />
                                 )
                             })
@@ -73,9 +41,14 @@ const ListEstateOnHome: NextPage = () => {
                     </div>
 
                     <div className="my-4 text-center">
-                        <button className="w-28 h-9 border border-solid border-gray-300 rounded-lg hover:border-black" title="Xem thêm">
-                            <p className="text-xs font-medium">Xem thêm</p>
-                        </button>
+                        <Link href={`/post/list-post`}>
+                            <button
+                                className="w-28 h-9 border border-solid border-gray-300 rounded-lg hover:border-black"
+                                title="Xem thêm"
+                            >
+                                <p className="text-xs font-medium">Xem thêm</p>
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

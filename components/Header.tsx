@@ -1,17 +1,53 @@
 import { useState, Fragment, MouseEvent, KeyboardEvent, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import List from "@mui/material/List"
 import Drawer from "@mui/material/Drawer"
 import Box from "@mui/material/Box"
+
 import server from "../interfaces/server"
-import Logo from "../public/img/logo.png"
 import { EstateType } from "../interfaces/estateType"
-import Image from "next/image"
+import Logo from "../public/img/logo.png"
+
+import Login from "../components/LoginModal"
+import Register from "../components/RegisterModal"
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [state, setState] = useState(false)
   const [typeLinks, setTypeLinks] = useState([])
+  const [newsLinks, setNewsLinks] = useState([])
+
+
+  const [fullname, setFullname] = useState("")
+
+  const [showModalLogin, setShowModalLogin] = useState(false)
+  const [showModalRegister, setShowModalRegister] = useState(false)
+
+  const callbackLoginModal = (action: string) => {
+    switch (action) {
+      case "close":
+        setShowModalLogin(false)
+        break
+      case "register":
+        setShowModalLogin(false)
+        setShowModalRegister(true)
+        break
+      default:
+        break
+    }
+  }
+
+  const callbackRegisterModal = (action: string) => {
+    switch (action) {
+      case "close":
+        setShowModalRegister(false)
+        break
+
+      default:
+        break
+    }
+  }
 
   const toggleDrawer =
     (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
@@ -25,6 +61,18 @@ const Header = () => {
       setState(open)
     }
 
+  const logout = () => {
+    sessionStorage.clear()
+    setIsLogin(false)
+    window.location.href = "/"
+  }
+
+  useEffect(() => {
+    if (sessionStorage.getItem("jwt")) {
+      setIsLogin(true)
+    }
+  }, [])
+
   useEffect(() => {
     fetch(`${server}/a/estate-type/get`)
       .then((res) => res.json())
@@ -32,6 +80,30 @@ const Header = () => {
         setTypeLinks(data.data)
       })
   }, [])
+
+  useEffect(() => {
+    fetch(`${server}/news/type`)
+      .then((res) => res.json())
+      .then((data) => {
+        setNewsLinks(data.data)
+      })
+  }, [])
+
+  useEffect(() => {
+    if (isLogin) {
+      fetch(`${server}/user/currentUser`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setFullname(data.user.fullname)
+        })
+    }
+  }, [isLogin])
 
   return (
     <>
@@ -70,11 +142,15 @@ const Header = () => {
 
               <div className="ml-4 flex lg:ml-0">
                 <a className="inline-flex items-center" href="\">
-                  <img
-                    className="h-8 w-auto mr-2"
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
-                    alt=""
-                  />
+                  <div className="mr-2">
+                    <Image
+                      className="h-8 w-auto"
+                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+                      alt="logo.png"
+                      height={30}
+                      width={30}
+                    />
+                  </div>
                   <Image src={Logo} alt="logo.png" />
                 </a>
               </div>
@@ -152,6 +228,27 @@ const Header = () => {
                       </a>
                     </div>{" "}
                   </div>
+                  <div className="flex items-center nav-item">
+                    <a
+                      href="#"
+                      className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
+                    >
+                      Tin tức
+                    </a>
+                    <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                      {newsLinks.map((newsLink: any) => {
+                        return (
+                          <a
+                            key={newsLink._id}
+                            href={`/tin-tuc/${newsLink.slug}`}
+                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                          >
+                            {newsLink.name}
+                          </a>
+                        )
+                      })}
+                    </div>{" "}
+                  </div>
                 </div>
               </div>
 
@@ -167,16 +264,21 @@ const Header = () => {
                     </a>
                   ) : null}
                   {/* Saved  */}
-                  <a href="#">
-                    <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
-                      favorite_border
-                    </span>
-                  </a>
-                  <Link href="/post/upload-post">
-                    <a className="border-2 rounded-md border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200">
-                      Đăng tin
-                    </a>
-                  </Link>
+                  {isLogin ? (
+                    <>
+                      <a href="#">
+                        <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
+                          favorite_border
+                        </span>
+                      </a>
+                      <Link href="/post/upload-post">
+                        <a className="border-2 rounded-md border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200">
+                          Đăng tin
+                        </a>
+                      </Link>
+                    </>
+                  ) : null}
+
                   <span
                     className="h-6 w-px bg-gray-200"
                     aria-hidden="true"
@@ -186,75 +288,61 @@ const Header = () => {
                     <div className="nav-user relative">
                       <div className="flex flex-nowrap items-center space-x-2">
                         <div className="rounded-full bg-black h-10 w-10"></div>
-                        <p className="font-medium text-md">Tống Đức Dũng</p>
+                        <p className="font-medium text-md">{fullname}</p>
                         <span className="material-icons">expand_more</span>
                       </div>
                       <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">list</span>
-                          <p>Quản lý tin đăng</p>
-                        </a>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">person</span>
-                          <p>Thông tin cá nhân</p>
-                        </a>
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
-                        >
-                          <span className="material-icons mr-2">lock</span>
-                          <p>Đổi mật khẩu</p>
-                        </a>
+                        <Link href="/seller" passHref={true}>
+                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center">
+                            <span className="material-icons mr-2">list</span>
+                            <p>Quản lý tin đăng</p>
+                          </div>
+                        </Link>
+                        <Link href="/seller?s=editInfo" passHref={true}>
+                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center">
+                            <span className="material-icons mr-2">person</span>
+                            <p>Thông tin cá nhân</p>
+                          </div>
+                        </Link>
+                        <Link href="/seller?s=changePassword" passHref={true}>
+                          <div className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center">
+                            <span className="material-icons mr-2">lock</span>
+                            <p>Đổi mật khẩu</p>
+                          </div>
+                        </Link>
                         <div className="border-t border-gray-200 m-2" />
-                        <a
-                          href="#"
-                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        <div
+                          onClick={() => {
+                            logout()
+                          }}
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center"
                         >
                           <span className="material-icons mr-2">logout</span>
                           <p>Đăng xuất</p>
-                        </a>
+                        </div>
                       </div>{" "}
                     </div>
                   ) : (
                     <>
-                      <Link passHref href="/admin">
-                        <div className="cursor-pointer p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200">
-                          Đăng nhập{" "}
-                        </div>
-                      </Link>
+                      <div
+                        onClick={() => {
+                          setShowModalLogin(true)
+                        }}
+                        className="cursor-pointer p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                      >
+                        Đăng nhập{" "}
+                      </div>
 
-                      <a
-                        href="#"
-                        className="p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                      <div
+                        className="cursor-pointer p-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200"
+                        onClick={() => {
+                          setShowModalRegister(true)
+                        }}
                       >
                         Đăng ký
-                      </a>
+                      </div>
                     </>
                   )}
-                </div>
-
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a
-                    href="#"
-                    className="text-gray-700 hover:text-gray-800 flex items-center"
-                  >
-                    <img
-                      src="https://flagicons.lipis.dev/flags/4x3/vn.svg"
-                      alt=""
-                      className="w-5 h-auto block flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">
-                      {" "}
-                      VIE{" "}
-                    </span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
                 </div>
               </div>
             </div>
@@ -438,6 +526,14 @@ const Header = () => {
           </Box>
         </Drawer>
       </Fragment>
+
+      {/* Login */}
+      <Login showModal={showModalLogin} callback={callbackLoginModal} />
+      <Register
+        // provinces={provinces}
+        showModal={showModalRegister}
+        callback={callbackRegisterModal}
+      />
     </>
   )
 }

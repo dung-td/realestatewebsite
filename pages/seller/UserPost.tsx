@@ -155,10 +155,13 @@ const UserPost = ({ type }: any) => {
     setIsLoading(true)
     let isCancelled = false
     fetch(
-      `${server}/post/get?oid=62640dfaa4b7d5cedcf0166d&s=${type}&pt=${postType}`
+      `${server}/post/get?oid=${sessionStorage.getItem(
+        "id"
+      )}&s=${type}&pt=${postType}`
     )
       .then((res) => res.json())
       .then((data) => {
+        console.log(data.data)
         setData(data.data)
         let count = data.data.length / 5
         setPageCount(

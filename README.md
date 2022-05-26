@@ -1,10 +1,18 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Powered by [TailwindCSS](https://tailwindcss.com/), [MUI](https://mui.com/) [TypeScript](https://www.typescriptlang.org/)
+Powered by [TailwindCSS](https://tailwindcss.com/), [MUI](https://mui.com/) and [TypeScript](https://www.typescriptlang.org/).
 
 ## Getting Started
 
-First, run the development server:
+First, install the npm packages:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -16,8 +24,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Backend service
 
-You can find out our backend service for this project [hear](https://github.com/nointh/real-estate-backend).
+You can find out our backend service for this project [here](https://github.com/nointh/real-estate-backend).
 
 ## Demo Website
+
+You can login and use further features using these accounts
+
+| Role  |  Username   |  Password   |
+| :---: | :---------: | :---------: |
+| Admin | updating... | updating... |
+| User  |   dungtd    |   123456    |
 
 Visit [https://batdongsan88.vercel.app/](https://batdongsan88.vercel.app/)!

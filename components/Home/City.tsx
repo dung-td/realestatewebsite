@@ -38,13 +38,13 @@ const City = ({ postCounts, smallProvines }: Props) => {
 
   return (
     <div className="mt-8">
-      <div>
-        <h3 className="section-title font-bold text-sm sm:text-base">
+      <div className="grid">
+        <h3 className="font-bold text-sm sm:text-base">
           BẤT ĐỘNG SẢN Ở THÀNH PHỐ LỚN
         </h3>
-        <div className="seperate-line border-b-2 border-indigo-500 w-1/4 mb-4"></div>
+        <div className="border-b-2 border-indigo-500 w-1/4 mb-4"></div>
       </div>
-      <div className="grid px-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <Link passHref href="/ho-chi-minh">
           <div className="img-hover-zoom city-container relative xl:row-span-2 xl:col-span-2 aspect-w-16 aspect-h-9">
             <div className="absolute todiv-0 left-0 p-2 city-title z-10">

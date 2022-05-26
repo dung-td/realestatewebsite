@@ -21,12 +21,15 @@ type Attribute = {
 type DetailProps = {
     attributeList: Array<Attribute>,
     address? : string,
-    estateType?: string
+    estateType?: {
+        name: string,
+        slug: string
+    }
 }
 const DetailBox = (props: DetailProps) => {
     return (
         <div className="border rounded-lg border-2xl border-gray-300 overflow-clip p-3 my-2">
-            <div className='mb-3'><b>Loại bất động sản:</b> <span>{props.estateType}</span></div>
+            <div className='mb-3'><b>Loại bất động sản:</b> <span>{props.estateType?.name}</span></div>
             <div className='mb-3'><b>Địa chỉ:</b> <span>{props.address}</span></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 mb-2">
                 {props.attributeList.map((val, index) =>(

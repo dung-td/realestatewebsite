@@ -83,7 +83,7 @@ const Item: React.FC<{ data: any; callback: any; postType: string }> = ({
           </a>
         </div>
         <p className="text-gray-700">
-          <span className="font-semibold">{data.estateType}</span> -{" "}
+          <span className="font-semibold">{data.estateType.name}</span> -{" "}
           {data.address}
         </p>
 
@@ -136,7 +136,11 @@ const Item: React.FC<{ data: any; callback: any; postType: string }> = ({
 
             <div className="col-span-2 md:col-span-1">
               <a
-                href={data.slug}
+                href={
+                  data.forSaleOrRent == "sale"
+                    ? `ban-${data.estateType.slug}/${data.slug}`
+                    : `thue-${data.estateType.slug}/${data.slug}`
+                }
                 type="button"
                 target="_blank"
                 rel="noreferrer"

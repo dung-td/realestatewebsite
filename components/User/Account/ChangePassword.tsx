@@ -7,7 +7,7 @@ const ChangePassword = () => {
     const [passwordAgain, setPasswordAgain] = useState('');
 
     return (
-        <div className="flex flex-col px-6 py-3 w-[80%] xl:w-1/3 lg:w-1/3 md:w-1/2 h-max mt-8 mx-auto drop-shadow-md border-solid border border-gray-200 rounded-lg">
+        <div className="flex flex-col px-6 py-3 w-[80%] xl:w-1/3 lg:w-1/3 md:w-1/2 h-max mt-8 mx-auto border-solid border border-gray-200 rounded-md">
             <p className="text-black text-base font-medium">Đổi mật khẩu</p>
 
             <div className="mt-4 w-full">
@@ -17,7 +17,7 @@ const ChangePassword = () => {
                 <input
                     type="password"
                     id="old_pass"
-                    className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                    className="bg-white border border-gray-300 text-black text-sm rounded-md block w-full p-2.5 "
                     placeholder="Mật khẩu cũ"
                     required
                     value={oldPassword}
@@ -32,7 +32,7 @@ const ChangePassword = () => {
                 <input
                     type="password"
                     id="new_pass"
-                    className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                    className="bg-white border border-gray-300 text-black text-sm rounded-md block w-full p-2.5 "
                     placeholder="Mật khẩu mới"
                     required
                     value={newPassword}
@@ -47,7 +47,7 @@ const ChangePassword = () => {
                 <input
                     type="password"
                     id="new_pass_again"
-                    className="bg-white border border-gray-300 text-black text-sm rounded-lg block w-full p-2.5 "
+                    className="bg-white border border-gray-300 text-black text-sm rounded-md block w-full p-2.5 "
                     placeholder="Nhập lại mật khẩu"
                     required
                     value={passwordAgain}
