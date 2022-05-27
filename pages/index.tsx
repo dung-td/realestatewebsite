@@ -13,7 +13,6 @@ import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 import News from "../interfaces/news"
-import MoneyFormat from "../util/MoneyFormat"
 
 type Props = {
   news: News[]
@@ -144,7 +143,8 @@ const getPost = async () => {
       estateType: post.estateType,
       thumbnail: post.images[0],
       purpose: post.forSaleOrRent,
-      price: MoneyFormat(post.price) + " " + post.priceType,
+      price: post.price,
+      priceType: post.priceType,
       area: post.area,
       bathroom: post.bathroomNumber,
       bedroom: post.bedroomNumber,

@@ -1,12 +1,14 @@
 import type { NextPage } from "next"
 import Link from "next/link";
 import { useState } from "react"
+import MoneyFormat from "../../util/MoneyFormat";
 
 type Props = {
     id: string;
     title: string;
     imageUrl: string;
     price: string;
+    priceType: string;
     areaSqr: string;
     rooms: string;
     address: string;
@@ -31,6 +33,29 @@ const EstateCard = (props : Props) => {
     const handleFavouriteClick = (e: any, itemId: string) => {
         setFavourite(!favourite)
         e.preventDefault()
+    }
+
+    const convertPriceToString = (val: string) => {
+        var resUnit = ""
+        var priceType = props.priceType
+        if (props.priceType == "Giá / m²") {
+            priceType = props.priceType.substring(priceType.indexOf(' '), props.priceType.length)
+        }
+        var length = val.toString().length
+        var dividedBy = 1
+
+        if (length > 6 && length < 10) {
+            resUnit = "triệu"
+            dividedBy = 1000000
+        }
+        if (length > 9) {
+            resUnit = "tỷ"
+            dividedBy = 1000000000
+        }
+
+        const price = length > 6 ? Math.round(parseInt(val) / dividedBy) : MoneyFormat(parseInt(val))
+
+        return price.toString() + " " + resUnit + " " + priceType
     }
 
     return (
@@ -63,7 +88,14 @@ const EstateCard = (props : Props) => {
                     <div className="pr-3 mt-2 flex flex-row justify-between">
                         <div className="flex flex-row items-center">
                             <span className="material-icons-outlined">paid</span>
-                            <p className="text-black text-sm ml-1">{props.price}</p>
+                            <p className="text-black text-sm ml-1">
+                                {
+                                    props.priceType=="Thỏa thuận" ?
+                                    props.priceType
+                                    :
+                                    convertPriceToString(props.price)
+                                }
+                            </p>
                         </div>
 
                         <div className="flex flex-row items-center">

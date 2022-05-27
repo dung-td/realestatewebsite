@@ -27,6 +27,7 @@ const ListEstateOnHome = (props: Props) => {
                                         purpose={item.purpose}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
+                                        priceType={item.priceType}
                                         areaSqr={item.area}
                                         address={item.address}
                                         author={item.ownerName}
