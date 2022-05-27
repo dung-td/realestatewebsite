@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useState, useEffect, useMemo } from "react"
+import moment from "moment"
 import Filter from "../../components/User/Filter"
 import Item from "../../components/admin/Dashboard/Post/Item"
 import Tabs from "@mui/material/Tabs"
@@ -103,7 +104,10 @@ const AdminPost = ({ type }: any) => {
     console.log(query)
     let queryArray = new Array<any>()
     data.forEach((post) => {
-      if (post.title.toLowerCase().includes(query) || post._id.includes(query)) {
+      if (
+        post.title.toLowerCase().includes(query) ||
+        post._id.includes(query)
+      ) {
         queryArray.push(post)
       }
     })
@@ -157,6 +161,8 @@ const AdminPost = ({ type }: any) => {
       case "remove":
         decline(id)
         break
+      case "ban":
+        ban(id)
       default:
         break
     }
@@ -205,7 +211,31 @@ const AdminPost = ({ type }: any) => {
   const _delete = (id: string) => {
     let body = { id: id }
     console.log(body)
-    fetch(`${server}/admin/post/delete`, {
+    fetch(`${server}/admin/user/ban`, {
+      method: "POST",
+      body: JSON.stringify({
+        _id: id,
+        period: moment(new Date().setDate(new Date().getDate() + 7)).format(
+          "DD/MM/YYYY"
+        ),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsChange(!isChange)
+      })
+    setAlertMessage("Người dùng đã bị cấm đăng 7 ngày!")
+    setAlertOpen(true)
+    setIsLoading(false)
+  }
+
+  const terminate = (id: string) => {
+    let body = { id: id }
+    console.log(body)
+    fetch(`${server}/admin/post/terminate`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -217,12 +247,12 @@ const AdminPost = ({ type }: any) => {
       .then((data: any) => {
         setIsChange(!isChange)
       })
-    setAlertMessage("Tin đã được xóa")
+    setAlertMessage("Tin đã được gỡ bỏ")
     setAlertOpen(true)
     setIsLoading(false)
   }
 
-  const terminate = (id: string) => {
+  const ban = (id: string) => {
     let body = { id: id }
     console.log(body)
     fetch(`${server}/admin/post/terminate`, {

@@ -65,7 +65,7 @@ const Sidebar = () => {
             </li>
             {/* Quản lý tài khoản */}
             <li>
-              <Accordion>
+              <Accordion expanded={true}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -111,7 +111,7 @@ const Sidebar = () => {
             </li>
             {/* Quản lý dự án */}
             <li>
-              <Accordion>
+              <Accordion expanded={true}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"

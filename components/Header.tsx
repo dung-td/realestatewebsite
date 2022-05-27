@@ -14,10 +14,10 @@ import Register from "../components/RegisterModal"
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [state, setState] = useState(false)
   const [typeLinks, setTypeLinks] = useState([])
   const [newsLinks, setNewsLinks] = useState([])
-
 
   const [fullname, setFullname] = useState("")
 
@@ -67,12 +67,18 @@ const Header = () => {
     window.location.href = "/"
   }
 
+  // Check session
   useEffect(() => {
     if (sessionStorage.getItem("jwt")) {
       setIsLogin(true)
     }
+    if (sessionStorage.getItem("isAdmin")) {
+      setIsLogin(true)
+      setIsAdmin(true)
+    }
   }, [])
 
+  // Getting type for header
   useEffect(() => {
     fetch(`${server}/a/estate-type/get`)
       .then((res) => res.json())
@@ -80,7 +86,6 @@ const Header = () => {
         setTypeLinks(data.data)
       })
   }, [])
-
   useEffect(() => {
     fetch(`${server}/news/type`)
       .then((res) => res.json())
@@ -89,8 +94,9 @@ const Header = () => {
       })
   }, [])
 
+  // Get user info
   useEffect(() => {
-    if (isLogin) {
+    if (isLogin && !isAdmin) {
       fetch(`${server}/user/currentUser`, {
         method: "GET",
         headers: {
@@ -264,7 +270,7 @@ const Header = () => {
                     </a>
                   ) : null}
                   {/* Saved  */}
-                  {isLogin ? (
+                  {isLogin && isAdmin == false ? (
                     <>
                       <a href="#">
                         <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
@@ -284,11 +290,11 @@ const Header = () => {
                     aria-hidden="true"
                   ></span>
 
-                  {isLogin ? (
+                  {isLogin && !isAdmin ? (
                     <div className="nav-user relative">
                       <div className="flex flex-nowrap items-center space-x-2">
                         <div className="rounded-full bg-black h-10 w-10"></div>
-                        <p className="font-medium text-md">{fullname}</p>
+                        <p className="font-medium text-md">Quản trị viên</p>
                         <span className="material-icons">expand_more</span>
                       </div>
                       <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
@@ -316,6 +322,47 @@ const Header = () => {
                             logout()
                           }}
                           className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">logout</span>
+                          <p>Đăng xuất</p>
+                        </div>
+                      </div>{" "}
+                    </div>
+                  ) : isLogin && isAdmin ? (
+                    <div className="nav-user relative pr-12">
+                      <div className="flex flex-nowrap items-center space-x-2">
+                        <div className="rounded-full bg-black h-10 w-10 mr-2"></div>
+                        <p className="font-medium text-md">Quản trị viên</p>
+                        <span className="material-icons">expand_more</span>
+                      </div>
+                      <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                        <a
+                          href={`/admin?s=post&st=waiting`}
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">list</span>
+                          <p>Quản lý tin đăng</p>
+                        </a>
+                        <a
+                          href={`/admin?s=userList`}
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">person</span>
+                          <p>Quản lý tài khoản</p>
+                        </a>
+                        <a
+                          href="#"
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">apartment</span>
+                          <p>Quản lý dự án</p>
+                        </a>
+                        <div className="border-t border-gray-200 m-2" />
+                        <div
+                          onClick={() => {
+                            logout()
+                          }}
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
                         >
                           <span className="material-icons mr-2">logout</span>
                           <p>Đăng xuất</p>

@@ -17,14 +17,12 @@ import MoneyFormat from "../util/MoneyFormat"
 
 type Props = {
   news: News[]
-  postCounts: any[]
   provinces: Province[]
   smallProvinces: Province[]
   estateOnHome: any[]
 }
 
 const Home = ({
-  postCounts,
   provinces,
   smallProvinces,
   news,
@@ -54,7 +52,7 @@ const Home = ({
         <div className="space-y-16">
           <NewsSection typeSlug="tin-noi-bat" news={news} />
 
-          <City postCounts={postCounts} smallProvines={smallProvinces} />
+          <City smallProvines={smallProvinces} />
           {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
@@ -70,13 +68,14 @@ const Home = ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Getting provinces
-  const { postCounts, provinces, smallProvinces } = await getProvince()
+  const { provinces, smallProvinces } = await getProvince()
+  // const { postCounts } = await getPostCount()
   // Getting news
   const { news } = await getNews()
   const { estateOnHome } = await getPost()
 
   return {
-    props: { postCounts, provinces, smallProvinces, news, estateOnHome },
+    props: { provinces, smallProvinces, news, estateOnHome },
   }
 }
 
@@ -96,13 +95,6 @@ const getProvince = async () => {
     provinces.push(obj)
   })
   let count = 0
-  let postCounts = new Array<any>()
-  bigCites.forEach(async (city) => {
-    const res = await fetch(`${server}/admin/post/count?p=${city}`)
-    let data = await res.json()
-    data = data.data
-    postCounts.push(data)
-  })
   while (count < 6) {
     let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
 
@@ -112,7 +104,7 @@ const getProvince = async () => {
     }
   }
 
-  return { postCounts, provinces, smallProvinces }
+  return { provinces, smallProvinces }
 }
 
 const getNews = async () => {
@@ -161,5 +153,23 @@ const getPost = async () => {
 
   return { estateOnHome }
 }
+
+// const getPostCount = async () => {
+//   let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
+//   let postCounts = new Array()
+//   bigCites.map((city) => {
+//     fetch(`${server}/post/count?cityCode=${city}`)
+//       .then((res) => res.json())
+//       .then((data) => {
+//         postCounts.push(data.data)
+//       })
+//   })
+
+//   console.log(postCounts)
+
+//   postCounts = [0, 0, 0, 0, 0]
+
+//   return { postCounts }
+// }
 
 export default Home
