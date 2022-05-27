@@ -15,12 +15,14 @@ const NewsDetail = ({ news }: Props) => {
   const [title, setTitle] = useState("")
   useEffect(() => {
     let isCancelled = false
-    fetch(`${server}/news/type?slug=${news[0].type}`)
-      .then((res) => res.json())
-      .then((data) => {
-        let d = data.data
-        setTitle(d.name)
-      })
+    if (news.length > 0) {
+      fetch(`${server}/news/type?slug=${news[0].type}`)
+        .then((res) => res.json())
+        .then((data) => {
+          let d = data.data
+          setTitle(d.name)
+        })
+    }
     return () => {
       isCancelled = true
     }
@@ -31,7 +33,7 @@ const NewsDetail = ({ news }: Props) => {
       <Header />
 
       <div className="mt-8 min-h-screen">
-        {news ? (
+        {news.length > 0 ? (
           <ListNews title={title} news={news} />
         ) : (
           <div className="grid text-center font-bold">

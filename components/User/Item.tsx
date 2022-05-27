@@ -266,7 +266,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               Lượt tiếp cận: <span className="font-bold">3004</span> lượt
             </div>
             <div className="col-span-6 font-medium">
-              Lượt xem: <span className="font-bold">1975</span> lượt
+              Lượt xem: <span className="font-bold">{data.views}</span> lượt
             </div>
 
             <div className="col-span-6 font-medium">

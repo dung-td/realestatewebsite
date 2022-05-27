@@ -18,6 +18,7 @@ const Header = () => {
   const [state, setState] = useState(false)
   const [typeLinks, setTypeLinks] = useState([])
   const [newsLinks, setNewsLinks] = useState([])
+  const [projectLinks, setProjectLinks] = useState([])
 
   const [fullname, setFullname] = useState("")
 
@@ -91,6 +92,13 @@ const Header = () => {
       .then((res) => res.json())
       .then((data) => {
         setNewsLinks(data.data)
+      })
+  }, [])
+  useEffect(() => {
+    fetch(`${server}/a/project-type/get`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProjectLinks(data.data)
       })
   }, [])
 
@@ -213,25 +221,18 @@ const Header = () => {
                     >
                       Dự án
                     </a>
-                    <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300"
-                      >
-                        Căn hộ chung cư
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300"
-                      >
-                        Cao ốc văn phòng
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-300"
-                      >
-                        Khu đô thị mới
-                      </a>
+                    <div className="z-10 nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                      {projectLinks.map((typeLink: EstateType) => {
+                        return (
+                          <a
+                            key={typeLink._id}
+                            href="#"
+                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                          >
+                            {typeLink.name}
+                          </a>
+                        )
+                      })}
                     </div>{" "}
                   </div>
                   <div className="flex items-center nav-item">

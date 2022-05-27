@@ -72,7 +72,7 @@ const City = ({ smallProvines }: Props) => {
   }, [])
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 p-8">
       <div className="grid">
         <h3 className="font-bold text-sm sm:text-base">
           BẤT ĐỘNG SẢN Ở THÀNH PHỐ LỚN
@@ -90,9 +90,9 @@ const City = ({ smallProvines }: Props) => {
             </div>
             <Image
               alt="Hồ Chí Minh"
-              height="400"
+              height="410"
               width="600"
-              className="w-full object-cover rounded-lg"
+              className="w-full  rounded-lg"
               src="https://file4.batdongsan.com.vn/images/newhome/cities1/HCM-web-2.jpg"
             />
           </div>
@@ -110,7 +110,8 @@ const City = ({ smallProvines }: Props) => {
                   </p>
                 </div>
                 <Image
-                  layout="fill"
+                  height="410"
+                  width="600"
                   alt={city.label}
                   className="w-full object-cover rounded-lg"
                   src={city.img}

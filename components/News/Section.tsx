@@ -16,11 +16,11 @@ const NewsSection = ({ typeSlug, news }: Props) => {
   moment.locale("vi")
 
   return (
-    <div className="md:container md:mx-auto grid">
+    <div className="md:container md:mx-auto grid p-8 md:p-0">
       <div className="md:w-5/12 border-b-2 border-red-700">
         <h2 className="font-bold text-base">TIN TỨC NỔI BẬT</h2>
       </div>
-      <div className="md:flex pt-4 space-x-6">
+      <div className="md:flex pt-4 md:space-x-6">
         <div className="w-12/12 md:w-7/12 space-y-2">
           <Image
             className="rounded-md"
@@ -72,7 +72,7 @@ const NewsSection = ({ typeSlug, news }: Props) => {
             })}
           </div>
         </div>
-        <div className=" break-before-column w-4/12">
+        <div className="mt-4 w-full md:mt-0 md:w-4/12 ">
           <Image
             height={200}
             width={400}

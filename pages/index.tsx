@@ -22,12 +22,7 @@ type Props = {
   estateOnHome: any[]
 }
 
-const Home = ({
-  provinces,
-  smallProvinces,
-  news,
-  estateOnHome,
-}: Props) => {
+const Home = ({ provinces, smallProvinces, news, estateOnHome }: Props) => {
   return (
     <div className="relative">
       <Header />
@@ -43,13 +38,13 @@ const Home = ({
               src="https://res.cloudinary.com/dpc0elrwr/image/upload/v1653552538/real-estate/bannerbatdongsan07_bl4gmn.jpg"
             />
           </div>
-          <div className="w-3/5 ml-auto mr-auto md:absolute md:w-full md:top-10">
+          <div className="px-4 md:w-full ml-auto mr-auto md:absolute md:top-10">
             <SearchBar provinces={provinces} />
           </div>
         </div>
 
         {/* Section */}
-        <div className="space-y-16">
+        <div className=" space-y-16">
           <NewsSection typeSlug="tin-noi-bat" news={news} />
 
           <City smallProvines={smallProvinces} />
