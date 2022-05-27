@@ -15,6 +15,8 @@ import server from "../interfaces/server"
 import News from "../interfaces/news"
 import MoneyFormat from "../util/MoneyFormat"
 
+import Item from "../components/User/Transaction/Item"
+
 type Props = {
   news: News[]
   provinces: Province[]

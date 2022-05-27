@@ -64,12 +64,14 @@ export async function getStaticPaths() {
   data = data.data
   let slugs = new Array()
   data.forEach((n: any) => {
-    let obj = {
-      params: {
-        newsTypeSlug: n.slug,
-      },
+    if (n.slug != "tin-noi-bat") {
+      let obj = {
+        params: {
+          newsTypeSlug: n.slug,
+        },
+      }
+      slugs.push(obj)
     }
-    slugs.push(obj)
   })
   // console.log(slugs)
   return { paths: slugs, fallback: false }
