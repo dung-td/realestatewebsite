@@ -1,6 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next"
-import Footer from "../../components/Footer"
-import Header from "../../components/Header"
+// import Footer from "../../components/Footer"
+// import Header from "../../components/Header"
 import { useState } from "react"
 import { News } from "../../interfaces/News"
 import { MessageTwoTone, NewspaperSharp } from "@mui/icons-material"
@@ -40,7 +40,7 @@ const Tintuc = ({ newss }: Props) => {
     }
 
     return <div className="space-y-16">
-        <Header />
+        {/* <Header /> */}
         <div className="md:container  md:mx-auto px-36">
             <div className="w-5/12" style={{ borderBottom: "2px solid red" }}>
                 <h2 className="font-bold">TIN TỨC NỔI BẬT</h2>
@@ -297,7 +297,7 @@ const Tintuc = ({ newss }: Props) => {
                 </div>
             </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
     </div>
 }
 
