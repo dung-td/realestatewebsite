@@ -293,8 +293,8 @@ const SearchBar = ({ provinces }: Props) => {
   }
 
   return (
-    <div className="grid w-3/5 bg-slate-300/75 rounded-md drop-shadow-xl">
-      <Box className="mb-2 min-w-min text-white">
+    <div className="w-full md:w-3/5 mr-auto ml-auto md:grid md:bg-slate-300/75 rounded-md drop-shadow-xl">
+      <Box className="mb-2 md:min-w-min text-white">
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Nhà cho thuê" />
           <Tab label="Nhà bán/ sang nhượng" />
@@ -349,7 +349,7 @@ const SearchBar = ({ provinces }: Props) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-12 gap-4 sm:p-8">
+        <div className="mt-4 md:mt-0 grid grid-cols-12 gap-4 sm:p-8">
           <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
             <FormControl fullWidth size="small">
               <InputLabel id="label-input-city">Tỉnh/ thành phố</InputLabel>
@@ -357,7 +357,7 @@ const SearchBar = ({ provinces }: Props) => {
                 labelId="label-input-city"
                 id="input-city"
                 value={search.province}
-                label="Tỉnh/ thành phố"
+                label="Tỉnh/ thành phố" 
                 onChange={onProvinceChange}
               >
                 {provinces.map((province) => {

@@ -54,5 +54,6 @@ export default interface PostDto{
     width: number,
     depth: number,
     roadWidth: number,
-    facade: number
+    facade: number,
+    views: number,
 }

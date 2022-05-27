@@ -1,10 +1,9 @@
 import type { NextPage, GetServerSideProps } from "next"
 import Image from "next/image"
 import styles from "../styles/Home.module.css"
-import Header from "../../components/admin/Header"
+import Header from "../../components/Header"
 import NewsSection from "../../components/News/Section"
 import ListNews from "../../components/News/List"
-
 import server from "../../interfaces/server"
 import News from "../../interfaces/news"
 

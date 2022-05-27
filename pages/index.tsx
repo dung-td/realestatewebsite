@@ -14,21 +14,16 @@ import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 import News from "../interfaces/news"
 
+import Item from "../components/User/Transaction/Item"
+
 type Props = {
   news: News[]
-  postCounts: any[]
   provinces: Province[]
   smallProvinces: Province[]
   estateOnHome: any[]
 }
 
-const Home = ({
-  postCounts,
-  provinces,
-  smallProvinces,
-  news,
-  estateOnHome,
-}: Props) => {
+const Home = ({ provinces, smallProvinces, news, estateOnHome }: Props) => {
   return (
     <div className="relative">
       <Header />
@@ -44,16 +39,16 @@ const Home = ({
               src="https://res.cloudinary.com/dpc0elrwr/image/upload/v1653552538/real-estate/bannerbatdongsan07_bl4gmn.jpg"
             />
           </div>
-          <div className="w-3/5 ml-auto mr-auto md:absolute md:w-full md:top-10">
+          <div className="px-4 md:w-full ml-auto mr-auto md:absolute md:top-10">
             <SearchBar provinces={provinces} />
           </div>
         </div>
 
         {/* Section */}
-        <div className="space-y-16">
+        <div className=" space-y-16">
           <NewsSection typeSlug="tin-noi-bat" news={news} />
 
-          <City postCounts={postCounts} smallProvines={smallProvinces} />
+          <City smallProvines={smallProvinces} />
           {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
@@ -69,13 +64,14 @@ const Home = ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Getting provinces
-  const { postCounts, provinces, smallProvinces } = await getProvince()
+  const { provinces, smallProvinces } = await getProvince()
+  // const { postCounts } = await getPostCount()
   // Getting news
   const { news } = await getNews()
   const { estateOnHome } = await getPost()
 
   return {
-    props: { postCounts, provinces, smallProvinces, news, estateOnHome },
+    props: { provinces, smallProvinces, news, estateOnHome },
   }
 }
 
@@ -95,13 +91,6 @@ const getProvince = async () => {
     provinces.push(obj)
   })
   let count = 0
-  let postCounts = new Array<any>()
-  bigCites.forEach(async (city) => {
-    const res = await fetch(`${server}/admin/post/count?p=${city}`)
-    let data = await res.json()
-    data = data.data
-    postCounts.push(data)
-  })
   while (count < 6) {
     let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
 
@@ -111,7 +100,7 @@ const getProvince = async () => {
     }
   }
 
-  return { postCounts, provinces, smallProvinces }
+  return { provinces, smallProvinces }
 }
 
 const getNews = async () => {
@@ -161,5 +150,23 @@ const getPost = async () => {
 
   return { estateOnHome }
 }
+
+// const getPostCount = async () => {
+//   let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
+//   let postCounts = new Array()
+//   bigCites.map((city) => {
+//     fetch(`${server}/post/count?cityCode=${city}`)
+//       .then((res) => res.json())
+//       .then((data) => {
+//         postCounts.push(data.data)
+//       })
+//   })
+
+//   console.log(postCounts)
+
+//   postCounts = [0, 0, 0, 0, 0]
+
+//   return { postCounts }
+// }
 
 export default Home

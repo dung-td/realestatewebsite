@@ -24,7 +24,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Backend service
 
-You can find out our backend service for this project [here](https://github.com/nointh/real-estate-backend).
+You might want to find out our backend service of this project [here](https://github.com/nointh/real-estate-backend).
 
 ## Demo Website
 
@@ -32,7 +32,7 @@ You can login and use further features using these accounts
 
 | Role  |  Username   |  Password   |
 | :---: | :---------: | :---------: |
-| Admin | updating... | updating... |
+| Admin |    admin    |   123456   |
 | User  |   dungtd    |   123456    |
 
 Visit [https://batdongsan88.vercel.app/](https://batdongsan88.vercel.app/)!
