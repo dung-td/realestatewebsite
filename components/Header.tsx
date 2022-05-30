@@ -271,7 +271,7 @@ const Header = () => {
                     </a>
                   ) : null}
                   {/* Saved  */}
-                  {isLogin && isAdmin == false ? (
+                  {isLogin && !isAdmin ? (
                     <>
                       <a href="#">
                         <span className="material-icons rounded-md border-gray-300 p-2 text-gray-700 hover:bg-gray-200">
@@ -295,7 +295,7 @@ const Header = () => {
                     <div className="nav-user relative">
                       <div className="flex flex-nowrap items-center space-x-2">
                         <div className="rounded-full bg-black h-10 w-10"></div>
-                        <p className="font-medium text-md">Quản trị viên</p>
+                        <p className="font-medium text-md">{fullname}</p>
                         <span className="material-icons">expand_more</span>
                       </div>
                       <div className="nav-user-item absolute  w-60 py-2 bg-white bg-white-100 rounded-md shadow-xl">
@@ -350,6 +350,13 @@ const Header = () => {
                         >
                           <span className="material-icons mr-2">person</span>
                           <p>Quản lý tài khoản</p>
+                        </a>
+                        <a
+                          href={`/admin?s=transactionList`}
+                          className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
+                        >
+                          <span className="material-icons mr-2">money</span>
+                          <p>Quản lý giao dịch</p>
                         </a>
                         <a
                           href="#"

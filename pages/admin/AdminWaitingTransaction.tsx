@@ -15,7 +15,14 @@ import Item from "../../components/User/Transaction/Item"
 
 import Transaction from "../../interfaces/transaction"
 
-const UserTransaction = () => {
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+})
+
+const AdminWaitingTransaction = () => {
   const [data, setData] = useState<Array<Transaction>>([])
   const [queryData, setQueryData] = useState<Array<Transaction>>([])
 
@@ -23,37 +30,22 @@ const UserTransaction = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
 
-  const [transactionType, setTransactionType] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [tabValue, setTabValue] = useState(0)
+  const [alertMessage, setAlertMessage] = useState("Giao dịch đã được duyệt")
+  const [alertOpen, setAlertOpen] = useState(false)
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
-    setIsLoading(true)
-    switch (newValue) {
-      case 0:
-      default:
-        setTransactionType("")
-        break
-      case 1:
-        setTransactionType("income")
-        break
-      case 2:
-        setTransactionType("outcome")
-        break
+  const [isLoading, setIsLoading] = useState(true)
+  const [isChange, setIsChange] = useState(false)
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return
     }
+
+    setAlertOpen(false)
   }
-
-  // const handleClose = (
-  //   event?: React.SyntheticEvent | Event,
-  //   reason?: string
-  // ) => {
-  //   if (reason === "clickaway") {
-  //     return
-  //   }
-
-  //   setAlertOpen(false)
-  // }
 
   const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     const firstPageIndex = (value - 1) * 5
@@ -62,10 +54,42 @@ const UserTransaction = () => {
     window.scroll(0, 0)
   }
 
+  const transactionCallback = (action: string, id: string) => {
+    setIsLoading(true)
+    switch (action) {
+      case "confirm":
+        finishTransaction(id)
+        break
+      case "error":
+        break
+      default:
+        break
+    }
+  }
+
+  const finishTransaction = (id: string) => {
+    fetch(`${server}/transaction/finish`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        status: "success",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsChange(!isChange)
+        setIsLoading(false)
+        setAlertOpen(true)
+      })
+  }
+
   useEffect(() => {
     let isCancelled = false
-    let userId = sessionStorage.getItem("id")
-    fetch(`${server}/transaction?user=${userId}&type=${transactionType}`)
+    fetch(`${server}/transaction?status=waiting`)
       .then((res) => res.json())
       .then((data) => {
         setData(data.data)
@@ -82,41 +106,22 @@ const UserTransaction = () => {
     return () => {
       isCancelled = true
     }
-  }, [tabValue])
+  }, [isChange])
 
   return (
     <>
       <div className="ml-72 p-8">
         <div className="grid grid-full">
           <div className="mb-4">
-            <p className="font-bold text-xl">LỊCH SỬ GIAO DỊCH</p>
+            <p className="font-bold text-xl">GIAO DỊCH NẠP TIỀN CHỜ DUYỆT</p>
             <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
           </div>
-
-          <Filter />
-
-          <Box sx={{ width: "100%" }}>
-            <Box
-              className="mb-4"
-              sx={{ borderBottom: 1, borderColor: "divider" }}
-            >
-              <Tabs
-                value={tabValue}
-                onChange={handleTabChange}
-                aria-label="basic tabs example"
-              >
-                <Tab label={`Tất cả`} />
-                <Tab label={`Tiền vào`} />
-                <Tab label={`Tiền ra`} />
-              </Tabs>
-            </Box>
-          </Box>
 
           <div className="space-y-4 mb-4">
             {queryData.reverse().map((transaction) => {
               return (
                 <Item
-                  callback={null}
+                  callback={transactionCallback}
                   key={transaction._id}
                   transaction={transaction}
                 />
@@ -136,6 +141,21 @@ const UserTransaction = () => {
             <p className="text-center italic">Không có thông tin</p>
           )}
 
+          <Snackbar
+            open={alertOpen}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            autoHideDuration={6000}
+            onClose={handleClose}
+          >
+            <Alert
+              onClose={handleClose}
+              severity="success"
+              sx={{ width: "100%" }}
+            >
+              {alertMessage}
+            </Alert>
+          </Snackbar>
+
           <Backdrop
             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={isLoading}
@@ -151,4 +171,4 @@ const UserTransaction = () => {
   )
 }
 
-export default UserTransaction
+export default AdminWaitingTransaction

@@ -25,6 +25,7 @@ type Props = {
 }
 
 const Home = ({ provinces, smallProvinces, news, estateOnHome }: Props) => {
+  console.log(smallProvinces)
   return (
     <div className="relative">
       <Header />
