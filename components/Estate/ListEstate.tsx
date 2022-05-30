@@ -1,20 +1,16 @@
-import type { NextPage, GetServerSideProps } from "next"
 import { useState, useEffect } from "react"
-import ProjectCard from "../../components/Estate/ProjectCard"
+import EstateCard from "../../components/Estate/EstateCard"
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Pagination from "@mui/material/Pagination"
-import server from "../../interfaces/server"
-import MoneyFormat from "../../util/MoneyFormat"
-import Header from "../../components/Header"
-import Footer from "../../components/Footer"
+import { Estate } from "../../interfaces/estate"
 
 type Props = {
-    posts: any[]
+    posts: Estate[]
 }
 
-const ListProject = (props: Props) => {
+const ListEstate = (props: Props) => {
     const [sort, setSort] = useState('Thông thường')
 
     const [pageCount, setPageCount] = useState(0)
@@ -45,16 +41,14 @@ const ListProject = (props: Props) => {
 
     return (
         <>
-            <Header/>
-
             {/* List posts */}
             <div className="bg-white w-full">
                 <div className="max-w-full mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:px-8" style={{maxWidth: '1200'}}>
                     <div className="grid">
                         <div className="flex flex-row mb-4 items-center justify-between">
-                            <h2 className="font-bold text-base">Dự án/ Trang {currentPageIndex.toString()}</h2>
+                            <h2 className="font-bold text-base">Nhà bán/ Trang {currentPageIndex.toString()}</h2>
 
-                            <div className="w-[34%] sm:w-[20%] md:w-[20%] lg:w-[14%]">
+                            <div className="w-[34%] sm:w-[24%] md:w-[20%] lg:w-[16%]">
                                 <FormControl fullWidth>
                                     <Select
                                         value={sort}
@@ -80,21 +74,22 @@ const ListProject = (props: Props) => {
                         {
                             currentPageData.map((item) => {
                                 return (
-                                    <ProjectCard
+                                    <EstateCard
                                         key={item._id}
                                         id={item._id}
-                                        name={item.name}
-                                        projectType={item.projectType}
+                                        title={item.title}
+                                        estateType={item.estateType}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
-                                        areaSqr={item.area}
+                                        priceType={item.priceType}
+                                        areaSqr={item.area.toString()}
+                                        rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
                                         titleColor={item.titleColor}
                                         slug={item.slug}
-                                        statusCode={item.status}
-                                        apartments={item.apartments}
-                                        buildings={item.buildings}
-                                        investor={item.investorName}
+                                        purpose={item.purpose}
+                                        author={item.ownerName}
+                                        author_phone_number={item.ownerPhone}
                                     />
                                 )
                             })
@@ -116,40 +111,8 @@ const ListProject = (props: Props) => {
                     )}
                 </div>
             </div>
-
-            <Footer/>
         </>
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    console.log("Getting post list from Server...")
-    const res = await fetch(`${server}/project/get`)
-    let data = await res.json()
-    
-    data = data.data
-    let posts = new Array()
-
-    data.forEach((post: any) => {
-        let obj = {
-            _id: post._id,
-            name: post.name,
-            address: post.address,
-            status: post.projectStatus,
-            projectType: post.projectType,
-            thumbnail: post.images[0],
-            price: post.price,
-            area: post.area,
-            apartments: post.aparmentNumber,
-            buildings: post.buildingNumber,
-            investorName: post.investor.name,
-            titleColor: post.postType.title_color,
-            slug: post.slug,
-        }
-        posts.push(obj)
-    })
-
-    return { props: { posts } }
-}
-
-export default ListProject
+export default ListEstate

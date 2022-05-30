@@ -41,7 +41,7 @@ const EstateDetail: NextPage<IPost> = (props)=>{
         <>
             <Header/>
             
-            <div className="sm:w-[1200px] mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
+            <div className="sm:w-[1200px] grid mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
                 <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
                     <PostContent post={props.post}/>
                     

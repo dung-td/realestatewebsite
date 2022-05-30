@@ -6,7 +6,6 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Pagination from "@mui/material/Pagination"
 import server from "../../interfaces/server"
-import MoneyFormat from "../../util/MoneyFormat"
 import { Estate } from "../../interfaces/estate"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
@@ -55,7 +54,7 @@ const ListEstate = (props: Props) => {
                         <div className="flex flex-row mb-4 items-center justify-between">
                             <h2 className="font-bold text-base">Nhà bán/ Trang {currentPageIndex.toString()}</h2>
 
-                            <div className="w-[34%] sm:w-[20%] md:w-[20%] lg:w-[14%]">
+                            <div className="w-[34%] sm:w-[24%] md:w-[20%] lg:w-[16%]">
                                 <FormControl fullWidth>
                                     <Select
                                         value={sort}
@@ -88,6 +87,7 @@ const ListEstate = (props: Props) => {
                                         estateType={item.estateType}
                                         imageUrl={item.thumbnail}
                                         price={item.price}
+                                        priceType={item.priceType}
                                         areaSqr={item.area.toString()}
                                         rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
                                         address={item.address}
@@ -138,7 +138,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
             address: post.address,
             estateType: post.estateType,
             thumbnail: post.images[0],
-            price: MoneyFormat(post.price) + " " + post.priceType,
+            price: post.price,
+            priceType: post.priceType,
             area: post.area,
             bathroom: post.bathroomNumber,
             bedroom: post.bedroomNumber,
