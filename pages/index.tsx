@@ -1,34 +1,29 @@
 import type { GetServerSideProps } from "next"
+import { useState } from "react"
 import Image from "next/image"
+import Head from "next/head"
+
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
 import Footer from "../components/Footer"
 import City from "../components/Home/City"
 import NewsSection from "../components/News/Section"
 import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
-import { useState } from "react"
+
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
 import News from "../interfaces/news"
-import MoneyFormat from "../util/MoneyFormat"
+
+import Item from "../components/User/Transaction/Item"
 
 type Props = {
   news: News[]
-  postCounts: any[]
   provinces: Province[]
   smallProvinces: Province[]
   estateOnHome: any[]
 }
 
-const Home = ({
-  postCounts,
-  provinces,
-  smallProvinces,
-  news,
-  estateOnHome,
-}: Props) => {
-  const [scrollTop, setScrollTop] = useState(0)
-
+const Home = ({ provinces, smallProvinces, news, estateOnHome }: Props) => {
   return (
     <div className="relative">
       <Header />
@@ -37,21 +32,23 @@ const Home = ({
       <div className="grid-full">
         <div className="relative mb-8">
           <div className="home-banner">
-            <img
+            <Image
+              height={600}
+              width={1920}
               alt="banner"
-              src="https://phathung.vn/wp-content/uploads/2019/02/ecogreen-banner.jpg"
+              src="https://res.cloudinary.com/dpc0elrwr/image/upload/v1653552538/real-estate/bannerbatdongsan07_bl4gmn.jpg"
             />
           </div>
-          <div className="w-4/5 ml-auto mr-auto md:absolute md:w-full md:top-10">
+          <div className="px-4 md:w-full ml-auto mr-auto md:absolute md:top-10">
             <SearchBar provinces={provinces} />
           </div>
         </div>
 
         {/* Section */}
-        <div className="space-y-16">
-          <NewsSection news={news} />
+        <div className=" space-y-16">
+          <NewsSection typeSlug="tin-noi-bat" news={news} />
 
-          <City postCounts={postCounts} smallProvines={smallProvinces} />
+          <City smallProvines={smallProvinces} />
           {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
@@ -67,40 +64,15 @@ const Home = ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Getting provinces
-  const { postCounts, provinces, smallProvinces } = await getProvince()
+  const { provinces, smallProvinces } = await getProvince()
+  // const { postCounts } = await getPostCount()
   // Getting news
   const { news } = await getNews()
+  const { estateOnHome } = await getPost()
 
-  const fetchPost = await fetch(`${server}/post/get`)
-  let posts = await fetchPost.json()
-
-  posts = posts.data
-  let estateOnHome = new Array()
-
-  posts.forEach((post: any) => {
-    let obj = {
-      _id: post._id,
-      title: post.title,
-      address: post.address,
-      estateType: post.estateType,
-      thumbnail: post.images[0],
-      purpose: post.forSaleOrRent,
-      price: MoneyFormat(post.price) + " " + post.priceType,
-      area: post.area,
-      bathroom: post.bathroomNumber,
-      bedroom: post.bedroomNumber,
-      ownerName: post.owner.name,
-      ownerPhone: post.owner.phone,
-      publishDate: post.publishedDate,
-      titleColor: post.postType.title_color,
-      slug: post.slug,
-    }
-    if (estateOnHome.length < 6) {
-      estateOnHome.push(obj)
-    }
-  })
-
-  return { props: { postCounts, provinces, smallProvinces, news, estateOnHome } }
+  return {
+    props: { provinces, smallProvinces, news, estateOnHome },
+  }
 }
 
 const getProvince = async () => {
@@ -119,14 +91,7 @@ const getProvince = async () => {
     provinces.push(obj)
   })
   let count = 0
-  let postCounts = new Array<any>()
-  bigCites.forEach(async (city) => {
-    const res = await fetch(`${server}/admin/post/count?p=${city}`)
-    let data = await res.json()
-    data = data.data
-    postCounts.push(data)
-  })
-  while (count < 7) {
+  while (count < 6) {
     let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
 
     if (!bigCites.includes(provinces[i])) {
@@ -135,11 +100,11 @@ const getProvince = async () => {
     }
   }
 
-  return { postCounts, provinces, smallProvinces }
+  return { provinces, smallProvinces }
 }
 
 const getNews = async () => {
-  const res = await fetch(`${server}/news/get`)
+  const res = await fetch(`${server}/news/popular?limit=7`)
 
   let data = await res.json()
   data = data.data
@@ -151,5 +116,57 @@ const getNews = async () => {
 
   return { news }
 }
+
+const getPost = async () => {
+  const fetchPost = await fetch(`${server}/post/get`)
+  let posts = await fetchPost.json()
+
+  posts = posts.data
+  let estateOnHome = new Array()
+
+  posts.forEach((post: any) => {
+    let obj = {
+      _id: post._id,
+      title: post.title,
+      address: post.address,
+      estateType: post.estateType,
+      thumbnail: post.images[0],
+      purpose: post.forSaleOrRent,
+      price: post.price,
+      priceType: post.priceType,
+      area: post.area,
+      bathroom: post.bathroomNumber,
+      bedroom: post.bedroomNumber,
+      ownerName: post.owner.name,
+      ownerPhone: post.owner.phone,
+      publishDate: post.publishedDate,
+      titleColor: post.postType.title_color,
+      slug: post.slug,
+    }
+    if (estateOnHome.length < 6) {
+      estateOnHome.push(obj)
+    }
+  })
+
+  return { estateOnHome }
+}
+
+// const getPostCount = async () => {
+//   let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
+//   let postCounts = new Array()
+//   bigCites.map((city) => {
+//     fetch(`${server}/post/count?cityCode=${city}`)
+//       .then((res) => res.json())
+//       .then((data) => {
+//         postCounts.push(data.data)
+//       })
+//   })
+
+//   console.log(postCounts)
+
+//   postCounts = [0, 0, 0, 0, 0]
+
+//   return { postCounts }
+// }
 
 export default Home

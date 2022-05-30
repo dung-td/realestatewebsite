@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import ListNews from "../../components/News/List"
 import Header from "../../components/Header"
@@ -12,13 +12,29 @@ type Props = {
 }
 
 const NewsDetail = ({ news }: Props) => {
+  const [title, setTitle] = useState("")
+  useEffect(() => {
+    let isCancelled = false
+    if (news.length > 0) {
+      fetch(`${server}/news/type?slug=${news[0].type}`)
+        .then((res) => res.json())
+        .then((data) => {
+          let d = data.data
+          setTitle(d.name)
+        })
+    }
+    return () => {
+      isCancelled = true
+    }
+  }, [])
+
   return (
     <>
       <Header />
 
       <div className="mt-8 min-h-screen">
-        {news ? (
-          <ListNews title={"TIN NỔI BẬT"} news={news} />
+        {news.length > 0 ? (
+          <ListNews title={title} news={news} />
         ) : (
           <div className="grid text-center font-bold">
             {" "}
@@ -48,12 +64,14 @@ export async function getStaticPaths() {
   data = data.data
   let slugs = new Array()
   data.forEach((n: any) => {
-    let obj = {
-      params: {
-        newsTypeSlug: n.slug,
-      },
+    if (n.slug != "tin-noi-bat") {
+      let obj = {
+        params: {
+          newsTypeSlug: n.slug,
+        },
+      }
+      slugs.push(obj)
     }
-    slugs.push(obj)
   })
   // console.log(slugs)
   return { paths: slugs, fallback: false }

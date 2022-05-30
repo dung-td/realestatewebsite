@@ -37,11 +37,13 @@ const UploadPost = (props: Props) => {
   const [wards, setWards] = useState(new Array())
   const [streets, setStreets] = useState(new Array())
   const [priceUnits, setPriceUnits] = useState(new Array())
+  const [projects, setProjects] = useState(new Array())
 
   const [usrId, setUsrId] = useState("")
   const [purpose, setPurpose] = useState("sell")
   const [category, setCategory] = useState("")
   const [displayAddress, setDisplayAdress] = useState("")
+  const [projectId, setProjectId] = useState("")
   const [city, setCity] = useState("")
   const [district, setDistrict] = useState("")
   const [quarter, setQuarter] = useState("")
@@ -84,6 +86,18 @@ const UploadPost = (props: Props) => {
   const furnitures = ["Đầy đủ", "Không có"]
 
   const post_durations = ["7", "10", "14", "21"]
+
+  const getProjectName = (id: string) => {
+    var res = ""
+    for (let index = 0; index < projects.length; index++) {
+      const element = projects[index];
+      if (element._id = id) {
+        res = element.name
+        break
+      }
+    }
+    return res
+  }
 
   const onMapLngLatCallback = (lng: any, lat: any) => {
     console.log(lng + "/" + lat)
@@ -277,8 +291,8 @@ const UploadPost = (props: Props) => {
             "Lng": mapMarker[0],
           },
           "belongToProject": {
-            "projectId": 0,
-            "projectName": "SMART",
+            "projectId": projectId,
+            "projectName": getProjectName(projectId),
           },
           "description": description,
           "images": urlArr.data,
@@ -298,6 +312,7 @@ const UploadPost = (props: Props) => {
           "depth": depth,
           "roadWidth": roadWidth,
           "facade": 0,
+          "views": 0,
           "status": "waiting",
           "slug": "slug",
           "declineReasonId": ""
@@ -423,10 +438,28 @@ const UploadPost = (props: Props) => {
       })
     }
 
+    const fetchProjects = async () => {
+      const res = await fetch(`${server}/project/get`)
+      let data = await res.json()
+      
+      data = data.data
+      let prjs = new Array()
+
+      data.forEach((post: any) => {
+          let obj = {
+              _id: post._id,
+              name: post.name,
+          }
+          prjs.push(obj)
+      })
+      setProjects(prjs)
+    }
+
     fetchEstateTypes()
     fetchPostTypes()
     fetchPriceUnits()
     fetchCurrentUser()
+    fetchProjects()
   }, [])
 
   return (
@@ -518,6 +551,41 @@ const UploadPost = (props: Props) => {
                       }}
                     >
                       {estateTypes.map((item, index) => {
+                        return (
+                          <MenuItem
+                            key={index}
+                            value={item._id}
+                            style={{ fontSize: 14 }}
+                          >
+                            {item.name}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
+
+                <div className="mt-2 mb-2">
+                  <div className="flex flex-row">
+                    <label
+                      htmlFor="categories"
+                      className="block mb-2 text-sm font-medium text-black"
+                    >
+                      Thuộc về dự án
+                    </label>
+                  </div>
+
+                  <FormControl fullWidth>
+                    <Select
+                      displayEmpty
+                      value={projectId}
+                      style={{ height: 38, fontSize: 14 }}
+                      className="text-sm"
+                      onChange={(e) => {
+                        setProjectId(e.target.value)
+                      }}
+                    >
+                      {projects.map((item, index) => {
                         return (
                           <MenuItem
                             key={index}

@@ -1,10 +1,41 @@
-import type { NextPage } from "next"
 import { useState } from "react"
+import Alert from "@mui/material/Alert"
+import AlertTitle from "@mui/material/AlertTitle"
+import server from "../../../interfaces/server"
 
 const ChangePassword = () => {
-    const [oldPassword, setOldPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [passwordAgain, setPasswordAgain] = useState('');
+    const [fail, setFail] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [alertWrongPass, setAlertWrongPass] = useState(false)
+    const [oldPassword, setOldPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [passwordAgain, setPasswordAgain] = useState('')
+
+    const handleUpdateButton = async () => {
+        if (newPassword == passwordAgain) {
+            const response = await fetch(`${server}/user/changePassword`, {
+                method: "POST",
+                body: JSON.stringify({
+                    "oldPassword": oldPassword,
+                    "newPassword": newPassword,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+                },
+            })
+        
+            const myJson = await response.json()
+            
+            if (myJson.message && response.status==200) {
+                setSuccess(true)
+            } else {
+                setFail(true)
+            }
+        } else {
+            setAlertWrongPass(true)
+        }
+    }
 
     return (
         <div className="flex flex-col px-6 py-3 w-[80%] xl:w-1/3 lg:w-1/3 md:w-1/2 h-max mt-8 mx-auto border-solid border border-gray-200 rounded-md">
@@ -36,7 +67,10 @@ const ChangePassword = () => {
                     placeholder="Mật khẩu mới"
                     required
                     value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    onChange={(e) => {
+                        setAlertWrongPass(false)
+                        setNewPassword(e.target.value)
+                    }}
                 />
             </div>
 
@@ -51,19 +85,74 @@ const ChangePassword = () => {
                     placeholder="Nhập lại mật khẩu"
                     required
                     value={passwordAgain}
-                    onChange={(e) => setPasswordAgain(e.target.value)}
+                    onChange={(e) => {
+                        setAlertWrongPass(false)
+                        setPasswordAgain(e.target.value)
+                    }}
                 />
             </div>
 
-            <button
-                className="w-full md:w-36 xl:w-36 h-10 mt-4 self-end rounded-md bg-blue-500 hover:bg-blue-700"
-                title="Cập nhật thay đổi"
-                onClick={() => {
+            {
+                (!fail && !success && !alertWrongPass) ?
+                <button
+                    className="w-full md:w-36 xl:w-36 h-10 mt-4 self-end rounded-md bg-blue-500 hover:bg-blue-700"
+                    title="Cập nhật thay đổi"
+                    onClick={() => {
+                        handleUpdateButton()
+                    }}
+                >
+                    <p className="text-white text-sm">Cập nhật</p>
+                </button>
+                : null
+            }
+            
+            {
+                alertWrongPass ?
+                <div className="w-full mx-auto mt-4">
+                    <Alert
+                        severity="error"
+                        onClose={() => {
+                            setAlertWrongPass(false)
+                        }}
+                    >
+                    <AlertTitle>Thất bại</AlertTitle>
+                        Mật khẩu mới và mật khẩu nhập lại khác nhau — {" "} <strong>Vui lòng kiểm tra lại!</strong>
+                    </Alert>
+                </div>
+                : null
+            }
 
-                }}
-            >
-                <p className="text-white text-sm">Cập nhật</p>
-            </button>
+            {
+                success ?
+                <div className="w-full mx-auto mt-4">
+                    <Alert
+                        severity="success"
+                        onClose={() => {
+                            setSuccess(false)
+                        }}
+                    >
+                    <AlertTitle>Thành công</AlertTitle>
+                        Mật khẩu mới đã được cập nhật!
+                    </Alert>
+                </div>
+                : null
+            }
+
+            {
+                fail ?
+                <div className="w-full mx-auto mt-4">
+                    <Alert
+                        severity="error"
+                        onClose={() => {
+                            setFail(false)
+                        }}
+                    >
+                    <AlertTitle>Thất bại</AlertTitle>
+                        Không thể cập nhật mật khẩu!— {" "} <strong>Vui lòng kiểm tra lại!</strong>
+                    </Alert>
+                </div>
+                : null
+            }
         </div>
     )
 }

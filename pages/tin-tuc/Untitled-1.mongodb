@@ -7,60 +7,8 @@ const collection = 'NEW_COLLECTION_NAME';
 // The current database to use.
 use(database);
 
-db.news.insertOne({
-  "thumnail": "https://res.cloudinary.com/dpc0elrwr/image/upload/v1653484228/real-estate/20220524151629-8ee8_nh8l09.jpg",
-  "title": "Sóng đầu tư đổ về “Hạ Long trên cao nguyên",
-  "body": [
-    {
-      "type": "heading",
-      "src": "Điểm đến mới của dòng tiền đầu tư."
-    },
-    {
-      "type": "text",
-      "src": "Hồ Tà Đùng nằm trong khu bảo tồn thiên nhiên Tà Đùng thuộc địa phận hai xã Đắc P’lao và xã Đắk Som, huyện Đắk Glong tỉnh Đắc Nông. Với diện tích lên đến 5.000 ha, hồ Tà Đùng bao gồm 40 hòn đảo lớn nhỏ khác nhau và là nơi sinh trưởng của nhiều loại chim đặc hữu. Những hòn đảo xanh rì được ôm ấp trọn vẹn giữa mênh mông sóng nước của lòng hồ tạo nên cảnh sắc tuyệt đẹp hiếm nơi nào có được. Nơi đây vẫn giữ trọn được cảnh sắc thiên nhiên hoang sơ, thơ mộng và hùng vĩ. Không chỉ sở hữu thiên nhiên tươi đẹp, khu vực hồ Tà Đùng còn có thời tiết mát mẻ, rất thích hợp để du lịch, khám phá. Chính bởi vậy mà hồ Tà Đùng được mệnh danh là Hạ Long trên cao nguyên."
-    },
-    {
-      "type": "text",
-      "src": "Trước tiềm năng du lịch lớn của Tà Đùng, khoảng ba năm gần đây, Đắk Nông chú trọng đẩy mạnh kêu gọi các nhà đầu tư phát triển Tà Đùng. Định hướng của Đắk Nông là ưu tiên hoạt động du lịch sinh thái, lưu trú để tăng tính hấp dẫn sản phẩm du lịch đặc trưng, kêu gọi doanh nghiệp có kinh nghiệm, uy tín đầu tư vào chuỗi các sản phẩm du lịch. Đầu năm 2022, một số ông lớn trong ngành bất động sản đã có động thái tìm hiểu về vùng đất này như Liên danh Công ty Cổ phần Tập đoàn Đầu tư Địa ốc No Va và Công ty Cổ phần Đầu tư Đất Tâm đã có buổi báo cáo ý tưởng quy hoạch khu vực Huyện Đắk Glong và Vườn quốc gia Tà Đùng. Liên danh đã trình bày ý tưởng về một dự án khu du lịch quy mô lớn, tạo nhiều sản phẩm vui chơi giải trí cộng đồng, du lịch trải nghiệm, thể thao, mạo hiểm; du lịch sinh thái, tâm linh… Dự án có quy mô khoảng 23.500 ha với 7 phân khu. Hay tập đoàn FLC ký kết biên bản cam kết đầu tư dự án Quần thể sân golf, resort, biệt thự nghỉ dưỡng và giải trí cao cấp FLC Tà Đùng…"
-    },
-    {
-      "type": "image",
-      "src": "https://res.cloudinary.com/dpc0elrwr/image/upload/v1653484228/real-estate/20220524151629-8ee8_nh8l09.jpg",
-    },
-    {
-      "type": "text",
-      "src": "Thông tin về cuộc đổ bộ của các ông lớn bất động sản đã kích thích sự phát triển của bất động sản Tà Đùng, khiến giá đất khu vực này tăng mạnh thời gian qua. Ngoài các ông lớn địa ốc, nhiều nhà đầu tư nhỏ lẻ đến từ các địa phương khác cũng đổ về Tà Đùng săn đất với mục đích xây dựng homestay, khách sạn hoặc chỉ đơn thuần là mua đất rồi chờ tăng giá."
-    },
-    {
-      "type": "heading",
-      "src": "Giá đất tăng cao"
-    },
-    {
-      "type": "text",
-      "src": "Theo tìm hiểu của Batdongsan.com.vn, khoảng 7 năm về trước, một mét ngang đất tại các vị trí gần hồ Tà Đùng có giá chỉ 20-30 triệu đồng, đến nay mỗi mét ngang đã lên tới 200-400 triệu đồng. Tổng giá trị các lô đất của hơn 7 năm trước chỉ vài trăm triệu đồng thì nay giá rao bán đã lên cả chục tỉ đồng. Năm 2013, chị Nam, một cư dân tại Buôn Mê Thuột về Đắk Som, Dăk GLong mua một khu đất lớn view hồ Tà Đùng với giá 24 triệu đồng/mét ngang thì đến tháng 3/2022 đã có người trả chị 260 triệu đồng/mét ngang. Tổng lô đất của chị có diện tích hơn 1.000m2 với 27 mét ngang với giá thành là hơn 7 tỉ đồng. Những lô đất có view nhìn ra hồ Tà Đùng, gần homestay Chú Đông – một homestay nổi tiếng ở Tà Đùng cũng đang được chào bán từ 12-18 tỷ đồng với diện tích khoảng 2ha, mức giá tùy thuộc vào tỉ lệ đất thổ cư."
-    },
-    {
-      "type": "image",
-      "src": "https://res.cloudinary.com/dpc0elrwr/image/upload/v1653484361/real-estate/20220524151628-32b1_sncfti.jpg",
-    },
-    {
-      "type": "text",
-      "src": "Ăn theo cơn tăng giá của đất view hồ Tà Đùng, những khu đất dù không view hồ, không có lợi thế gần hồ cũng tăng đáng kể. Cụ thể, khu vực trung tâm xã, từ ngã 3 và Đắk Năng, đất mặt tiền QL28 đang được rao bán từ 5-7 triệu đồng/m2, tăng 40-50% so với 3 năm trước đó. Khu vực mặt đường bê tông lên đỉnh Tà Đùng thuộc thôn 5 có giá từ 3-6 triệu đồng/m2, trong khi vài năm trước đất ở đây được giao dịch ở mức 2,5 triệu đồng/m2. Đất thuộc thôn 1, khu nhà thờ Nhật Hạ có giá từ 1,5-3,2 triệu đồng/m2. Đất mặt tiền đường nhựa liên xã ven hồ vào Đắk Năng có giá từ 2-3 triệu đồng/m2. Đất mặt tiền đường nhựa chính liên xã vào Đắk Năng có giá từ 2.5-3,7 triệu đồng/m2. Đất thôn 4 được chào bán 1,1-1,6 triệu đồng/m2.",
-    },
-    {
-      "type": "text",
-      "src": "Theo các môi giới địa phương, giao dịch của thị trường hiện tập trung chính ở các khu đất có view trực diện hồ Tà Đùng, các khu vực ăn theo không có lợi thế view hồ, giao dịch khá chậm. Hiện nhiều khu đất lớn tại đây đang nằm trong tay các nhà đầu tư đến từ Hà Nội, TP.HCM. Họ dự định sẽ xây dựng homestay, khách sạn tại khu vực này trong thời gian tới, đón làn sóng du lịch đang đổ về đây mạnh mẽ.",
-    }
-  ],
-  "slug": "song-dau-tu-do-ve-ha-long-tren-cao-nguyen-ar109006",
-  "author": "Công Danh",
-  "description": "Tà Đùng thuộc huyện Đắk Glong tỉnh Đắc Nông được mệnh danh là Hạ Long trên cao nguyên bởi cảnh quan thiên nhiên đẹp tựa kì quan thiên nhiên thế giới là vịnh Hạ Long thuộc tỉnh Quảng Ninh. Đây là khu vực thu hút mạnh làn sóng đầu tư thời gian qua, giá bất động sản cũng ghi nhận mức tăng mạnh.",
-  "submitday": {
-    "$date": "2022-05-25T14:56:00Z"
-  },
-  "tags": "kinh-nghiem-mua-bsd",
-  "type": "tin-thi-truong",
-  "views": 0
+db.news.updateMany({}, {
+  $set: { "author" : "Đức Dũng"}
 })
 
 // Create a new collection.

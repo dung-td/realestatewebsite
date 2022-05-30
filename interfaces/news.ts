@@ -9,7 +9,7 @@ export default interface News {
   tags: string
   type: string
   views: number
-  thumnail: string
+  thumbnail: string
 }
 
 interface NewsDetails {
