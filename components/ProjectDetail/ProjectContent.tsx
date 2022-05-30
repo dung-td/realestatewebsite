@@ -6,6 +6,8 @@ import ImageCarousel from "../EstateDetail/ImageCarousel"
 import ContentSegment from "./ContentSegment"
 import Map from "../Map"
 import FavoriteButton from '../EstateDetail/FavoriteButton'
+import { Modal } from "@mui/material"
+import { useState } from "react"
 const Separator: React.FC = () => {
   return <div className="my-3 border-b border-y-gray-300 container"></div>
 }
@@ -17,6 +19,8 @@ interface IProject {
 
 const ProjectContent = (props: IProject) => {
   const { project } = props
+  const [ imageIndex, setImageIndex ] = useState(0)
+  const [ fullscreenImageModal, setFullscreenImageModal ] = useState(false)
   const { description, investor, utilities } = project
   console.log(project)
   const UtilityComponent = () => {
@@ -44,10 +48,29 @@ let detailList = [
 
   return (
     <div className="w-full">
-      <ImageCarousel
+      <Modal open={fullscreenImageModal}
+      onClose={()=>{ setFullscreenImageModal(false) }}>
+        <div className="text-center absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          <ImageCarousel imageList={project.images}
+          className='w-[80vw] h-[100%]'
+          imageStyle="w-[80vw] h-[80vh]"
+          showThumbs={true}
+          selectedItem = {imageIndex}
+          />
+        </div>
+      </Modal>
+      <div className="text-center">
+        <ImageCarousel
         imageList={project.images}
         className="border-2xl overflow-clip rounded-lg"
-      />
+        imageStyle="h-[60vh]"
+        onClick={(index)=>{
+          setFullscreenImageModal(true)
+          setImageIndex(index)
+        }}
+        showThumbs={false}
+        />
+      </div>
       <div className="p-3">
         <div>
           <h1 className="text-3xl font-bold text-black uppercase">
@@ -101,7 +124,7 @@ let detailList = [
             }
         <div className="mt-3 font-medium text-2xl">Thông tin chi tiết</div>
         <DetailBox
-          projectType = { project.projectType }
+          projectType = { project.projectType.name }
           investorName = { investor.name }
           address = { project.address }
           attributeList = {detailList.filter((element) => element.value)}

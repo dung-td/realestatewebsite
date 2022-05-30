@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { ClockIcon, HeartIcon, HomeIcon } from "@heroicons/react/outline"
 import { Unit, getUnitComponent } from "../../Enum"
 import PostDto from "../../interfaces/PostDTO"
@@ -5,6 +6,8 @@ import CollapseDescription from "./CollapseDescription"
 import DetailBox from "./DetailBox"
 import ImageCarousel from "./ImageCarousel"
 import FavoriteButton from './FavoriteButton'
+import { Modal } from "@mui/material"
+import {Carousel} from 'react-responsive-carousel'
 import Map from "../Map"
 
 const Separator: React.FC = () => {
@@ -15,6 +18,8 @@ interface IPost {
 }
 
 const PostContent = (props: IPost) => {
+  const [ imageIndex, setImageIndex ] = useState(0)
+  const [ fullscreenImageModal, setFullscreenImageModal ] = useState(false)
   const { post } = props
   const PriceComponent = () => {
     const price =
@@ -66,10 +71,30 @@ const PostContent = (props: IPost) => {
 
   return (
     <div className="w-full">
-      <ImageCarousel
+      <Modal open={fullscreenImageModal}
+      onClose={()=>{ setFullscreenImageModal(false) }}>
+        <div className="text-center absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          <ImageCarousel imageList={post.images}
+          className='w-[80vw] h-[100%]'
+          imageStyle="w-[80vw] h-[80vh]"
+          showThumbs={true}
+          selectedItem = {imageIndex}
+          />
+        </div>
+      </Modal>
+      <div className="text-center">
+        <ImageCarousel
         imageList={post.images}
         className="border-2xl overflow-clip rounded-lg"
-      />
+        imageStyle="h-[60vh]"
+        onClick={(index)=>{
+          setFullscreenImageModal(true)
+          setImageIndex(index)
+        }}
+        showThumbs={false}
+        />
+      </div>
+      
       <div className="p-3">
         <div>
           <h1 className="text-2xl font-bold text-black uppercase">

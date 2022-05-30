@@ -12,7 +12,10 @@ interface PostDto{
         name: string,
         title_color: string
     },
-    projectType: string,
+    projectType: {
+        name: string,
+        slug: string
+    },
     investor: {
         name: string,
         phone: string,
