@@ -182,13 +182,17 @@ const Header = () => {
                     <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {typeLinks.map((typeLink: EstateType) => {
                         return (
-                          <a
+                          <Link
                             key={typeLink._id}
-                            href={typeLink.slug}
-                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                            href={`/${typeLink.slug}?pp=cho-thue`}
+                            passHref={true}
                           >
-                            Cho thuê {typeLink.name}
-                          </a>
+                            <a
+                              className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                            >
+                              Cho thuê {typeLink.name}
+                            </a>
+                          </Link>
                         )
                       })}
                     </div>{" "}
@@ -203,13 +207,17 @@ const Header = () => {
                     <div className="z-10 nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {typeLinks.map((typeLink: EstateType) => {
                         return (
-                          <a
+                          <Link
                             key={typeLink._id}
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                            href={`/${typeLink.slug}?pp=ban`}
+                            passHref={true}
                           >
-                            Bán {typeLink.name}
-                          </a>
+                            <a
+                              className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                            >
+                              Bán {typeLink.name}
+                            </a>
+                          </Link>
                         )
                       })}
                     </div>{" "}
@@ -278,7 +286,7 @@ const Header = () => {
                           favorite_border
                         </span>
                       </a>
-                      <Link href="/post/upload-post">
+                      <Link href="/tin-dang/dang-tin">
                         <a className="border-2 rounded-md border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200">
                           Đăng tin
                         </a>
