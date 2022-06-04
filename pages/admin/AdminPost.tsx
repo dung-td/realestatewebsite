@@ -78,9 +78,6 @@ const AdminPost = ({ type }: any) => {
     }
   }
 
-  const openAlert = () => {
-    setAlertOpen(true)
-  }
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,

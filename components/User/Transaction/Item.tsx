@@ -1,17 +1,23 @@
-import Script from "next/script"
-import Head from "next/head"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
+import moment from "moment"
+import "moment/locale/vi"
 
+import Transaction from "../../../interfaces/transaction"
 import MoneyFormat from "../../../util/MoneyFormat"
+import server from "../../../interfaces/server"
 
-const Item = () => {
+type Props = {
+  transaction: Transaction
+  callback: any
+}
+
+const Item = ({ transaction, callback }: Props) => {
+  moment.locale("vi")
+  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("isAdmin"))
   const [expandDetail, setExpandDetail] = useState(false)
 
-  const [accountValue, setAccountValue] = useState(100000)
-  const [accountValueChange, setAccountValueChange] = useState(50000)
-  const [accountValue2, setAccountValue2] = useState(0)
-  const [accountValue2Change, setAccountValue2Change] = useState(0)
+  const confirmTransaction = () => {}
 
   const expand = () => {
     setExpandDetail(!expandDetail)
@@ -20,131 +26,113 @@ const Item = () => {
   return (
     <div className="p-4 grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
       <div className="col-span-12 text-center md:col-span-3 md:text-left">
-        <p className="font-bold text-xl text-[#004E7F]">NẠP TIỀN</p>
+        <p className="font-bold text-xl text-[#004E7F]">
+          {transaction.type == "income" ? "TIỀN VÀO" : "TIỀN RA"}
+        </p>
         <p className="text-lg">Tài khoản chính</p>
       </div>
-
+      <div className="col-span-6 md:col-span-4">
+        <p>Mã giao dịch</p>
+        <p className="font-bold">{transaction._id}</p>
+      </div>
       <div className="col-span-6 md:col-span-2">
         <p>Trạng thái</p>
-        <p className="w-max text-white bg-yellow-400 font-medium rounded-md text-xs p-0.5">
-          Chờ duyệt
+        {transaction.status == "waiting" ? (
+          <p className="p-1 w-max text-white bg-yellow-400 font-medium rounded-md text-xs p-0.5">
+            Chờ duyệt
+          </p>
+        ) : transaction.status == "success" ? (
+          <p className="p-1 w-max text-white bg-green-400 font-medium rounded-md text-xs p-0.5">
+            Thành công
+          </p>
+        ) : (
+          <p className="p-1 w-max text-white bg-red-400 font-medium rounded-md text-xs p-0.5">
+            Thất bại
+          </p>
+        )}
+      </div>
+      <div className="col-span-3 px-8">
+        <p>Thời gian</p>
+        <p className="font-bold">
+          {moment(transaction.dateProceed).format("DD/MM/YYYY, h:m")}
         </p>
       </div>
-      <div className="col-span-6 md:col-span-2">
-        <p>Mã giao dịch</p>
-        <p className="font-bold">30041975</p>
+
+      <div className="md:col-span-3"></div>
+
+      <div className="col-span-6 md:col-span-4">
+        <p>Số dư</p>
+        {transaction.status == "success" ? (
+          <p className="font-bold text-lg">
+            {MoneyFormat(transaction.balance)} VNĐ
+          </p>
+        ) : (
+          <p className="font-bold italic">Chờ xử lý...</p>
+        )}
       </div>
       <div className="col-span-6 md:col-span-2">
-        <p>Ngày đăng</p>
-        <p className="font-bold">22/02/2022</p>
+        <p>Biến động</p>
+        {transaction.status != "failed" ? (
+          <p className={`font-bold text-lg text-[#5CB85C]`}>
+            {transaction.type == "income"
+              ? "+"
+              : transaction.type == "outcome"
+              ? "-"
+              : ""}
+            {MoneyFormat(transaction.amount)} VNĐ
+          </p>
+        ) : (
+          <p className={`font-bold text-lg text-red-500 `}>0 VNĐ</p>
+        )}
       </div>
-      <div className="col-span-6 md:col-span-2">
-        <p>Ngày hết hạn</p>
-        <p className="font-bold">22/02/2022</p>
+      <div className="col-span-3 px-8">
+        <p>Hoàn tất</p>
+        {transaction.status == "success" ? (
+          <p className="font-bold">
+            {moment(transaction.dateFinish).format("DD/MM/YYYY, h:m")}
+          </p>
+        ) : (
+          <p className="font-bold italic">Chờ xử lý...</p>
+        )}
       </div>
 
-      <div className="col-span-12 md:col-span-6 mt-4"></div>
-      <div className="text-center col-span-12 md:text-right">
-        <button
-          onClick={expand}
-          className="center text-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-        >
-          Mở rộng
-          <span className="material-icons">arrow_drop_down</span>
-        </button>
+      <div className="col-span-12 md:col-span-0 mt-4"></div>
+      <div className="col-span-8 px-8">
+        <p className="font-medium">
+          Diễn giải: <span className="font-bold">{transaction.detail}</span>
+        </p>
+        {transaction.type == "income" ? (
+          <p className="font-medium">
+            Nội dung chuyển khoản:{" "}
+            <span className="font-bold bg-gray-300 px-2 py-1 rounded-md">
+              {`batdongsan88 ${transaction.user} ${transaction.amount}`}
+            </span>
+          </p>
+        ) : null}
       </div>
-
-      {expandDetail ? (
+      {isAdmin ? (
         <>
-          <div className="col-span-12 md:col-span-6 mt-4">
-            <p className="text-md text-center font-bold md:text-lg">
-              TÀI KHOẢN CHÍNH
-            </p>
-            <div className="grid grid-cols-2 text-center">
-              <div>
-                <p>Số dư</p>
-                <p className="font-bold text-lg">
-                  {MoneyFormat(accountValue)} VNĐ
-                </p>
-              </div>
-              <div>
-                <p>Biến động</p>
-                <p
-                  className={`font-bold text-lg ${
-                    accountValueChange > 0
-                      ? "text-[#5CB85C]"
-                      : accountValueChange < 0
-                      ? ""
-                      : ""
-                  } `}
-                >
-                  {accountValueChange > 0
-                    ? "+"
-                    : accountValueChange < 0
-                    ? "-"
-                    : ""}
-                  {MoneyFormat(accountValueChange)} VNĐ
-                </p>
-              </div>
-            </div>
+          <div className="col-span-2">
+            <button
+              type="button"
+              className="w-full text-white bg-red-500 hover:bg-red-700 border border-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              onClick={() => {
+                callback("error", transaction._id)
+              }}
+            >
+              Báo lỗi
+            </button>
           </div>
-          <div className="col-span-12 md:col-span-6 mt-4">
-            <p className="text-md text-center font-bold md:text-lg">
-              TÀI KHOẢN KHUYẾN MÃI
-            </p>
-            <div className="grid grid-cols-2 text-center">
-              <div>
-                <p>Số dư</p>
-                <p className="font-bold text-lg">
-                  {MoneyFormat(accountValue2)} VNĐ
-                </p>
-              </div>
-              <div>
-                <p>Biến động</p>
-                <p
-                  className={`font-bold text-lg ${
-                    accountValue2Change > 0
-                      ? "text-[#5CB85C]"
-                      : accountValue2Change < 0
-                      ? ""
-                      : ""
-                  } `}
-                >
-                  {accountValue2Change > 0
-                    ? "+"
-                    : accountValue2Change < 0
-                    ? "-"
-                    : ""}
-                  {MoneyFormat(accountValue2Change)} VNĐ
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col-span-12 px-8">
-            <p className="font-medium">
-              Loại giao dịch: <span className="font-bold">NẠP TIỀN</span>
-            </p>
-          </div>
-          <div className="col-span-12 px-8">
-            <p className="font-medium">
-              Diễn giải:{" "}
-              <span className="font-bold">
-                {accountValueChange > 0
-                  ? "cộng "
-                  : accountValueChange < 0
-                  ? "trừ "
-                  : ""}
-                {MoneyFormat(accountValueChange)} VNĐ vào tài khoản chính
-              </span>
-            </p>
-          </div>
-          <div className="col-span-12 px-8">
-            <p className="font-medium">
-              Ghi chú:{" "}
-              <span className="font-bold">
-                khách hàng nạp tiền vào tài khoản chính
-              </span>
-            </p>
+          <div className="col-span-2">
+            <button
+              type="button"
+              onClick={() => {
+                callback("confirm", transaction._id)
+              }}
+              className="w-full text-white bg-green-500 hover:bg-green-700 border border-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Xác nhận
+            </button>
           </div>
         </>
       ) : null}

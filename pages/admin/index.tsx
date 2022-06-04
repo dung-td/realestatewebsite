@@ -12,8 +12,10 @@ import AccordionDetails from "@mui/material/AccordionDetails"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import AdminPost from "./AdminPost"
 import AdminUser from "./AdminUser"
+import AdminTransaction from "./AdminTransactionList"
 import Custom404 from "../../pages/404"
 import server from "../../interfaces/server"
+import AdminWaitingTransaction from "./AdminWaitingTransaction"
 
 const Home = () => {
   const router = useRouter()
@@ -139,7 +141,7 @@ const Home = () => {
                 </li>
                 {/* Quản lý tài khoản */}
                 <li>
-                  <Accordion>
+                  <Accordion expanded={true}>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
@@ -201,9 +203,59 @@ const Home = () => {
                     </AccordionDetails>
                   </Accordion>
                 </li>
+                {/* Quản lý giao dịch */}
+                <li>
+                  <Accordion expanded={true}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <span className="material-icons">paid</span>
+                      <span
+                        className="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="dropdown-1"
+                      >
+                        Quản lý giao dịch
+                      </span>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul id="dropdown-1" className="space-y-2">
+                        <li>
+                          <a
+                            onClick={() => {
+                              setSelect("transactionList")
+                            }}
+                            className={`${
+                              select == "transactionList"
+                                ? `border-r-4 border-[#1976d2] bg-blue-50`
+                                : ``
+                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                          >
+                            Danh sách giao dịch
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            onClick={() => {
+                              setSelect("transactionWaiting")
+                            }}
+                            className={`${
+                              select == "transactionWaiting"
+                                ? `border-r-4 border-[#1976d2] bg-blue-50`
+                                : ``
+                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
+                          >
+                            Giao dịch chờ duyệt
+                          </a>
+                        </li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </li>
                 {/* Quản lý dự án */}
                 <li>
-                  <Accordion>
+                  <Accordion expanded={true}>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
@@ -246,8 +298,12 @@ const Home = () => {
           <div className="min-h-screen ">
             {select == "post" ? (
               <AdminPost type={selectPostType} />
-            ) : (
+            ) : select == "userList" ? (
               <AdminUser />
+            ) : select == "transactionList" ? (
+              <AdminTransaction />
+            ) : (
+              <AdminWaitingTransaction />
             )}
           </div>
 
