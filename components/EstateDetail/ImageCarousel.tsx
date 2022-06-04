@@ -37,7 +37,7 @@ const ImageCarousel: React.FC<CarouselProps> = ({imageList, className, onClick, 
             //     }
             // } 
             >
-                <img className='object-fit w-full h-full' src={val}/>
+                <img className='object-fill w-full h-full' src={val}/>
             </div>)}
         </Carousel>
     //     <Swiper

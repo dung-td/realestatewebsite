@@ -62,8 +62,8 @@ let detailList = [
       <div className="text-center">
         <ImageCarousel
         imageList={project.images}
-        className="border-2xl overflow-clip rounded-lg"
-        imageStyle="h-[60vh]"
+        className="overflow-clip rounded-lg"
+        imageStyle="h-[70vh]"
         onClick={(index)=>{
           setFullscreenImageModal(true)
           setImageIndex(index)
@@ -95,7 +95,7 @@ let detailList = [
         <div className="flex justify-between">
           <div className="flex-1">
             <p>Mức giá</p>
-            <p className="font-bold">{(Math.round((project.price / 1000) * 100) / 100).toString() + " tỷ"}</p>
+            <p className="font-bold">{project.price.toString() + " triệu/m"}<sup>2</sup></p>
           </div>
           <div className="flex-1">
             <p>Diện tích</p>
@@ -130,7 +130,7 @@ let detailList = [
           attributeList = {detailList.filter((element) => element.value)}
         />
         <div className="mt-3 font-medium text-2xl">Tiện dụng</div>
-        {UtilityComponent()}
+        {project.utilities && UtilityComponent()}
         <Map lat={project.cor.lat} lng={project.cor.Lng} type="view" />
       </div>
     </div>
