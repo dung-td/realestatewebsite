@@ -47,17 +47,31 @@ const EstateProject: NextPage<IProject> = (props)=>{
                     
 
                 </div>
-                <div className="md:border-gray-300 md:w-1/4 md:border md:rounded-top-xl" id="sideContent">
-                    <div className='md:h-[50vh] container flex md:flex-col md:justify-center items-center justify-around'>
-                        <img className="w-20 h-20 rounded-full bg-cyan-500"
-                        src={investor?.avatar}/>
-                        <p className="my-1">{investor?.name}</p>
-                        <a className="italic cursor-pointer">Xem thêm bài đăng khác</a>
-                        <a href={`tel:${investor?.phone}`} className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static">
-                            <PhoneIcon className='inline h-5 w-5'/>{investor?.phone}
+                <div className="md:border-gray-300 md:w-1/4 md:ml-1" id="sideContent">
+                    <div className="md:h-[50vh] container md:border md:border-gray-300 md:rounded-top-xl flex md:flex-col md:justify-center items-center justify-around">
+                        <img
+                        className="w-20 h-20 rounded-full bg-cyan-500"
+                        src={investor.avatar}
+                        />
+                        <p>Được đăng bởi</p>
+                        <p className="my-1">{investor.name}</p>
+                        <a className="cursor-pointer">Xem thêm bài đăng khác</a>
+                        <a
+                        href={`tel:${investor.phone}`}
+                        className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static"
+                        >
+                        <div>
+                        <PhoneIcon className="inline h-5 w-5" />
+                        {investor.phone}
+                        </div>
                         </a>
                     </div>
-                    
+
+                    <div>
+                        <div className="md:h-[50vh] container md:border md:border-gray-300 md:rounded-md flex md:flex-col md:justify-center items-center justify-around mt-2">
+                        <p>Bất động sản</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <Footer/>
