@@ -4,10 +4,6 @@ import Image from "next/image"
 import { Province } from "../../interfaces/Province"
 import server from "../../interfaces/server"
 
-type Props = {
-  smallProvines: Province[]
-}
-
 const City = () => {
   const [postCountSG, setPostCountSG] = useState(0)
   const smallPopularCity = useState<Province[]>([
@@ -41,35 +37,35 @@ const City = () => {
     },
   ])
 
-  // useEffect(() => {
-  //   let isCancelled = false
-  //   smallPopularCity[0].map((city) => {
-  //     fetch(`${server}/post/count?cityCode=${city.value}`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         if (data.data) {
-  //           city.postCount = data.data
-  //         }
-  //       })
-  //   })
-  //   return () => {
-  //     isCancelled = true
-  //   }
-  // }, [])
+  useEffect(() => {
+    let isCancelled = false
+    smallPopularCity[0].map((city) => {
+      fetch(`${server}/post/count?cityCode=${city.value}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.data) {
+            city.postCount = data.data
+          }
+        })
+    })
+    return () => {
+      isCancelled = true
+    }
+  }, [])
 
-  // useEffect(() => {
-  //   let isCancelled = false
-  //   fetch(`${server}/post/count?cityCode=SG`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data) {
-  //         setPostCountSG(data.data)
-  //       }
-  //     })
-  //   return () => {
-  //     isCancelled = true
-  //   }
-  // }, [])
+  useEffect(() => {
+    let isCancelled = false
+    fetch(`${server}/post/count?cityCode=SG`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          setPostCountSG(data.data)
+        }
+      })
+    return () => {
+      isCancelled = true
+    }
+  }, [])
 
   return (
     <div className="mt-8 p-8">
@@ -123,8 +119,8 @@ const City = () => {
         })}
       </div>
 
-      {/* <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-6 gap-4 mt-4">
-        {smallProvines.map((province) => (
+      <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-6 gap-4 mt-4">
+        {/* {smallProvines.map((province) => (
           <a
             key={province.slug}
             href={province.slug}
@@ -132,8 +128,8 @@ const City = () => {
           >
             <p className="text-center">{province.label}</p>
           </a>
-        ))}
-      </div> */}
+        ))} */}
+      </div>
     </div>
   )
 }

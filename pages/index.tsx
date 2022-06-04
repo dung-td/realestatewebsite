@@ -79,15 +79,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const getNews = async () => {
-  const res = await fetch(`${server}/news/popular?limit=7`)
+  const res = await fetch(`${server}/news/popular?limit=6`)
 
   let data = await res.json()
-  data = data.data
-
-  let news = new Array()
-  data.forEach((n: any) => {
-    news.push(n)
-  })
+  let news = data.data
 
   return { news }
 }
@@ -127,7 +122,7 @@ const getPost = async () => {
 }
 
 const getProject = async () => {
-  const fetchPrj = await fetch(`${server}/project/get`)
+  const fetchPrj = await fetch(`${server}/project/get?limit=3`)
   let posts = await fetchPrj.json()
 
   posts = posts.data
@@ -153,23 +148,5 @@ const getProject = async () => {
 
   return { projectOnHome }
 }
-
-// const getPostCount = async () => {
-//   let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
-//   let postCounts = new Array()
-//   bigCites.map((city) => {
-//     fetch(`${server}/post/count?cityCode=${city}`)
-//       .then((res) => res.json())
-//       .then((data) => {
-//         postCounts.push(data.data)
-//       })
-//   })
-
-//   console.log(postCounts)
-
-//   postCounts = [0, 0, 0, 0, 0]
-
-//   return { postCounts }
-// }
 
 export default Home
