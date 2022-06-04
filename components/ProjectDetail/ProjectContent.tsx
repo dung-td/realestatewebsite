@@ -24,15 +24,20 @@ const ProjectContent = (props: IProject) => {
   const { description, investor, utilities } = project
   console.log(project)
   const UtilityComponent = () => {
-    return (<div className="border rounded-lg border-2xl border-gray-300 overflow-clip p-3 my-2">
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 m-2 list-disc">
-          {utilities.map((val, index) =>(
-              <li className="container pb-2 mb-2 list-inside"  key={index}>
-                  {val}
-              </li>
-          ))}
-        </ul>
-    </div>)
+    return (
+      <div>
+        <div className="mt-3 font-medium text-2xl">Tiện dụng</div>
+        <div className="border rounded-lg border-2xl border-gray-300 overflow-clip p-3 my-2">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 m-2 list-disc">
+              {utilities.map((val, index) =>(
+                  <li className="container pb-2 mb-2 list-inside"  key={index}>
+                      {val}
+                  </li>
+              ))}
+            </ul>
+        </div>
+      </div>
+      )
   }
 
 let detailList = [
@@ -128,8 +133,7 @@ let detailList = [
           investorName = { investor.name }
           address = { project.address }
           attributeList = {detailList.filter((element) => element.value)}
-        />
-        <div className="mt-3 font-medium text-2xl">Tiện dụng</div>
+        />        
         {project.utilities && UtilityComponent()}
         <Map lat={project.cor.lat} lng={project.cor.Lng} type="view" />
       </div>
