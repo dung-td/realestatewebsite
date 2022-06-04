@@ -152,22 +152,4 @@ const getPost = async () => {
   return { estateOnHome }
 }
 
-// const getPostCount = async () => {
-//   let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
-//   let postCounts = new Array()
-//   bigCites.map((city) => {
-//     fetch(`${server}/post/count?cityCode=${city}`)
-//       .then((res) => res.json())
-//       .then((data) => {
-//         postCounts.push(data.data)
-//       })
-//   })
-
-//   console.log(postCounts)
-
-//   postCounts = [0, 0, 0, 0, 0]
-
-//   return { postCounts }
-// }
-
 export default Home

@@ -295,7 +295,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="min-h-screen ">
+          <div className=" h-[50rem]">
             {select == "post" ? (
               <AdminPost type={selectPostType} />
             ) : select == "userList" ? (
@@ -307,7 +307,7 @@ const Home = () => {
             )}
           </div>
 
-          <Footer />
+          {/* <Footer /> */}
         </>
       ) : (
         <Custom404 />
