@@ -9,6 +9,7 @@ import Footer from "../components/Footer"
 import City from "../components/Home/City"
 import NewsSection from "../components/News/Section"
 import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
+import ListProjectOnHome from "../components/Estate/ListProjectOnHome"
 
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
@@ -21,10 +22,10 @@ type Props = {
   provinces: Province[]
   smallProvinces: Province[]
   estateOnHome: any[]
+  projectOnHome: any[]
 }
 
-const Home = ({ provinces, smallProvinces, news, estateOnHome }: Props) => {
-  console.log(smallProvinces)
+const Home = ({ provinces, smallProvinces, news, estateOnHome, projectOnHome }: Props) => {
   return (
     <div className="relative">
       <Header />
@@ -53,6 +54,7 @@ const Home = ({ provinces, smallProvinces, news, estateOnHome }: Props) => {
           {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
+          <ListProjectOnHome posts={projectOnHome} />
         </div>
       </div>
 
@@ -70,9 +72,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   // Getting news
   const { news } = await getNews()
   const { estateOnHome } = await getPost()
+  const { projectOnHome } = await getProject()
 
   return {
-    props: { provinces, smallProvinces, news, estateOnHome },
+    props: { provinces, smallProvinces, news, estateOnHome, projectOnHome },
   }
 }
 
@@ -119,7 +122,7 @@ const getNews = async () => {
 }
 
 const getPost = async () => {
-  const fetchPost = await fetch(`${server}/post/get`)
+  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=6`)
   let posts = await fetchPost.json()
 
   posts = posts.data
@@ -151,5 +154,51 @@ const getPost = async () => {
 
   return { estateOnHome }
 }
+
+const getProject = async () => {
+  const fetchPrj = await fetch(`${server}/project/get`)
+  let posts = await fetchPrj.json()
+
+  posts = posts.data
+  let projectOnHome = new Array()
+
+  posts.forEach((post: any) => {
+    let obj = {
+      _id: post._id,
+      name: post.name,
+      address: post.location.DistrictName + ", " + post.location.CityName,
+      projectType: post.projectType,
+      projectStatus: post.projectStatus,
+      thumbnail: post.images[0],
+      price: post.price,
+      area: post.area,
+      titleColor: post.postType.title_color,
+      slug: post.slug,
+    }
+    if (projectOnHome.length < 6) {
+      projectOnHome.push(obj)
+    }
+  })
+
+  return { projectOnHome }
+}
+
+// const getPostCount = async () => {
+//   let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
+//   let postCounts = new Array()
+//   bigCites.map((city) => {
+//     fetch(`${server}/post/count?cityCode=${city}`)
+//       .then((res) => res.json())
+//       .then((data) => {
+//         postCounts.push(data.data)
+//       })
+//   })
+
+//   console.log(postCounts)
+
+//   postCounts = [0, 0, 0, 0, 0]
+
+//   return { postCounts }
+// }
 
 export default Home

@@ -5,41 +5,27 @@ import MoneyFormat from "../../util/MoneyFormat";
 
 type Props = {
     id: string;
-    title: string;
+    name: string;
     imageUrl: string;
     price: string;
-    priceType: string;
     areaSqr: string;
     address: string;
-    author: string;
-    upload_date: string;
+    projectStatus: string;
     titleColor: string;
-    purpose: string;
     slug: string;
-    estateType: {
+    projectType: {
         name: string;
         slug: string;
     };
 }
 
-const CardOnHome = (props : Props) => {
-    const [favourite, setFavourite] = useState(false);
+const ProjectOnHome = (props : Props) => {
 
-    const handleFavouriteClick = (e: any, itemId: string) => {
-        setFavourite(!favourite)
-        e.preventDefault()
-    }
-
-    const estateSlug = props.estateType.slug
+    const estateSlug = props.projectType.slug
     const postSlug = props.slug
-    const purpose = props.purpose == "sale" ? "ban" : "mua"
 
     const convertPriceToString = (val: string) => {
-        var resUnit = ""
-        var priceType = props.priceType
-        if (props.priceType == "Giá / m²") {
-            priceType = props.priceType.substring(priceType.indexOf(' '), props.priceType.length)
-        }
+        var resUnit = "VNĐ"
         var length = val.toString().length
         var dividedBy = 1
 
@@ -54,12 +40,56 @@ const CardOnHome = (props : Props) => {
 
         const price = length > 6 ? Math.round(parseInt(val) / dividedBy) : MoneyFormat(parseInt(val))
 
-        return price.toString() + " " + resUnit + " " + priceType
+        return price.toString() + " " + resUnit + "/m2"
+    }
+
+    const getProjectStatus = (val: string) => {
+        var res = ""
+        switch (val) {
+            case "open":
+                res = "Đang mở bán"
+                break
+            case "finish":
+                res = "Đã bàn giao"
+                break
+            default:
+                res = "Sắp mở bán"
+        }
+
+        return res
+    }
+
+    const StatusDiv = () => {
+        return (
+            <>
+            {
+                props.projectStatus == "open" ?
+                <div className={`mt-2 w-1/2 mx-auto py-1 items-center text-center rounded-md bg-[#E7FFF4]`}>
+                    <p className={`text-[#006D3C] text-sm font-medium`}>{getProjectStatus(props.projectStatus)}</p>
+                </div>
+                : null
+            }
+            {
+                props.projectStatus == "finish" ?
+                <div className={`mt-2 w-1/2 mx-auto py-1 items-center text-center rounded-md bg-[#F0EAF4]`}>
+                    <p className={`text-[#563968] text-sm font-medium`}>{getProjectStatus(props.projectStatus)}</p>
+                </div>
+                : null
+            }
+            {
+                props.projectStatus == "pre-open" ?
+                <div className={`mt-2 w-1/2 mx-auto py-1 items-center text-center rounded-md bg-[#FFECEB]`}>
+                    <p className={`text-[#961B12] text-sm font-medium`}>{getProjectStatus(props.projectStatus)}</p>
+                </div>
+                : null
+            }
+            </>
+        )
     }
 
     return (
-        <Link href={`/${purpose}-${estateSlug}/${postSlug}`} passHref={true}>
-            <div className="group flex flex-col h-max mt-2 ml-2 drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:opacity-90">
+        <Link href={`/${estateSlug}/${postSlug}`}>
+            <div className="group flex flex-col h-max mt-2 ml-2 drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer">
                 <div className="w-full max-h-48 aspect-w-1 aspect-h-1 bg-gray-200 rounded-t-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                     <img
                         className="w-full h-40 max-h-48 object-cover transition group-hover:-translate-y-1 group-hover:scale-110 duration-300"
@@ -67,16 +97,6 @@ const CardOnHome = (props : Props) => {
                         style={{imageRendering: '-webkit-optimize-contrast'}}
                         alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
                     />
-
-                    <span
-                        title={favourite ? 'Bỏ lưu' : 'Lưu'}
-                        className={
-                            !favourite ?
-                            "material-icons absolute top-2 right-2 rounded-md p-1 text-white hover:bg-gray-200 hover:text-gray-700"
-                            : "material-icons absolute top-2 right-2 rounded-md p-1 text-rose-500 hover:bg-gray-200"
-                        }
-                        onClick={(e) => handleFavouriteClick(e, props.id)}
-                    >favorite_border</span>
                 </div>
                 
                 <div className="w-full flex flex-col px-4 py-2">
@@ -92,7 +112,7 @@ const CardOnHome = (props : Props) => {
                             color: props.titleColor
                         }}
                     >
-                        {props.title}
+                        {props.name}
                     </h3>
 
                     <div className="mt-2 flex flex-row items-center justify-between">
@@ -100,8 +120,7 @@ const CardOnHome = (props : Props) => {
                             <span className="material-icons-outlined text-[20px]">paid</span>
                             <p className="text-black text-sm ml-1">
                                 {
-                                    props.priceType == "Thỏa thuận" ?
-                                    props.priceType : convertPriceToString(props.price)
+                                    convertPriceToString(props.price)
                                 }
                             </p>
                         </div>
@@ -133,18 +152,11 @@ const CardOnHome = (props : Props) => {
 
                     <hr className="mt-2"/>
 
-                    <div className="mt-2 flex flex-row items-center justify-between">
-                        <div className="flex flex-row items-center">
-                            <span className="material-icons-outlined text-[20px]">schedule</span>
-                            <p className="text-black text-sm ml-1">{props.upload_date}</p>
-                        </div>
-
-                        <p className="text-black text-sm font-bold">{props.author}</p>
-                    </div>
+                    <StatusDiv/>
                 </div>
             </div>
         </Link>
     )
 }
 
-export default CardOnHome
+export default ProjectOnHome

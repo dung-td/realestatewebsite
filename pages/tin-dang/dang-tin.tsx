@@ -313,6 +313,7 @@ const UploadPost = (props: Props) => {
           "roadWidth": roadWidth,
           "facade": 0,
           "views": 0,
+          "payAmount": postDuration * postTypes[postTypeIndex].price,
           "status": "waiting",
           "slug": "slug",
           "declineReasonId": ""

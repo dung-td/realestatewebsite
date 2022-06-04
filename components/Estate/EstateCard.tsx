@@ -28,7 +28,7 @@ const EstateCard = (props : Props) => {
 
     const estateSlug = props.estateType.slug
     const postSlug = props.slug
-    const purpose = props.purpose == "sale" ? "ban" : "mua"
+    const purpose = props.purpose == "sale" ? "ban" : "thue"
 
     const handleFavouriteClick = (e: any, itemId: string) => {
         setFavourite(!favourite)

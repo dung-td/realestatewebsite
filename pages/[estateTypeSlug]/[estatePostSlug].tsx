@@ -97,31 +97,28 @@ interface IPathParam {
 }
 
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch(
-    "http://vn-real-estate-api.herokuapp.com/api/post/slug"
-  )
-  const data = await res.json()
-  const { slugs } = data
-  console.log(slugs)
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  return { paths: slugs, fallback: false }
+    // Call an external API endpoint to get posts
+    const res = await fetch('http://vn-real-estate-api.herokuapp.com/api/post/slug')
+    const data = await res.json()
+    const {slugs} = data
+    console.log(slugs)
+    // We'll pre-render only these paths at build time.
+    // { fallback: false } means other routes should 404.
+    return { paths: slugs, fallback: false }
 }
+  
 
-export async function getStaticProps(pathParam: IPathParam) {
-  const { params } = pathParam
-  const res = await fetch(
-    `http://vn-real-estate-api.herokuapp.com/api/post/slug?slug=${params.estatePostSlug}`
-  )
-  const data = await res.json()
-  const { post } = data
-  console.log(post)
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      post,
-    },
-  }
+export async function getStaticProps (pathParam: IPathParam) {
+    const { params } = pathParam
+    const res = await fetch(`http://vn-real-estate-api.herokuapp.com/api/post/slug?slug=${params.estatePostSlug}`)
+    const data = await res.json()
+    const {post} =data
+    console.log(post)
+    // By returning { props: { posts } }, the Blog component
+    // will receive `posts` as a prop at build time
+    return {
+      props: {
+        post,
+      },
+    }
 }
