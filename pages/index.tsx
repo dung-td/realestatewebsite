@@ -122,7 +122,7 @@ const getNews = async () => {
 }
 
 const getPost = async () => {
-  const fetchPost = await fetch(`${server}/post/get?pp=approved&limit=6`)
+  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=6`)
   let posts = await fetchPost.json()
 
   posts = posts.data

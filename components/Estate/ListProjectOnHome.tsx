@@ -10,7 +10,7 @@ const ListProjectOnHome = (props: Props) => {
     return (
         <>
             <div className="bg-white w-full">
-                <div className="mx-auto py-8 px-4 max-w-full" style={{maxWidth: '1200'}}>
+                <div className="mx-auto px-4 max-w-full" style={{maxWidth: '1200'}}>
                     <div className="grid">
                         <h2 className="font-bold mb-4">DỰ ÁN NỔI BẬT</h2>
                         <hr className="w-1/3 ml:0 -mt-3 mb-4 border-black"/>

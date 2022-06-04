@@ -125,7 +125,7 @@ const ListEstate = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
     console.log("Getting post list from Server...")
-    const res = await fetch(`${server}/post/get`)
+    const res = await fetch(`${server}/post/get?stt=approved&limit=20`)
     let data = await res.json()
     
     data = data.data

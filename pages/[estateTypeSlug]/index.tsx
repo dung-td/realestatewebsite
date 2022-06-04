@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     // Get post with params
     let posts = new Array()
-    const res = await fetch(`${server}/post/get?pp=${purpose}&et=${estateType}`)
+    const res = await fetch(`${server}/post/get?pp=${purpose}&et=${estateType}&stt=approved&limit=20`)
     data = await res.json()
     data = data.data
 
