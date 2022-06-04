@@ -19,13 +19,11 @@ import Item from "../components/User/Transaction/Item"
 
 type Props = {
   news: News[]
-  provinces: Province[]
-  smallProvinces: Province[]
   estateOnHome: any[]
   projectOnHome: any[]
 }
 
-const Home = ({ provinces, smallProvinces, news, estateOnHome, projectOnHome }: Props) => {
+const Home = ({ news, estateOnHome, projectOnHome }: Props) => {
   return (
     <div className="relative">
       <Header />
@@ -42,7 +40,7 @@ const Home = ({ provinces, smallProvinces, news, estateOnHome, projectOnHome }: 
             />
           </div>
           <div className="px-4 md:w-full ml-auto mr-auto md:absolute md:top-10">
-            <SearchBar provinces={provinces} />
+            <SearchBar />
           </div>
         </div>
 
@@ -50,7 +48,8 @@ const Home = ({ provinces, smallProvinces, news, estateOnHome, projectOnHome }: 
         <div className=" space-y-16">
           <NewsSection typeSlug="tin-noi-bat" news={news} />
 
-          <City smallProvines={smallProvinces} />
+          <City
+           />
           {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
@@ -67,7 +66,7 @@ const Home = ({ provinces, smallProvinces, news, estateOnHome, projectOnHome }: 
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Getting provinces
-  const { provinces, smallProvinces } = await getProvince()
+  // const { provinces, smallProvinces } = await getProvince()
   // const { postCounts } = await getPostCount()
   // Getting news
   const { news } = await getNews()
@@ -75,36 +74,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const { projectOnHome } = await getProject()
 
   return {
-    props: { provinces, smallProvinces, news, estateOnHome, projectOnHome },
+    props: { news, estateOnHome, projectOnHome },
   }
-}
-
-const getProvince = async () => {
-  const res = await fetch(`${server}/a/province/get`)
-  let data = await res.json()
-  data = data.data
-  let provinces = new Array()
-  let smallProvinces = new Array()
-  let bigCites = ["SG", "HN", "DDN", "BD", "DN"]
-  data.forEach((province: any) => {
-    let obj = {
-      value: province._id,
-      label: province.provinceName,
-      slug: province.slug,
-    }
-    provinces.push(obj)
-  })
-  let count = 0
-  while (count < 6) {
-    let i = Math.floor(Math.random() * (63 - 0 + 1) + 0)
-
-    if (!bigCites.includes(provinces[i])) {
-      smallProvinces.push(provinces[i])
-      count++
-    }
-  }
-
-  return { provinces, smallProvinces }
 }
 
 const getNews = async () => {

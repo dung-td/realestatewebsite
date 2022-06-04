@@ -5,10 +5,13 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Pagination from "@mui/material/Pagination"
-import server from "../../interfaces/server"
-import { Estate } from "../../interfaces/estate"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
+import SearchBarOnList from "../../components/SearchBarOnList"
+
+import { Search } from "../../interfaces/search"
+import server from "../../interfaces/server"
+import { Estate } from "../../interfaces/estate"
 
 type Props = {
     posts: Estate[]
@@ -20,6 +23,7 @@ const ListEstate = (props: Props) => {
     const [pageCount, setPageCount] = useState(0)
     const [currentPageIndex, setCurrentPageIndex] = useState(1)
     const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
+    const [province, setProvince] = useState([])
 
     const handleSortResults = (e: any) => {
 
@@ -43,9 +47,15 @@ const ListEstate = (props: Props) => {
         setCurrentPageData(props.posts.slice(firstPageIndex, lastPageIndex))
     }, [])
 
+    const onSearchCallback = (search: Search) => {
+        console.log(search)
+    }
+
     return (
         <>
             <Header/>
+
+            <SearchBarOnList callback={onSearchCallback} />
 
             {/* List posts */}
             <div className="bg-white w-full">

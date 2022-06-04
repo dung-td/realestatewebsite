@@ -1,5 +1,4 @@
-import { NextPage, GetServerSideProps } from "next"
-import React, { useState, Component, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import MenuItem from "@mui/material/MenuItem"
 import InputLabel from "@mui/material/InputLabel"
@@ -8,33 +7,18 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Typography from "@mui/material/Typography"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
-import Autocomplete from "@mui/material/Autocomplete"
 import { Province } from "../interfaces/Province"
-import TextField from "@mui/material/TextField"
+
+import { Search } from '../interfaces/search'
+import { EstateType } from "../interfaces/estateType"
 import server from "../interfaces/server"
 
-type EstateType = {
-  _id: string
-  name: string
-  slug: string
+
+interface Props {
+    callback: any
 }
 
-type Search = {
-  province?: string
-  district?: string
-  ward?: string
-  street?: string
-  price?: string
-  area?: string
-  type?: string
-  bedroom?: string
-  width?: string
-  streetWidth?: string
-  orientation?: string
-}
-
-
-const SearchBar = () => {
+const SearchBarOnList = ({callback} : Props) => {
   const [SearchExpand, setSearchExpand] = useState(false)
   const [tabValue, setTabValue] = useState(0)
   const [estateType, setEstateType] = useState("sell")
@@ -67,9 +51,9 @@ const SearchBar = () => {
     { value: "mat-tien2", label: "< 500 triệu" },
     { value: "mat-tien3", label: "500 - 800 triệu" },
     { value: "mat-tien4", label: "800 triệu - 1 tỷ" },
-    { value: "mat-tien5", label: "1 triệu - 3 tỷ" },
-    { value: "mat-tien6", label: "3 triệu - 7 tỷ" },
-    { value: "mat-tien7", label: "7 triệu - 10 tỷ" },
+    { value: "mat-tien5", label: "1 tỷ - 3 tỷ" },
+    { value: "mat-tien6", label: "3 tỷ - 7 tỷ" },
+    { value: "mat-tien7", label: "7 tỷ - 10 tỷ" },
     { value: "mat-tien8", label: "> 10 tỷ" },
   ]
 
@@ -128,7 +112,6 @@ const SearchBar = () => {
     { value: "12mt", label: "Đông Nam" },
   ]
 
-
   useEffect(() => {
     fetch(`${server}/a/estate-type/get`)
       .then((res) => res.json())
@@ -153,10 +136,8 @@ const SearchBar = () => {
         })
         setProvinces(provinces)
       })
-    }, [])
-    
-    
-    
+  }, [])
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
     switch (newValue) {
@@ -176,7 +157,7 @@ const SearchBar = () => {
   }
 
   const onSearch = () => {
-    console.log(search)
+    callback(search)
   }
 
   const onTypeChange = (event: SelectChangeEvent) => {
@@ -306,7 +287,7 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="w-full md:w-3/5 mr-auto ml-auto md:grid md:bg-slate-300/75 rounded-md drop-shadow-xl">
+    <div className="md:sticky md:top-0 w-full mr-auto ml-auto md:grid md:bg-white drop-shadow-xl z-10">
       <Box className="mb-2 md:min-w-min text-white">
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Nhà cho thuê" />
@@ -315,9 +296,9 @@ const SearchBar = () => {
         </Tabs>
       </Box>
 
-      <div className="md:p-6">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 mt-2 mb-1 md:mb-0 md:mt-0 lg:col-span-2 inline-flex items-center">
+      <div className="md:px-4 md:py-2">
+        <div className="p-4 grid grid-full grid-cols-16 gap-4 inline-flex items-center">
+          <div className="col-span-16 mt-2 mb-1 md:mb-0 md:mt-0 lg:col-span-2 inline-flex items-center">
             <FormControl fullWidth size="small">
               <InputLabel className="text-sm" id="label-input-type">
                 Loại nhà đất
@@ -339,31 +320,17 @@ const SearchBar = () => {
               </Select>
             </FormControl>
           </div>
-          <div className="relative col-span-12 sm:col-span-9 lg:col-span-8 ">
+          <div className="h-full relative col-span-16 sm:col-span-9 lg:col-span-5 mb-2 md:mb-0">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <span className="material-icons">search</span>
             </div>
             <input
               type="text"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block h-full w-full pl-10 p-2 "
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block h-full w-full pl-10 p-2 "
               placeholder="Bạn tìm kiếm gì hôm nay?"
             />
           </div>
-          <div className="col-span-12 lg:col-span-2 sm:col-span-12">
-            <button
-              type="button"
-              className="text-white h-full w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
-              onClick={() => {
-                onSearch()
-              }}
-            >
-              Tìm kiếm
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-4 md:mt-0 grid grid-cols-12 gap-4 sm:p-8">
-          <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+          <div className="col-span-8 sm:col-span-6 md:col-span-4 lg:col-span-2">
             <FormControl fullWidth size="small">
               <InputLabel id="label-input-city">Tỉnh/ thành phố</InputLabel>
               <Select
@@ -383,7 +350,7 @@ const SearchBar = () => {
               </Select>
             </FormControl>
           </div>
-          <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+          <div className="col-span-8 sm:col-span-6 md:col-span-4 lg:col-span-2">
             <FormControl fullWidth size="small">
               <InputLabel id="label-input-price">Khoảng giá</InputLabel>
               <Select
@@ -404,7 +371,7 @@ const SearchBar = () => {
             </FormControl>
           </div>
           {estateType != "project" ? (
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-8 sm:col-span-6 md:col-span-4 lg:col-span-2">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-area">Diện tích</InputLabel>
                 <Select
@@ -425,7 +392,7 @@ const SearchBar = () => {
               </FormControl>
             </div>
           ) : (
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-8 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-area">Tình trạng</InputLabel>
                 <Select
@@ -446,24 +413,34 @@ const SearchBar = () => {
               </FormControl>
             </div>
           )}
-
           {estateType != "project" ? (
-            <div className="inline-flex justify-center items-center col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="inline-flex justify-center items-center col-span-8 sm:col-span-6 md:col-span-4 lg:col-span-1">
               <button
-                className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center rounded-lg text-sm px-5 py-2.5"
+                className="justify-center text-blue-700 text-xs font-medium w-full inline-flex items-center rounded-lg text-sm"
                 type="button"
                 onClick={expandSearch}
               >
-                <p>Mở rộng tìm kiếm</p>
+                <p>Mở rộng</p>
                 <span className="material-icons">arrow_drop_down</span>
               </button>
             </div>
           ) : null}
+          <div className="col-span-16 sm:col-span-12 lg:col-span-2">
+            <button
+              type="button"
+              className="text-white h-full w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+              onClick={() => {
+                onSearch()
+              }}
+            >
+              Tìm kiếm
+            </button>
+          </div>
         </div>
 
         {SearchExpand ? (
-          <div className=" grid grid-cols-12 gap-4 mt-4 sm:p-8">
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+          <div className="grid grid-cols-12 gap-4 mt-4 p-4">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">
                   Quận/ huyện
@@ -485,7 +462,7 @@ const SearchBar = () => {
             </div>
             <div
               key={"ward"}
-              className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+              className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3"
             >
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">
@@ -506,7 +483,7 @@ const SearchBar = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">Đường/ phố</InputLabel>
                 <Select
@@ -526,7 +503,7 @@ const SearchBar = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">Dự án</InputLabel>
                 <Select
@@ -546,7 +523,7 @@ const SearchBar = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">Số phòng ngủ</InputLabel>
                 <Select
@@ -573,7 +550,7 @@ const SearchBar = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">Hướng nhà</InputLabel>
                 <Select
@@ -603,7 +580,7 @@ const SearchBar = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">Đường rộng</InputLabel>
                 <Select
@@ -630,7 +607,7 @@ const SearchBar = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+            <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-ward">Mặt tiền</InputLabel>
                 <Select
@@ -664,4 +641,4 @@ const SearchBar = () => {
   )
 }
 
-export default SearchBar
+export default SearchBarOnList
