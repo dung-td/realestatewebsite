@@ -79,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const getNews = async () => {
-  const res = await fetch(`${server}/news/popular?limit=6`)
+  const res = await fetch(`${server}/news/popular?limit=1`)
 
   let data = await res.json()
   let news = data.data
@@ -88,7 +88,7 @@ const getNews = async () => {
 }
 
 const getPost = async () => {
-  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=6`)
+  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=1`)
   let posts = await fetchPost.json()
 
   posts = posts.data
@@ -122,7 +122,7 @@ const getPost = async () => {
 }
 
 const getProject = async () => {
-  const fetchPrj = await fetch(`${server}/project/get?limit=3`)
+  const fetchPrj = await fetch(`${server}/project/get?limit=1`)
   let posts = await fetchPrj.json()
 
   posts = posts.data
