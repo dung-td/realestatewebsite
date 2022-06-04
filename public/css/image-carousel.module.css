@@ -1,0 +1,4 @@
+ .carousel.carousel-slider .control-arrow, .carousel.carousel-slider .control-arrow:hover{
+    color: red;
+    background-color: green;
+}

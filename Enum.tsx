@@ -1,4 +1,5 @@
 export enum Unit{
+    PRICEPERMETER = 'pricePerMeter',
     AREA = 'area',
     LENGTH = 'length',
 }

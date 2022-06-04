@@ -4,16 +4,18 @@ import ImageCarousel from "../../components/EstateDetail/ImageCarousel"
 import DetailBox from "../../components/EstateDetail/DetailBox"
 import CollapseDescription from "../../components/EstateDetail/CollapseDescription"
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
-import { PhoneIcon } from "@heroicons/react/solid"
-import { Unit } from "../../Enum"
-import PostContent from "../../components/EstateDetail/PostContent"
-import PostDto from "../../interfaces/PostDTO"
-import Header from "../../components/Header"
-import Footer from "../../components/Footer"
-interface TitleSectionProps {
-  title: string
-  issuedDate?: string
-  address?: string
+import { PhoneIcon } from '@heroicons/react/solid'
+import {Unit} from '../../Enum'
+import PostContent from '../../components/EstateDetail/PostContent'
+import PostDto from '../../interfaces/PostDTO'
+import style from "../../public/css/Estate.module.css"
+
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+interface TitleSectionProps{
+    title: string,
+    issuedDate?: string,
+    address?: string
 }
 
 const Separator: React.FC = () => {
@@ -78,9 +80,6 @@ const EstateDetail: NextPage<IPost> = (props) => {
             </div>
           </div>
         </div>
-        <br />
-        <br />
-        <br />
       </div>
 
       <Footer />
