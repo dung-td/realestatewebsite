@@ -11,49 +11,50 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"
 import Autocomplete from "@mui/material/Autocomplete"
 import { Province } from "../interfaces/Province"
 import TextField from "@mui/material/TextField"
+
+import { Search } from "../interfaces/search"
+import { EstateType } from "../interfaces/estateType"
 import server from "../interfaces/server"
 
-type EstateType = {
-  _id: string
-  name: string
-  slug: string
+interface Props {
+  callback: any
 }
 
-type Search = {
-  province?: string
-  district?: string
-  ward?: string
-  street?: string
-  price?: string
-  area?: string
-  type?: string
-  bedroom?: string
-  width?: string
-  streetWidth?: string
-  orientation?: string
-}
-
-
-const SearchBar = () => {
+const SearchBar = ({ callback }: Props) => {
   const [SearchExpand, setSearchExpand] = useState(false)
   const [tabValue, setTabValue] = useState(0)
-  const [estateType, setEstateType] = useState("sell")
-
-  const [price, setPrice] = useState("")
-  const [area, setArea] = useState("")
 
   const [search, setSearch] = useState<Search>({
+    keyword: "",
     province: "",
     district: "",
     ward: "",
     street: "",
-    price: "",
-    area: "",
+    project: "",
+    price: {
+      min: "",
+      max: "",
+    },
+    area: {
+      min: "",
+      max: "",
+    },
     type: "",
-    bedroom: "",
-    width: "",
-    streetWidth: "",
+    bedroom: {
+      min: "",
+      max: "",
+    },
+    width: {
+      min: "",
+      max: "",
+    },
+    saleOrRent: "sell",
+    streetWidth: {
+      min: "",
+      max: "",
+    },
     orientation: "",
+    projectStatus: "",
   })
 
   const [provinces, setProvinces] = useState(new Array())
@@ -63,22 +64,22 @@ const SearchBar = () => {
   const [types, setTypes] = useState([])
 
   const prices = [
-    { value: "mat-tien", label: "Thỏa thuận" },
-    { value: "mat-tien2", label: "< 500 triệu" },
-    { value: "mat-tien3", label: "500 - 800 triệu" },
-    { value: "mat-tien4", label: "800 triệu - 1 tỷ" },
-    { value: "mat-tien5", label: "1 triệu - 3 tỷ" },
-    { value: "mat-tien6", label: "3 triệu - 7 tỷ" },
-    { value: "mat-tien7", label: "7 triệu - 10 tỷ" },
-    { value: "mat-tien8", label: "> 10 tỷ" },
+    { value: "null-null", label: "Thỏa thuận" },
+    { value: "0-500", label: "< 500 triệu" },
+    { value: "500-1000", label: "500 - 800 triệu" },
+    { value: "1000-3000", label: "800 triệu - 1 tỷ" },
+    { value: "3000-7000", label: "1 tỷ - 3 tỷ" },
+    { value: "7000-12000", label: "3 tỷ - 7 tỷ" },
+    { value: "12000-20000", label: "7 tỷ - 10 tỷ" },
+    { value: "20000-max", label: "> 10 tỷ" },
   ]
 
   const areas = [
-    { value: "mat-tien", label: "< 30 m²" },
-    { value: "mat-tien2", label: "30m² - 100 m²" },
-    { value: "mat-tien3", label: "100m² - 200m²" },
-    { value: "mat-tien4", label: "200m² - 500m²" },
-    { value: "mat-tien5", label: "> 500m²" },
+    { value: "0-30", label: "< 30 m²" },
+    { value: "30-100", label: "30m² - 100 m²" },
+    { value: "100-200", label: "100m² - 200m²" },
+    { value: "200-500", label: "200m² - 500m²" },
+    { value: "500-max", label: "> 500m²" },
   ]
 
   const projects = [
@@ -97,38 +98,37 @@ const SearchBar = () => {
   ]
 
   const bedroom = [
-    { value: "project-1", label: "1 - 2" },
-    { value: "project-2", label: "3 - 5" },
-    { value: "project-3", label: "> 5" },
+    { value: "1-2", label: "1 - 2" },
+    { value: "3-5", label: "3 - 5" },
+    { value: "5-max", label: "> 5" },
   ]
 
   const width = [
-    { value: "4mt", label: " <= 4m" },
-    { value: "6mt", label: "4m - 10m" },
-    { value: "10mt", label: "10m - 20m" },
-    { value: "12mt", label: "20m - 50m" },
-    { value: "12mt", label: "> 50m" },
+    { value: "4-8", label: "4m - 8m" },
+    { value: "8-20", label: "8m - 20m" },
+    { value: "20-50", label: "20m - 50m" },
+    { value: "50-max", label: "> 50m" },
   ]
 
   const streetWidth = [
-    { value: "4mt", label: "4m" },
-    { value: "6mt", label: "6m" },
-    { value: "10mt", label: "10m" },
-    { value: "12mt", label: "12m" },
+    { value: "0-4", label: "< 4m" },
+    { value: "8-17", label: "8m - 17m" },
+    { value: "17-30", label: "17m - 30m" },
+    { value: "30-max", label: "> 30m" },
   ]
 
   const orientation = [
-    { value: "4mt", label: "Đống" },
-    { value: "6mt", label: "Đông Bắc" },
-    { value: "10mt", label: "Bắc" },
-    { value: "12mt", label: "Tấy Bắc" },
-    { value: "12mt", label: "Tấy" },
-    { value: "12mt", label: "Tấy Nam" },
-    { value: "12mt", label: "Nam" },
-    { value: "12mt", label: "Đông Nam" },
+    { value: "E", label: "Đông" },
+    { value: "NE", label: "Đông Bắc" },
+    { value: "N", label: "Bắc" },
+    { value: "NW", label: "Tây Bắc" },
+    { value: "W", label: "Tây" },
+    { value: "SW", label: "Tây Nam" },
+    { value: "S", label: "Nam" },
+    { value: "SE", label: "Đông Nam" },
   ]
 
-
+  // Get estate type
   useEffect(() => {
     fetch(`${server}/a/estate-type/get`)
       .then((res) => res.json())
@@ -153,30 +153,41 @@ const SearchBar = () => {
         })
         setProvinces(provinces)
       })
-    }, [])
-    
-    
-    
+  }, [])
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
     switch (newValue) {
       case 0:
-        setEstateType("hire")
+        setSearch({
+          ...search,
+          saleOrRent: "rent",
+        })
         break
       case 1:
-        setEstateType("sell")
+        setSearch({
+          ...search,
+          saleOrRent: "sell",
+        })
         break
       case 2:
-        setEstateType("project")
+        setSearchExpand(false)
+        setSearch({
+          ...search,
+          saleOrRent: "project",
+        })
         break
       default:
-        setEstateType("hire")
+        setSearch({
+          ...search,
+          saleOrRent: "rent",
+        })
         break
     }
   }
 
   const onSearch = () => {
-    console.log(search)
+    callback(search)
   }
 
   const onTypeChange = (event: SelectChangeEvent) => {
@@ -190,21 +201,27 @@ const SearchBar = () => {
   }
 
   const onAreaChange = (event: SelectChangeEvent) => {
-    let area = event.target.value.toString()
+    let area = event.target.value.toString().split("-")
     if (search != undefined && area != undefined) {
       setSearch({
         ...search,
-        area: area,
+        area: {
+          min: area[0],
+          max: area[1],
+        },
       })
     }
   }
 
   const onPriceChange = (event: SelectChangeEvent) => {
-    let price = event.target.value.toString()
-    if (search != undefined && price != undefined) {
+    let prices = event.target.value.toString().split("-")
+    if (search != undefined && prices != undefined) {
       setSearch({
         ...search,
-        price: price,
+        price: {
+          min: prices[0],
+          max: prices[1],
+        },
       })
     }
   }
@@ -305,6 +322,41 @@ const SearchBar = () => {
     setSearchExpand(!SearchExpand)
   }
 
+  const refreshSearch = (sellOrRent: string) => {
+    setSearch({
+      keyword: "",
+      province: "",
+      district: "",
+      ward: "",
+      street: "",
+      project: "",
+      price: {
+        min: "",
+        max: "",
+      },
+      area: {
+        min: "",
+        max: "",
+      },
+      type: "",
+      bedroom: {
+        min: "",
+        max: "",
+      },
+      width: {
+        min: "",
+        max: "",
+      },
+      saleOrRent: sellOrRent,
+      streetWidth: {
+        min: "",
+        max: "",
+      },
+      orientation: "",
+      projectStatus: "",
+    })
+  }
+
   return (
     <div className="w-full md:w-3/5 mr-auto ml-auto md:grid md:bg-slate-300/75 rounded-md drop-shadow-xl">
       <Box className="mb-2 md:min-w-min text-white">
@@ -345,6 +397,13 @@ const SearchBar = () => {
             </div>
             <input
               type="text"
+              value={search.keyword}
+              onChange={(event) => {
+                setSearch({
+                  ...search,
+                  keyword: event.target.value,
+                })
+              }}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block h-full w-full pl-10 p-2 "
               placeholder="Bạn tìm kiếm gì hôm nay?"
             />
@@ -389,7 +448,11 @@ const SearchBar = () => {
               <Select
                 labelId="label-input-price"
                 id="input-price"
-                value={search.price}
+                value={
+                  search.price?.min == ""
+                    ? ""
+                    : search.price?.min + "-" + search.price?.max
+                }
                 label="Khoảng giá"
                 onChange={onPriceChange}
               >
@@ -403,14 +466,18 @@ const SearchBar = () => {
               </Select>
             </FormControl>
           </div>
-          {estateType != "project" ? (
+          {search.saleOrRent != "project" ? (
             <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <FormControl fullWidth size="small">
                 <InputLabel id="label-input-area">Diện tích</InputLabel>
                 <Select
                   labelId="label-input-area"
                   id="input-area"
-                  value={search.area}
+                  value={
+                    search.area?.min == ""
+                      ? ""
+                      : search.area?.min + "-" + search.area?.max
+                  }
                   label="Diện tích"
                   onChange={onAreaChange}
                 >
@@ -431,14 +498,21 @@ const SearchBar = () => {
                 <Select
                   labelId="label-input-area"
                   id="input-area"
-                  value={search.area}
-                  label="Diện tích"
-                  onChange={onAreaChange}
+                  value={search.projectStatus}
+                  label="Tình trạng"
+                  onChange={(event: SelectChangeEvent) => {
+                    if (search != undefined) {
+                      setSearch({
+                        ...search,
+                        projectStatus: event.target.value
+                      })
+                    }
+                  }}
                 >
-                  {projectStatus.map((status) => {
+                  {projectStatus.map((area) => {
                     return (
-                      <MenuItem key={status.value} value={status.value}>
-                        {status.label}
+                      <MenuItem key={area.value} value={area.value}>
+                        {area.label}
                       </MenuItem>
                     )
                   })}
@@ -447,18 +521,41 @@ const SearchBar = () => {
             </div>
           )}
 
-          {estateType != "project" ? (
-            <div className="inline-flex justify-center items-center col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
+          {search.saleOrRent != "project" ? (
+            <div className="inline-flex justify-center items-center col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-2">
               <button
-                className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center rounded-lg text-sm px-5 py-2.5"
+                className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center rounded-lg text-sm"
                 type="button"
                 onClick={expandSearch}
               >
-                <p>Mở rộng tìm kiếm</p>
-                <span className="material-icons">arrow_drop_down</span>
+                {SearchExpand ? (
+                  <>
+                    <p>Thu gọn</p>
+                    <span className="material-icons">arrow_drop_up</span>
+                  </>
+                ) : (
+                  <>
+                    <p>Mở rộng</p>
+                    <span className="material-icons">arrow_drop_down</span>
+                  </>
+                )}
               </button>
             </div>
           ) : null}
+
+          <div className="inline-flex justify-center items-center col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-1">
+            <button
+              className="justify-center text-blue-700 text-base font-medium w-full inline-flex items-center text-sm "
+              type="button"
+              onClick={() => {
+                refreshSearch(search.saleOrRent || "sell")
+              }}
+            >
+              <span className="material-icons rounded-lg hover:bg-slate-300 p-1">
+                autorenew
+              </span>
+            </button>
+          </div>
         </div>
 
         {SearchExpand ? (
@@ -532,14 +629,22 @@ const SearchBar = () => {
                 <Select
                   labelId="label-input-street"
                   id="input-ward"
-                  value={search.street}
-                  label="Đường/ phố"
-                  onChange={onStreetChange}
+                  value={search.project}
+                  label="Dự án"
+                  onChange={(event: SelectChangeEvent) => {
+                    let project = event.target.value.toString()
+                    if (search != undefined) {
+                      setSearch({
+                        ...search,
+                        project: project,
+                      })
+                    }
+                  }}
                 >
-                  {streets.map((street) => {
+                  {projects.map((project) => {
                     return (
-                      <MenuItem key={street.value} value={street.value}>
-                        {street.label}
+                      <MenuItem key={project.value} value={project.value}>
+                        {project.label}
                       </MenuItem>
                     )
                   })}
@@ -552,13 +657,21 @@ const SearchBar = () => {
                 <Select
                   labelId="label-input-street"
                   id="input-ward"
-                  value={search.bedroom}
+                  value={
+                    search.bedroom?.min == ""
+                      ? ""
+                      : search.bedroom?.min + "-" + search.bedroom?.max
+                  }
                   label="Số phòng ngủ"
                   onChange={(event: SelectChangeEvent) => {
+                    let bedroomRange = event.target.value.toString().split("-")
                     if (search != undefined) {
                       setSearch({
                         ...search,
-                        bedroom: event.target.value.toString(),
+                        bedroom: {
+                          min: bedroomRange[0],
+                          max: bedroomRange[1],
+                        },
                       })
                     }
                   }}
@@ -609,13 +722,23 @@ const SearchBar = () => {
                 <Select
                   labelId="label-input-street"
                   id="input-ward"
-                  value={search.streetWidth}
+                  value={
+                    search.streetWidth?.min == ""
+                      ? ""
+                      : search.streetWidth?.min + "-" + search.streetWidth?.max
+                  }
                   label="Đường rộng"
                   onChange={(event: SelectChangeEvent) => {
+                    let streetWidthRange = event.target.value
+                      .toString()
+                      .split("-")
                     if (search != undefined) {
                       setSearch({
                         ...search,
-                        streetWidth: event.target.value.toString(),
+                        streetWidth: {
+                          min: streetWidthRange[0],
+                          max: streetWidthRange[1],
+                        },
                       })
                     }
                   }}
@@ -636,13 +759,21 @@ const SearchBar = () => {
                 <Select
                   labelId="label-input-street"
                   id="input-ward"
-                  value={search.width}
+                  value={
+                    search.width?.min == ""
+                      ? ""
+                      : search.width?.min + "-" + search.width?.max
+                  }
                   label="Mặt tiền"
                   onChange={(event: SelectChangeEvent) => {
+                    let widthRange = event.target.value.toString().split("-")
                     if (search != undefined) {
                       setSearch({
                         ...search,
-                        width: event.target.value.toString(),
+                        width: {
+                          min: widthRange[0],
+                          max: widthRange[1],
+                        },
                       })
                     }
                   }}

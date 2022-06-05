@@ -1,7 +1,6 @@
 import type { GetServerSideProps } from "next"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
-import Head from "next/head"
 
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
@@ -16,14 +15,28 @@ import server from "../interfaces/server"
 import News from "../interfaces/news"
 
 import Item from "../components/User/Transaction/Item"
+import { Search } from "../interfaces/search"
 
 type Props = {
-  news: News[]
   estateOnHome: any[]
   projectOnHome: any[]
 }
 
-const Home = ({ news, estateOnHome, projectOnHome }: Props) => {
+const Home = ({ estateOnHome, projectOnHome }: Props) => {
+  const [news, setNews] = useState<Array<News>>(new Array())
+
+  useEffect(() => {
+    fetch(`${server}/news/popular?limit=6`)
+      .then((res) => res.json())
+      .then((data) => {
+        setNews(data.data)
+      })
+  }, [])
+
+  const searchCallback = (search: Search) => {
+    console.log(search)
+  }
+
   return (
     <div className="relative">
       <Header />
@@ -40,16 +53,16 @@ const Home = ({ news, estateOnHome, projectOnHome }: Props) => {
             />
           </div>
           <div className="px-4 md:w-full ml-auto mr-auto md:absolute md:top-10">
-            <SearchBar />
+            <SearchBar callback={searchCallback} />
           </div>
         </div>
 
         {/* Section */}
         <div className=" space-y-16">
-          <NewsSection typeSlug="tin-noi-bat" news={news} />
-
-          <City
-           />
+          {news.length > 0 ? (
+            <NewsSection typeSlug="tin-noi-bat" news={news} />
+          ) : null}
+          <City />
           {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
@@ -65,26 +78,12 @@ const Home = ({ news, estateOnHome, projectOnHome }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // Getting provinces
-  // const { provinces, smallProvinces } = await getProvince()
-  // const { postCounts } = await getPostCount()
-  // Getting news
-  const { news } = await getNews()
   const { estateOnHome } = await getPost()
   const { projectOnHome } = await getProject()
 
   return {
-    props: { news, estateOnHome, projectOnHome },
+    props: { estateOnHome, projectOnHome },
   }
-}
-
-const getNews = async () => {
-  const res = await fetch(`${server}/news/popular?limit=1`)
-
-  let data = await res.json()
-  let news = data.data
-
-  return { news }
 }
 
 const getPost = async () => {
