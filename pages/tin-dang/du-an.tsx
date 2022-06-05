@@ -124,7 +124,7 @@ const ListProject = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
     console.log("Getting post list from Server...")
-    const res = await fetch(`${server}/project/get`)
+    const res = await fetch(`${server}/project/get?limit=2`)
     let data = await res.json()
     
     data = data.data

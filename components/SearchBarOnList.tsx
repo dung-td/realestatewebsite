@@ -102,12 +102,12 @@ const SearchBarOnList = ({callback} : Props) => {
   ]
 
   const orientation = [
-    { value: "4mt", label: "Đống" },
+    { value: "4mt", label: "Đông" },
     { value: "6mt", label: "Đông Bắc" },
     { value: "10mt", label: "Bắc" },
-    { value: "12mt", label: "Tấy Bắc" },
-    { value: "12mt", label: "Tấy" },
-    { value: "12mt", label: "Tấy Nam" },
+    { value: "12mt", label: "Tây Bắc" },
+    { value: "12mt", label: "Tây" },
+    { value: "12mt", label: "Tây Nam" },
     { value: "12mt", label: "Nam" },
     { value: "12mt", label: "Đông Nam" },
   ]
