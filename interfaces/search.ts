@@ -5,13 +5,28 @@ export type Search = {
   ward?: string
   street?: string
   project?: string
-  price?: string
-  area?: string
+  price?: {
+    min: string,
+    max: string,
+  }
+  area?: {
+    min: string,
+    max: string,
+  }
   type?: string
-  bedroom?: string
-  width?: string
+  bedroom?: {
+    min: string,
+    max: string,
+  }
+  width?: {
+    min: string,
+    max: string,
+  }
   saleOrRent?: string
-  streetWidth?: string
+  streetWidth?: {
+    min: string,
+    max: string,
+  }
   orientation?: string
   projectStatus?: string
 }
