@@ -9,6 +9,8 @@ import {Unit} from '../../Enum'
 import style from "../../public/css/Estate.module.css"
 import ProjectContent from '../../components/ProjectDetail/ProjectContent'
 import ProjectDTO from '../../interfaces/ProjectDTO'
+import server from "../../interfaces/server"
+
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 
@@ -47,22 +49,26 @@ const EstateProject: NextPage<IProject> = (props)=>{
                     
 
                 </div>
-                <div className="md:border-gray-300 md:w-1/4 md:ml-1" id="sideContent">
-                    <div className="md:h-[50vh] container md:border md:border-gray-300 md:rounded-top-xl flex md:flex-col md:justify-center items-center justify-around">
-                        <img
+                <div className="md:border-gray-300 md:px-2 md:w-1/4 md:ml-1" id="sideContent">
+                    <div className="md:h-[50vh] container md:p-4 md:border md:border-gray-300 md:rounded-xl flex md:flex-col md:justify-center items-center justify-around">
+                        {/* <img
                         className="w-20 h-20 rounded-full bg-cyan-500"
                         src={investor.avatar}
+                        /> */}
+                        <img
+                        className="w-10 h-10 sm:w-20 sm:h-20 rounded-full bg-cyan-500 object-fill"
+                        src='http://cdn.onlinewebfonts.com/svg/img_299586.png'
                         />
-                        <p>Được đăng bởi</p>
-                        <p className="my-1">{investor.name}</p>
-                        <a className="cursor-pointer">Xem thêm bài đăng khác</a>
+                        <p className='hidden sm:block text-xs py-4'>Được đăng bởi</p>
+                        <p className="text-base font-bold">{investor.name}</p>
+                        <a className="text-sm cursor-pointer">Xem thêm bài đăng khác</a>
                         <a
                         href={`tel:${investor.phone}`}
-                        className="z-50 mt-3 fixed bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static"
+                        className="z-50 mt-3 fixed sm:w-[100%] bg-cyan-500 p-3 text-white rounded-xl bottom-5 left-1/2 sm:static sm:z-auto"
                         >
-                        <div>
-                        <PhoneIcon className="inline h-5 w-5" />
-                        {investor.phone}
+                            <div className="flex justify-center">
+                            <PhoneIcon className="inline h-4 w-4 m-1" />
+                            {investor.phone}
                         </div>
                         </a>
                     </div>
@@ -104,10 +110,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps (pathParam: IPathParam) {
     const { params } = pathParam
-    const res = await fetch(`http://vn-real-estate-api.herokuapp.com/api/project/get`)
+    const res = await fetch(`${server}/project/get?slug=${params.estateProjectSlug}`)
     const data = await res.json()
-    const posts = data.data
-    const project = posts.filter((el: { slug: string }) => el.slug == params.estateProjectSlug)[0]
+    const project = data.data
     // By returning { props: { posts } }, the Blog component
     // will receive `posts` as a prop at build time
     return {

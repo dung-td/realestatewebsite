@@ -73,7 +73,7 @@ const PostContent = (props: IPost) => {
     <div className="w-full">
       <Modal open={fullscreenImageModal}
       onClose={()=>{ setFullscreenImageModal(false) }}>
-        <div className="text-center absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+        <div className="text-center absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 focus-visible:outline-none">
           <ImageCarousel imageList={post.images}
           className='w-[80vw] h-[100%]'
           imageStyle="w-[80vw] h-[80vh]"
