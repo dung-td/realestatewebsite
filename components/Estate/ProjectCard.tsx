@@ -98,7 +98,7 @@ const ProjectCard = (props : Props) => {
     }
 
     return (
-        <Link href={`/${projectSlug}/${postSlug}`}>
+        <Link href={`/du-an/${postSlug}`}>
             <a className="group flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
                 <div className="w-3/5 xl:max-h-72 aspect-w-1 aspect-h-1 bg-gray-200 rounded-tl-lg rounded-bl-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                     <img
@@ -117,7 +117,7 @@ const ProjectCard = (props : Props) => {
                             display: 'block',
                             wordWrap: 'break-word',
                             overflow: 'hidden',
-                            maxHeight: '3em',
+                            maxHeight: '1.5em',
                             lineHeight: '1.5em',
                             color: props.titleColor
                         }}

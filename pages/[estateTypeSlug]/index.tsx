@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react"
 import { GetServerSideProps } from "next"
 import server from "../../interfaces/server"
-import { Estate } from "../../interfaces/estate"
 import Footer from "../../components/Footer"
-import ListEstate from "../../components/Estate/ListEstate"
 import EstateCard from "../../components/Estate/EstateCard"
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -25,6 +23,7 @@ const ListPost = (props: Props) => {
 
     const [posts, setPosts] = useState(new Array())
     const [pageCount, setPageCount] = useState(0)
+    const [isLoading, setIsLoading] = useState(true)
     const [currentPageIndex, setCurrentPageIndex] = useState(1)
     const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
 
@@ -36,8 +35,82 @@ const ListPost = (props: Props) => {
         window.scroll(0, 0)
     }
 
-    const onSearchCallback = (search: Search) => {
+    const onSearchCallback = async (search: Search) => {
         console.log(search)
+        console.log(search)
+        setIsLoading(true)
+        const res = await fetch(`${server}/post/search`, {
+            method: "POST",
+            body: JSON.stringify({
+              "province": search.province,
+              "district": search.district,
+              "ward": search.ward,
+              "street": search.street,
+              "type": search.type,
+              "project": search.project,
+              "price": {
+                "min": parseInt(search.price?.min || '0'),
+                "max": parseInt(search.price?.max || '100'),
+              },
+              "area": {
+                "min": parseInt(search.area?.min || '0'),
+                "max": parseInt(search.area?.max || '1000'),
+              },
+              "bedroom": {
+                "min": parseInt(search.bedroom?.min || '0'),
+                "max": parseInt(search.bedroom?.max || '100'),
+              },
+              "width": {
+                "min": parseInt(search.width?.min || '0'),
+                "max": parseInt(search.width?.max || '100'),
+              },
+              "streetWidth": {
+                "min": parseInt(search.streetWidth?.min || '0'),
+                "max": parseInt(search.streetWidth?.max || '100'),
+              },
+              "saleOrRent": "",
+              "orientation": search.orientation,
+            }), // string or object
+            headers: {
+              "Content-Type": "application/json",
+            },
+        })
+        let data = await res.json()
+        
+        data = data.data
+        let arr = new Array()
+
+        data.forEach((post: any) => {
+            let obj = {
+                _id: post._id,
+                title: post.title,
+                address: post.address,
+                estateType: post.estateType,
+                thumbnail: post.images[0],
+                price: post.price,
+                priceType: post.priceType,
+                area: post.area,
+                bathroom: post.bathroomNumber,
+                bedroom: post.bedroomNumber,
+                ownerName: post.owner.name,
+                ownerPhone: post.owner.phone,
+                titleColor: post.postType.title_color,
+                slug: post.slug,
+                purpose: post.forSaleOrRent,
+            }
+            arr.push(obj)
+        })
+        setPosts(arr)
+
+        let count = arr.length / 8
+        setPageCount(
+        Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+        )
+        const firstPageIndex = 0
+        const lastPageIndex = firstPageIndex + 8
+        setCurrentPageIndex(1)
+        setCurrentPageData(arr.slice(firstPageIndex, lastPageIndex))
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -52,7 +125,7 @@ const ListPost = (props: Props) => {
                 let obj = {
                     _id: post._id,
                     title: post.title,
-                    address: post.address,
+                    address: post.location.StreetName + ", " + post.location.WardName + ", " + post.location.DistrictName + ", " + post.location.CityName,
                     estateType: post.estateType,
                     thumbnail: post.images[0],
                     price: post.price,
@@ -69,6 +142,7 @@ const ListPost = (props: Props) => {
                 arr.push(obj)
             })
             setPosts(arr)
+            arr.length > 0 ? setIsLoading(false) : null
 
             let count = arr.length / 8
             setPageCount(
@@ -119,33 +193,38 @@ const ListPost = (props: Props) => {
                     </div>
                 
                     <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-2 xl:grid-cols-2 xl:gap-x-8">
-                        {
-                            currentPageData.map((item) => {
-                                return (
-                                    <EstateCard
-                                        key={item._id}
-                                        id={item._id}
-                                        title={item.title}
-                                        estateType={item.estateType}
-                                        imageUrl={item.thumbnail}
-                                        price={item.price}
-                                        priceType={item.priceType}
-                                        areaSqr={item.area.toString()}
-                                        rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
-                                        address={item.address}
-                                        titleColor={item.titleColor}
-                                        slug={item.slug}
-                                        purpose={item.purpose}
-                                        author={item.ownerName}
-                                        author_phone_number={item.ownerPhone}
-                                    />
-                                )
-                            })
+                    {
+                            (currentPageData.length == 0 && !isLoading) ?
+                            <p>Không có bất động sản nào thỏa tìm kiếm của bạn</p>
+                            :
+                            (
+                                currentPageData.map((item) => {
+                                    return (
+                                        <EstateCard
+                                            key={item._id}
+                                            id={item._id}
+                                            title={item.title}
+                                            estateType={item.estateType}
+                                            imageUrl={item.thumbnail}
+                                            price={item.price}
+                                            priceType={item.priceType}
+                                            areaSqr={item.area.toString()}
+                                            rooms={item.bedroom + ' PN + ' + item.bathroom + ' WC'}
+                                            address={item.address}
+                                            titleColor={item.titleColor}
+                                            slug={item.slug}
+                                            purpose={item.purpose}
+                                            author={item.ownerName}
+                                            author_phone_number={item.ownerPhone}
+                                        />
+                                    )
+                                })
+                            )
                         }
                     </div>
 
                     {/* Pagination */}
-                    {posts.length > 0 ? (
+                    {!isLoading ? (
                         <div className="flex justify-center mt-8">
                             <Pagination
                                 count={pageCount}
@@ -156,7 +235,7 @@ const ListPost = (props: Props) => {
                         </div>
                     ) : (
                         // <p className="text-center text-base italic">Không có thông tin</p>
-                        <div className="text-center">
+                        <div className="text-center mt-4 h-[768px]">
                             <CircularProgress />
                         </div>
                     )}
