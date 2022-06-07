@@ -194,21 +194,6 @@ const SellerHome = () => {
                             Tin đã duyệt
                           </a>
                         </li>
-                        <li>
-                          <a
-                            onClick={() => {
-                              setSelect("post")
-                              setSelectPostType("handle")
-                            }}
-                            className={`${
-                              select == "post" && selectPostType == "handle"
-                                ? `border-r-4 border-[#1976d2] bg-blue-50`
-                                : ``
-                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
-                          >
-                            Tin chờ xử lý
-                          </a>
-                        </li>
                       </ul>
                     </AccordionDetails>
                   </Accordion>
@@ -257,20 +242,6 @@ const SellerHome = () => {
                             }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
                           >
                             Mật khẩu
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={() => {
-                              setSelect("userStatistic")
-                            }}
-                            className={`${
-                              select == "userStatistic"
-                                ? `border-r-4 border-[#1976d2] bg-blue-50`
-                                : ``
-                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
-                          >
-                            Thống kê
                           </a>
                         </li>
                         <li>

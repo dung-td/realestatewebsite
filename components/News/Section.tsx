@@ -72,6 +72,7 @@ const NewsSection = ({ typeSlug, news }: Props) => {
             })}
           </div>
         </div>
+        
         <div className="mt-4 w-full md:mt-0 md:w-4/12 ">
           <Image
             height={200}

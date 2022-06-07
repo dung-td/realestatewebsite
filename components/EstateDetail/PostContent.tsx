@@ -136,16 +136,16 @@ const PostContent = (props: IPost) => {
           </div>
         </div>
         <Separator />
-        <h1 className="mt-3 font-bold text-xl">Thông tin mô tả</h1>
+        <h1 className="mt-3 font-bold text-md">Thông tin mô tả</h1>
         <CollapseDescription>{post.description}</CollapseDescription>
 
-        <div className="mt-3 font-bold text-xl">Đặc điểm bất động sản</div>
+        <div className="mt-3 font-bold text-md">Đặc điểm bất động sản</div>
         <DetailBox
           estateType={post.estateType}
           address={post.address}
           attributeList={detailList.filter((element) => element.value)}
         />
-        <div className="mt-3 font-bold text-xl">Vị trí trên bản đồ</div>
+        <div className="mt-3 font-bold text-md mb-2">Vị trí trên bản đồ</div>
         <Map lat={post.cor.lat} lng={post.cor.Lng} type="view" />
       </div>
     </div>

@@ -92,7 +92,7 @@ export async function getStaticPaths() {
     const res = await fetch('http://vn-real-estate-api.herokuapp.com/api/project/get')
     const data = await res.json()
     const posts = data.data
-    const slugs = posts.map( (el: { slug: any }) => { return {params: {
+    const slugs = posts.map( (el: { slug: any }) => { return { params: {
         estateProjectSlug: el.slug
     }}})
     console.log(slugs)

@@ -62,8 +62,8 @@ const Home = ({ estateOnHome, projectOnHome }: Props) => {
           {news.length > 0 ? (
             <NewsSection typeSlug="tin-noi-bat" news={news} />
           ) : null}
+
           <City />
-          {/* ELEMENTS GO HERE PLEASE */}
 
           <ListEstateOnHome posts={estateOnHome} />
           <ListProjectOnHome posts={projectOnHome} />
