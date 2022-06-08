@@ -232,13 +232,13 @@ const Header = () => {
                     <div className="z-10 nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {projectLinks.map((typeLink: EstateType) => {
                         return (
-                          <a
-                            key={typeLink._id}
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                          >
-                            {typeLink.name}
-                          </a>
+                          <Link key={typeLink._id} href={`/tin-dang/du-an/${typeLink.slug}`}>
+                            <a
+                              className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                            >
+                              {typeLink.name}
+                            </a>
+                          </Link>
                         )
                       })}
                     </div>{" "}

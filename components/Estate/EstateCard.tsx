@@ -59,8 +59,8 @@ const EstateCard = (props : Props) => {
     }
 
     return (
-        <Link href={`/${purpose}-${estateSlug}/${postSlug}`}>
-            <div className="group flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
+        <Link href={`/${purpose}-${estateSlug}/${postSlug}`} passHref={true}>
+            <a className="group flex flex-row xl:flex-row h-max min-h-[264px] drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:border-gray-400">
                 <div className="w-3/5 xl:max-h-72 aspect-w-1 aspect-h-1 bg-gray-200 rounded-tl-lg rounded-bl-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                     <img
                         className="w-full h-full object-cover xl:max-h-72 transition group-hover:-translate-y-1 group-hover:scale-110 duration-300"
@@ -159,7 +159,7 @@ const EstateCard = (props : Props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </Link>
     )
 }

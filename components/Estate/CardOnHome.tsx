@@ -59,7 +59,7 @@ const CardOnHome = (props : Props) => {
 
     return (
         <Link href={`/${purpose}-${estateSlug}/${postSlug}`} passHref={true}>
-            <div className="group flex flex-col h-max mt-2 ml-2 drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer hover:opacity-90">
+            <a className="group flex flex-col h-max mt-2 ml-2 drop-shadow-md border-solid border border-gray-200 rounded-lg cursor-pointer">
                 <div className="w-full max-h-48 aspect-w-1 aspect-h-1 bg-gray-200 rounded-t-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                     <img
                         className="w-full h-40 max-h-48 object-cover transition group-hover:-translate-y-1 group-hover:scale-110 duration-300"
@@ -142,7 +142,7 @@ const CardOnHome = (props : Props) => {
                         <p className="text-black text-sm font-bold">{props.author}</p>
                     </div>
                 </div>
-            </div>
+            </a>
         </Link>
     )
 }

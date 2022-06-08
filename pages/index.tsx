@@ -87,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const getPost = async () => {
-  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=1`)
+  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=3`)
   let posts = await fetchPost.json()
 
   posts = posts.data
@@ -121,7 +121,7 @@ const getPost = async () => {
 }
 
 const getProject = async () => {
-  const fetchPrj = await fetch(`${server}/project/get?limit=1`)
+  const fetchPrj = await fetch(`${server}/project/get?limit=3`)
   let posts = await fetchPrj.json()
 
   posts = posts.data

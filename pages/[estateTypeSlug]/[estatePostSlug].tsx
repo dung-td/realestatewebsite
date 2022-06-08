@@ -3,15 +3,19 @@ import type { NextPage } from "next"
 import Image from "next/image"
 import CollapseDescription from "../../components/EstateDetail/CollapseDescription"
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
-import PostContent from "../../components/EstateDetail/PostContent"
-import PostDto from "../../interfaces/PostDTO"
+import { PhoneIcon } from '@heroicons/react/solid'
+import {Unit} from '../../Enum'
+import PostContent from '../../components/EstateDetail/PostContent'
+import PostDto from '../../interfaces/PostDTO'
+import style from "../../public/css/Estate.module.css"
 import server from "../../interfaces/server"
-import Header from "../../components/Header"
-import Footer from "../../components/Footer"
-interface TitleSectionProps {
-  title: string
-  issuedDate?: string
-  address?: string
+
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+interface TitleSectionProps{
+    title: string,
+    issuedDate?: string,
+    address?: string
 }
 
 const Separator: React.FC = () => {
@@ -48,8 +52,8 @@ const EstateDetail: NextPage<IPost> = (props) => {
     <>
       <Header />
 
-      <div className="sm:w-[1200px] grid mx-auto my-3 sm:flex rounded-lg border-black overflow-clip">
-        <div className="container sm:w-3/4 sn:flex-initial">
+      <div className={`${style.default} sm:w-[1200px] grid mx-auto my-3 sm:flex rounded-lg border-black overflow-clip`}>
+        <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
           <PostContent post={props.post} />
 
           <div>
@@ -143,19 +147,17 @@ export async function getStaticPaths() {
   return { paths: slugs, fallback: false }
 }
 
-export async function getStaticProps(pathParam: IPathParam) {
-  const { params } = pathParam
-  const res = await fetch(
-    `http://vn-real-estate-api.herokuapp.com/api/post/slug?slug=${params.estatePostSlug}`
-  )
-  const data = await res.json()
-  const { post } = data
-  console.log(post)
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      post,
-    },
-  }
+export async function getStaticProps (pathParam: IPathParam) {
+    const { params } = pathParam
+    const res = await fetch(`${server}/post/slug?slug=${params.estatePostSlug}`)
+    const data = await res.json()
+    const {post} =data
+    console.log(post)
+    // By returning { props: { posts } }, the Blog component
+    // will receive `posts` as a prop at build time
+    return {
+      props: {
+        post,
+      },
+    }
 }

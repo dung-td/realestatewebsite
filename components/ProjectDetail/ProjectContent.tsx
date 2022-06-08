@@ -55,7 +55,7 @@ let detailList = [
     <div className="w-full">
       <Modal open={fullscreenImageModal}
       onClose={()=>{ setFullscreenImageModal(false) }}>
-        <div className="text-center absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+        <div className="text-center absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 focus-visible:outline-none">
           <ImageCarousel imageList={project.images}
           className='w-[80vw] h-[100%]'
           imageStyle="w-[80vw] h-[80vh]"
@@ -68,7 +68,7 @@ let detailList = [
         <ImageCarousel
         imageList={project.images}
         className="overflow-clip rounded-lg"
-        imageStyle="h-[70vh]"
+        imageStyle="h-[60vh]"
         onClick={(index)=>{
           setFullscreenImageModal(true)
           setImageIndex(index)
