@@ -13,14 +13,18 @@ const RouteBar = () => {
         <div className="flex">
             <span>
                 <Home>
-                    <a title="Trang chủ" href="/page"></a>
+                    <Link href="/page" passHref>
+                    <p>Trang chủ</p>
+                    </Link>
                 </Home>
                 <ChevronRight></ChevronRight>
             </span>
             <h3 className="cursor-pointer">
                 {data.map((page) => {
                     if (router.asPath == page.pid)
-                        return <a title={page.title} href={page.pid}>{page.title}</a>
+                        return <Link href={page.pid} passHref>
+                        <p>{page.title}</p>
+                        </Link>  
                 })}
             </h3>
         </div>
