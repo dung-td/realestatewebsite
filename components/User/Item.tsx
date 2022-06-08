@@ -120,8 +120,8 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               user: sessionStorage.getItem("id"),
               amount: postDuration * priceData?.price,
               balance: 0,
-              detail: "Nạp tiền vào tài khoản",
-              type: "income",
+              detail: "Trừ tiền phí đăng bài",
+              type: "outcome",
             }),
             headers: {
               "Content-Type": "application/json",
@@ -133,12 +133,19 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
                 method: "POST",
                 body: JSON.stringify({
                   userId: sessionStorage.getItem("id"),
-                  balance: balance,
+                  balance: balance - postDuration * priceData?.price,
                 }),
                 headers: {
                   Accept: "application/json",
                   "Content-Type": "application/json",
                 },
+              }).then(() => {
+                setIsLoading(false)
+                Swal.fire(
+                  "Thành công",
+                  "Giao dịch sẽ được xác nhận trong thời gian sớm nhất",
+                  "success"
+                )
               })
             })
         } else {

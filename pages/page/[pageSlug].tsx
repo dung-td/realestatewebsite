@@ -7,38 +7,36 @@ import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 
 const Page = () => {
-
   return (
-  <>
-  <Header></Header>
-    <div className="pl-36 space-y-5 h-screen bg-gray-100">
-      <RouteBar></RouteBar>
-      <div className="flex">
-        <LinkList></LinkList>
-        {/* Panel here */}
-        <ContentPanel></ContentPanel>
+    <>
+      <Header></Header>
+      <div className="pl-36 space-y-5 h-screen bg-gray-100">
+        <RouteBar></RouteBar>
+        <div className="flex">
+          <LinkList></LinkList>
+          {/* Panel here */}
+          <ContentPanel></ContentPanel>
+        </div>
       </div>
-    </div>
-    <Footer></Footer>
-  </>
+      <Footer></Footer>
+    </>
   )
 }
 
 export async function getStaticPaths() {
   return {
     paths: [
-      '/page/tuyen-dung',
-      '/page/quy-che-hoat-dong',
-      '/page/ve-meeyland',
-      '/page/dieu-khoan-va-dieu-kien',
-      '/page/quy-dinh-dang-tin',
-      '/page/lien-he',
-      '/page/tro-giup'
+      "/page/tuyen-dung",
+      "/page/quy-che-hoat-dong",
+      "/page/ve-meeyland",
+      "/page/dieu-khoan-va-dieu-kien",
+      "/page/quy-dinh-dang-tin",
+      "/page/lien-he",
+      "/page/tro-giup",
     ],
-    fallback: false
+    fallback: false,
   }
 }
-
 
 export async function getStaticProps() {
   const page = data

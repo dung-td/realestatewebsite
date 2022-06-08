@@ -1,16 +1,18 @@
-export type News = {
+export default interface News {
     _id: string
     title: string
-    body: Array<postDetails>
-    tags: string
+    body: [NewsDetails]
+    slug: string
     author: string
-    views: number
-    type: string
-    submitday: Date
     description: string
-}
-
-type postDetails = {
-    src: string
+    submitday: string
+    tags: string
     type: string
-}
+    views: number
+    thumbnail: string
+  }
+  
+  interface NewsDetails {
+    type: string
+    src: string
+  }

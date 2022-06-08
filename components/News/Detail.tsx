@@ -39,11 +39,11 @@ const Detail = ({ news }: Props) => {
               <p className="text-base font-semibold">{news.description}</p>
             </div>
             <div className="container pt-4 space-y-2 grid">
-              {news.body.map((item) => {
+              {news.body.map((item: any) => {
                 if (item.type == "text")
                   return (
                     <div key={item.src}>
-                      {item.src.split("\n").map((para) => {
+                      {item.src.split("\n").map((para: any) => {
                         return (
                           <p className="mb-2 text-base" key={para}>
                             {para}
@@ -55,7 +55,7 @@ const Detail = ({ news }: Props) => {
                 else if (item.type == "heading")
                   return (
                     <div key={item.src}>
-                      {item.src.split("\n").map((para) => {
+                      {item.src.split("\n").map((para: any) => {
                         return (
                           <p className="mb-2 text-base font-bold" key={para}>
                             {para}
