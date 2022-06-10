@@ -95,12 +95,12 @@ interface IPathParam{
 
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
-    const res = await fetch('http://vn-real-estate-api.herokuapp.com/api/project/get')
+    const res = await fetch('http://vn-real-estate-api.herokuapp.com/api/project/slug')
     const data = await res.json()
-    const posts = data.data
-    const slugs = posts.map( (el: { slug: any }) => { return { params: {
-        estateProjectSlug: el.slug
-    }}})
+    const slugs = data.data
+    // const slugs = posts.map( (el: { slug: any }) => { return { params: {
+    //     estateProjectSlug: el.slug
+    // }}})
     console.log(slugs)
     // We'll pre-render only these paths at build time.
     // { fallback: false } means other routes should 404.
