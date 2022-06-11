@@ -45,7 +45,7 @@ const SearchBarOnList = ({ callback }: Props) => {
       min: "0",
       max: "100",
     },
-    saleOrRent: "sell",
+    saleOrRent: "sale",
     streetWidth: {
       min: "0",
       max: "100",
@@ -364,7 +364,7 @@ const SearchBarOnList = ({ callback }: Props) => {
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Nhà cho thuê" />
           <Tab label="Nhà bán/ sang nhượng" />
-          <Tab label="Dự án" />
+          {/* <Tab label="Dự án" /> */}
         </Tabs>
       </Box>
 

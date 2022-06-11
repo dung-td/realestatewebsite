@@ -32,26 +32,26 @@ const SearchBar = ({ callback }: Props) => {
     street: "",
     project: "",
     price: {
-      min: "",
-      max: "",
+      min: "0",
+      max: "80000000000",
     },
     area: {
-      min: "",
-      max: "",
+      min: "0",
+      max: "1000000",
     },
     type: "",
     bedroom: {
-      min: "",
-      max: "",
+      min: "0",
+      max: "100",
     },
     width: {
-      min: "",
-      max: "",
+      min: "0",
+      max: "100",
     },
-    saleOrRent: "sell",
+    saleOrRent: "sale",
     streetWidth: {
-      min: "",
-      max: "",
+      min: "0",
+      max: "100",
     },
     orientation: "",
     projectStatus: "",
@@ -64,14 +64,14 @@ const SearchBar = ({ callback }: Props) => {
   const [types, setTypes] = useState([])
 
   const prices = [
-    { value: "null-null", label: "Thỏa thuận" },
-    { value: "0-500", label: "< 500 triệu" },
-    { value: "500-1000", label: "500 - 800 triệu" },
-    { value: "1000-3000", label: "800 triệu - 1 tỷ" },
-    { value: "3000-7000", label: "1 tỷ - 3 tỷ" },
-    { value: "7000-12000", label: "3 tỷ - 7 tỷ" },
-    { value: "12000-20000", label: "7 tỷ - 10 tỷ" },
-    { value: "20000-max", label: "> 10 tỷ" },
+    { value: "0-60000000000", label: "Tất cả" },
+    { value: "0-500000000", label: "< 500 triệu" },
+    { value: "500000000-800000000", label: "500 - 800 triệu" },
+    { value: "800000000-1000000000", label: "800 triệu - 1 tỷ" },
+    { value: "1000000000-3000000000", label: "1 tỷ - 3 tỷ" },
+    { value: "3000000000-7000000000", label: "3 tỷ - 7 tỷ" },
+    { value: "7000000000-10000000000", label: "7 tỷ - 10 tỷ" },
+    { value: "10000000000-60000000000", label: "> 10 tỷ" },
   ]
 
   const areas = [
@@ -79,7 +79,7 @@ const SearchBar = ({ callback }: Props) => {
     { value: "30-100", label: "30m² - 100 m²" },
     { value: "100-200", label: "100m² - 200m²" },
     { value: "200-500", label: "200m² - 500m²" },
-    { value: "500-max", label: "> 500m²" },
+    { value: "500-10000", label: "> 500m²" },
   ]
 
   const projects = [
@@ -100,32 +100,32 @@ const SearchBar = ({ callback }: Props) => {
   const bedroom = [
     { value: "1-2", label: "1 - 2" },
     { value: "3-5", label: "3 - 5" },
-    { value: "5-max", label: "> 5" },
+    { value: "5-100", label: "> 5" },
   ]
 
   const width = [
     { value: "4-8", label: "4m - 8m" },
     { value: "8-20", label: "8m - 20m" },
     { value: "20-50", label: "20m - 50m" },
-    { value: "50-max", label: "> 50m" },
+    { value: "50-200", label: "> 50m" },
   ]
 
   const streetWidth = [
     { value: "0-4", label: "< 4m" },
     { value: "8-17", label: "8m - 17m" },
     { value: "17-30", label: "17m - 30m" },
-    { value: "30-max", label: "> 30m" },
+    { value: "30-160", label: "> 30m" },
   ]
 
   const orientation = [
-    { value: "E", label: "Đông" },
-    { value: "NE", label: "Đông Bắc" },
-    { value: "N", label: "Bắc" },
-    { value: "NW", label: "Tây Bắc" },
-    { value: "W", label: "Tây" },
-    { value: "SW", label: "Tây Nam" },
-    { value: "S", label: "Nam" },
-    { value: "SE", label: "Đông Nam" },
+    { value: "Đông", label: "Đông" },
+    { value: "Đông Bắc", label: "Đông Bắc" },
+    { value: "Bắc", label: "Bắc" },
+    { value: "Tây Bắc", label: "Tây Bắc" },
+    { value: "Tây", label: "Tây" },
+    { value: "Tây Nam", label: "Tây Nam" },
+    { value: "Nam", label: "Nam" },
+    { value: "Đông Nam", label: "Đông Nam" },
   ]
 
   // Get estate type
@@ -331,26 +331,26 @@ const SearchBar = ({ callback }: Props) => {
       street: "",
       project: "",
       price: {
-        min: "",
-        max: "",
+        min: "0",
+        max: "80000000000",
       },
       area: {
-        min: "",
-        max: "",
+        min: "0",
+        max: "1000000",
       },
       type: "",
       bedroom: {
-        min: "",
-        max: "",
+        min: "0",
+        max: "100",
       },
       width: {
-        min: "",
-        max: "",
+        min: "0",
+        max: "100",
       },
-      saleOrRent: sellOrRent,
+      saleOrRent: "sale",
       streetWidth: {
-        min: "",
-        max: "",
+        min: "0",
+        max: "100",
       },
       orientation: "",
       projectStatus: "",

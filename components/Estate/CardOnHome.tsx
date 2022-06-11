@@ -68,7 +68,7 @@ const CardOnHome = (props : Props) => {
                         alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
                     />
 
-                    <span
+                    {/* <span
                         title={favourite ? 'Bỏ lưu' : 'Lưu'}
                         className={
                             !favourite ?
@@ -76,7 +76,7 @@ const CardOnHome = (props : Props) => {
                             : "material-icons absolute top-2 right-2 rounded-md p-1 text-rose-500 hover:bg-gray-200"
                         }
                         onClick={(e) => handleFavouriteClick(e, props.id)}
-                    >favorite_border</span>
+                    >favorite_border</span> */}
                 </div>
                 
                 <div className="w-full flex flex-col px-4 py-2">

@@ -173,12 +173,13 @@ const Header = () => {
               <div className="hidden lg:ml-8 lg:block lg:self-stretch">
                 <div className="h-full flex space-x-8">
                   <div className="flex items-center nav-item">
-                    <a
-                      href="#"
-                      className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
-                    >
-                      Nhà đất cho thuê
-                    </a>
+                    <Link href={`/tin-dang`}>
+                      <a
+                        className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
+                      >
+                        Nhà đất cho thuê
+                      </a>
+                    </Link>
                     <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {typeLinks.map((typeLink: EstateType) => {
                         return (
@@ -198,12 +199,13 @@ const Header = () => {
                     </div>{" "}
                   </div>
                   <div className="flex items-center nav-item">
-                    <a
-                      href="#"
-                      className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
-                    >
-                      Nhà đất bán
-                    </a>
+                    <Link href={`/tin-dang`}>
+                      <a
+                        className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
+                      >
+                        Nhà đất bán
+                      </a>
+                    </Link>
                     <div className="z-10 nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {typeLinks.map((typeLink: EstateType) => {
                         return (
@@ -223,12 +225,13 @@ const Header = () => {
                     </div>{" "}
                   </div>
                   <div className="flex items-center nav-item">
-                    <a
-                      href="#"
-                      className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
-                    >
-                      Dự án
-                    </a>
+                    <Link href={`/tin-dang/du-an`}>
+                      <a
+                        className="relative text-sm font-medium text-gray-700 hover:text-gray-800 nav-link"
+                      >
+                        Dự án
+                      </a>
+                    </Link>
                     <div className="z-10 nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {projectLinks.map((typeLink: EstateType) => {
                         return (

@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from "next"
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import { useRouter } from "next/router"
 
 import Header from "../components/Header"
 import SearchBar from "../components/SearchBar"
@@ -23,6 +24,7 @@ type Props = {
 }
 
 const Home = ({ estateOnHome, projectOnHome }: Props) => {
+  const router = useRouter()
   const [news, setNews] = useState<Array<News>>(new Array())
 
   useEffect(() => {
@@ -35,6 +37,31 @@ const Home = ({ estateOnHome, projectOnHome }: Props) => {
 
   const searchCallback = (search: Search) => {
     console.log(search)
+    router.push({
+      pathname: "/tin-dang",
+      query: {
+        "keyword": "",
+        "province": search.province,
+        "district": search.district,
+        "ward": search.ward,
+        "street": search.street,
+        "project": search.project,
+        "priceMin": search.price?.min,
+        "priceMax": search.price?.max,
+        "areaMin": search.area?.min,
+        "areaMax": search.area?.max,
+        "type": search.type,
+        "bedroomMin": search.bedroom?.min,
+        "bedroomMax": search.bedroom?.max,
+        "widthMin": search.width?.min,
+        "widthMax": search.width?.max,
+        "saleOrRent": search.saleOrRent,
+        "streetWidthMin": search.streetWidth?.min,
+        "streetWidthMax": search.streetWidth?.max,
+        "orientation": search.orientation,
+        "projectStatus": search.projectStatus,
+      },
+    })
   }
 
   return (
