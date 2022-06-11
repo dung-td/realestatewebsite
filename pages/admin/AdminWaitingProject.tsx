@@ -1,18 +1,15 @@
 import * as React from "react"
 import { useState, useEffect, useMemo } from "react"
 import moment from "moment"
-import Filter from "../../components/User/Filter"
-import Item from "../../components/admin/Dashboard/Post/Item"
-import Tabs from "@mui/material/Tabs"
-import Tab from "@mui/material/Tab"
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import Item from "../../components/admin/Dashboard/Project/Item"
 import Pagination from "@mui/material/Pagination"
 import server from "../../interfaces/server"
 import Snackbar from "@mui/material/Snackbar"
 import MuiAlert, { AlertProps } from "@mui/material/Alert"
 import Backdrop from "@mui/material/Backdrop"
 import CircularProgress from "@mui/material/CircularProgress"
+
+import Swal from "sweetalert2"
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -21,7 +18,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
-const AdminPost = ({ type }: any) => {
+const AdminWaitingProject = ({ type }: any) => {
   const [data, setData] = useState<Array<any>>([])
   const [queryData, setQueryData] = useState<Array<any>>([])
 
@@ -30,9 +27,6 @@ const AdminPost = ({ type }: any) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
 
-  const [postTypes, setPostTypes] = useState<Array<any>>([])
-  const [postType, setPostType] = useState("")
-
   const [alertType, setAlertType] = useState("success")
   const [alertMessage, setAlertMessage] = useState("Tin đã được duyệt")
   const [alertOpen, setAlertOpen] = useState(false)
@@ -40,29 +34,6 @@ const AdminPost = ({ type }: any) => {
   const [isChange, setIsChange] = useState(false)
 
   const [tabValue, setTabValue] = useState(0)
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setIsLoading(true)
-    setTabValue(newValue)
-    switch (newValue) {
-      case 0:
-        setPostType("")
-        break
-      case 1:
-        setPostType("627ba24aea534ab591781729")
-        break
-      case 2:
-        setPostType("627ba1eeea534ab591781728")
-        break
-      case 3:
-        setPostType("627b993cea534ab591781727")
-        break
-      case 4:
-        setPostType("627ba283ea534ab59178172a")
-      default:
-        break
-    }
-  }
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -77,6 +48,7 @@ const AdminPost = ({ type }: any) => {
 
   const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value)
+    setIsLoading(true)
     window.scroll(0, 0)
   }
 
@@ -102,18 +74,9 @@ const AdminPost = ({ type }: any) => {
   }
 
   useEffect(() => {
-    fetch(`${server}/post/count?status=waiting`)
-      .then((res) => res.json())
-      .then((data) => {
-        let count = parseInt(data)
-        setPageCount(count / 5)
-      })
-  }, [])
-
-  useEffect(() => {
     setIsLoading(true)
     let isCancelled = false
-    fetch(`${server}/post/get?s=${type}&pt=${postType}&page=${currentPage}`)
+    fetch(`${server}/project/get?page=${currentPage}&limit=5`)
       .then((res) => res.json())
       .then((data) => {
         setData(data.data)
@@ -124,31 +87,46 @@ const AdminPost = ({ type }: any) => {
     return () => {
       isCancelled = true
     }
-  }, [tabValue, isChange, type, currentPage])
+  }, [isChange, currentPage])
+
+  useEffect(() => {
+    setIsLoading(true)
+    let isCancelled = false
+    fetch(`${server}/project/count?s=waiting`)
+      .then((res) => res.json())
+      .then((data) => {
+        let count = data
+        setPageCount(parseInt(count))
+      })
+    return () => {
+      isCancelled = true
+    }
+  }, [])
 
   const removeCallback = (id: string, type: string) => {
-    setIsLoading(true)
-    switch (type) {
-      case "approve":
-        approve(id)
-        break
-      case "decline":
-        decline(id)
-        break
-      case "terminate":
-        terminate(id)
-        break
-      case "delete":
-        _delete(id)
-        break
-      case "remove":
-        decline(id)
-        break
-      case "ban":
-        ban(id)
-      default:
-        break
-    }
+    Swal.fire("Đợi đã nào!", "Tính đang đang được cập nhật!!!", "warning")
+    // setIsLoading(true)
+    // switch (type) {
+    //   case "approve":
+    //     approve(id)
+    //     break
+    //   case "decline":
+    //     decline(id)
+    //     break
+    //   case "terminate":
+    //     terminate(id)
+    //     break
+    //   case "delete":
+    //     _delete(id)
+    //     break
+    //   case "remove":
+    //     decline(id)
+    //     break
+    //   case "ban":
+    //     ban(id)
+    //   default:
+    //     break
+    // }
   }
 
   const decline = async (id: string) => {
@@ -259,44 +237,13 @@ const AdminPost = ({ type }: any) => {
     <div className="ml-72 p-8 min-h-screen">
       <div className="grid grid-full">
         <div className="mb-4">
-          <p className="font-bold text-xl">Tin đang chờ duyệt</p>
+          <p className="font-bold text-xl">Dự án chờ duyệt</p>
           <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
         </div>
 
-        <Filter callback={onSearch} />
-
-        <Box sx={{ width: "100%" }}>
-          <Box
-            className="mb-4"
-            sx={{ borderBottom: 1, borderColor: "divider" }}
-          >
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              aria-label="basic tabs example"
-            >
-              {postTypes.map((type: any) => (
-                <Tab key={type.id} label={type.label} />
-              ))}
-              <Tab label={`Tất cả`} />
-              <Tab label={`VIP3`} />
-              <Tab label={`VIP2`} />
-              <Tab label={`VIP1`} />
-              <Tab label={`Tin thường`} />
-            </Tabs>
-          </Box>
-
-          {currentPageData.map((item: any) => {
-            return (
-              <Item
-                postType={postType}
-                callback={removeCallback}
-                key={item._id}
-                data={item}
-              />
-            )
-          })}
-        </Box>
+        {currentPageData.map((item: any) => {
+          return <Item callback={removeCallback} key={item._id} data={item} />
+        })}
 
         {data.length > 0 ? (
           <Pagination
@@ -339,4 +286,4 @@ const AdminPost = ({ type }: any) => {
   )
 }
 
-export default AdminPost
+export default AdminWaitingProject

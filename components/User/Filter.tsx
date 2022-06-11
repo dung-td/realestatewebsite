@@ -14,7 +14,7 @@ const Filter = ({ callback }: any) => {
   // }
 
   return (
-    <div className="w-full grid grid-cols-12 mt-1 gap-4 ml-0 inline-flex items-center sticky top-0">
+    <div className="w-full grid grid-cols-12 mt-1 gap-4 ml-0 inline-flex items-center sticky top-0 ">
       <div className="col-span-6">
         <div className="relative w-full h-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

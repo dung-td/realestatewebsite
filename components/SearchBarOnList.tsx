@@ -59,6 +59,7 @@ const SearchBarOnList = ({ callback }: Props) => {
   const [wards, setWards] = useState(new Array())
   const [streets, setStreets] = useState(new Array())
   const [types, setTypes] = useState([])
+  const [projectTypes, setProjectTypes] = useState([])
 
   const prices = [
     { value: "0-60000000000", label: "Tất cả" },
@@ -131,10 +132,14 @@ const SearchBarOnList = ({ callback }: Props) => {
       .then((res) => res.json())
       .then((data) => {
         setTypes(data.data)
-        setSearch({
-          ...search,
-          type: data.data[0]._id,
-        })
+      })
+  }, [])
+
+  useEffect(() => {
+    fetch(`${server}/a/project-type/get`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProjectTypes(data.data)
       })
   }, [])
 
@@ -332,7 +337,7 @@ const SearchBarOnList = ({ callback }: Props) => {
       street: "",
       project: "",
       price: {
-        min: "0",
+        min: "",
         max: "80000000000",
       },
       area: {
@@ -373,22 +378,36 @@ const SearchBarOnList = ({ callback }: Props) => {
           <div className="col-span-16 mt-2 mb-1 md:mb-0 md:mt-0 lg:col-span-2 inline-flex items-center">
             <FormControl fullWidth size="small">
               <InputLabel className="text-sm" id="label-input-type">
-                Loại nhà đất
+                {
+                  search.saleOrRent != "project" ? "Loại nhà đất" : "Loại dự án"
+                }
               </InputLabel>
               <Select
                 labelId="label-input-type"
                 id="input-type"
                 value={search.type}
-                label="Loại nhà đất"
+                label={
+                  search.saleOrRent != "project" ? "Loại nhà đất" : "Loại dự án"
+                }
                 onChange={onTypeChange}
               >
-                {types.map((type: EstateType) => {
-                  return (
-                    <MenuItem key={type._id} value={type._id}>
-                      {type.name}
-                    </MenuItem>
-                  )
-                })}
+                {
+                  search.saleOrRent != "project" ?
+                  types.map((type: EstateType) => {
+                    return (
+                      <MenuItem key={type._id} value={type._id}>
+                        {type.name}
+                      </MenuItem>
+                    )
+                  }) :
+                  projectTypes.map((type: EstateType) => {
+                    return (
+                      <MenuItem key={type._id} value={type._id}>
+                        {type.name}
+                      </MenuItem>
+                    )
+                  })
+                }
               </Select>
             </FormControl>
           </div>

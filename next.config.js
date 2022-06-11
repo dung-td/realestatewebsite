@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
     domains: [
+      "file1.batdongsan.com.vn",
       "file4.batdongsan.com.vn",
       "sprudge.com",
       "realestate.usnews.com",

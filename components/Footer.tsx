@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-800">
       {/* Info */}
-      <div className="grid grid-full grid-cols-2 gap-8 py-8 px-6 md:grid-cols-4 max-w-full">
+      <div className="grid grid-full grid-cols-2 gap-8 py-8 px-6 md:grid-cols-3 max-w-full">
         {/* Company info */}
         <div>
           <h2 className="mb-6 text-sm font-semibold text-gray-400 uppercase">
@@ -27,33 +27,6 @@ const Footer = () => {
           </ul>
         </div>
         {/* Help */}
-        <div>
-          <h2 className="mb-6 text-sm font-semibold text-gray-400 uppercase">
-            Trợ giúp
-          </h2>
-          <ul className="text-gray-300">
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Quy định đăng tin
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Liên hệ
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Báo giá
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Trợ giúp
-              </a>
-            </li>
-          </ul>
-        </div>
         <div>
           <h2 className="mb-6 text-sm font-semibold text-gray-400 uppercase">
             Trợ giúp

@@ -2,10 +2,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 
 import type { NextPage, GetServerSideProps } from "next"
-import Sidebar from "../../components/admin/Dashboard/Sidebar"
 import Header from "../../components/Header"
-import Footer from "../../components/Footer"
-import Box from "@mui/material/Box"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
@@ -16,6 +13,8 @@ import AdminTransaction from "./AdminTransactionList"
 import Custom404 from "../../pages/404"
 import server from "../../interfaces/server"
 import AdminWaitingTransaction from "./AdminWaitingTransaction"
+import AdminProjectList from "./AdminProjectList"
+import AdminWaitingProject from "./AdminWaitingProject"
 
 const Home = () => {
   const router = useRouter()
@@ -171,7 +170,7 @@ const Home = () => {
                             Danh sách người dùng
                           </a>
                         </li>
-                        <li>
+                        {/* <li>
                           <a
                             onClick={() => {
                               setSelect("userWrong")
@@ -184,21 +183,7 @@ const Home = () => {
                           >
                             Xử lý vi phạm
                           </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={() => {
-                              setSelect("userStatistic")
-                            }}
-                            className={`${
-                              select == "userStatistic"
-                                ? `border-r-4 border-[#1976d2] bg-blue-50`
-                                : ``
-                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
-                          >
-                            Thống kê
-                          </a>
-                        </li>
+                        </li> */}
                       </ul>
                     </AccordionDetails>
                   </Accordion>
@@ -273,16 +258,28 @@ const Home = () => {
                       <ul id="dropdown-1" className="space-y-2">
                         <li>
                           <a
-                            href="#"
-                            className="cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                            onClick={() => {
+                              setSelect("projectList")
+                            }}
+                            className={`${
+                              select == "projectList"
+                                ? `border-r-4 border-[#1976d2] bg-blue-50`
+                                : ``
+                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
                           >
                             Danh sách dự án
                           </a>
                         </li>
                         <li>
                           <a
-                            href="#"
-                            className="cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
+                            onClick={() => {
+                              setSelect("waitingProject")
+                            }}
+                            className={`${
+                              select == "waitingProject"
+                                ? `border-r-4 border-[#1976d2] bg-blue-50`
+                                : ``
+                            }  cursor-pointer flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100`}
                           >
                             Dự án chờ phê duyệt
                           </a>
@@ -302,6 +299,10 @@ const Home = () => {
               <AdminUser />
             ) : select == "transactionList" ? (
               <AdminTransaction />
+            ) : select == "projectList" ? (
+              <AdminProjectList />
+            ) : select == "waitingProject" ? (
+              <AdminWaitingProject />
             ) : (
               <AdminWaitingTransaction />
             )}

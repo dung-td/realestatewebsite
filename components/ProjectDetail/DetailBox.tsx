@@ -26,7 +26,7 @@ type DetailProps = {
 }
 const DetailBox = (props: DetailProps) => {
     return (
-        <div className="border rounded-lg border-2xl border-gray-300 overflow-clip p-3 my-2">
+        <div className=" overflow-clip p-3 my-2">
             <div className='mb-3'><b>Chủ đầu tư:</b> <span>{props.investorName}</span></div>
             {props?.projectType && <div className='mb-3'><b>Loại dự án:</b> <span>{props.projectType}</span></div>}
             <div className='mb-3'><b>Địa chỉ:</b> <span>{props.address}</span></div>

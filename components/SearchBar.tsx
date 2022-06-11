@@ -358,7 +358,7 @@ const SearchBar = ({ callback }: Props) => {
   }
 
   return (
-    <div className="w-full md:w-3/5 mr-auto ml-auto md:grid md:bg-slate-300/75 rounded-md drop-shadow-xl">
+    <div className="w-full md:w-3/5 mr-auto ml-auto md:grid md:bg-slate-300/95 rounded-md drop-shadow-xl">
       <Box className="mb-2 md:min-w-min text-white">
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Nhà cho thuê" />
@@ -504,7 +504,7 @@ const SearchBar = ({ callback }: Props) => {
                     if (search != undefined) {
                       setSearch({
                         ...search,
-                        projectStatus: event.target.value
+                        projectStatus: event.target.value,
                       })
                     }
                   }}
