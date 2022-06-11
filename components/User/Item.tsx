@@ -225,12 +225,13 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
 
             {data.status == "approved" ? (
               <div className="col-span-4 md:col-span-1">
-                <button
+                <a
+                  href={`/tin-dang/dang-tin?id=${data._id}`}
                   type="button"
                   className="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   Chỉnh sửa
-                </button>
+                </a>
               </div>
             ) : null}
 

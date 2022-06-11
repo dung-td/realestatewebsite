@@ -24,14 +24,17 @@ import {
   getWardId,
   getWardName,
   getWardPrefix,
+  getProvinceId,
 } from "../../util/Address"
 import { Province } from "../../interfaces/Province"
+import { useRouter } from "next/router"
 
 type Props = {
   provinces: Province[]
 }
 
 const UploadPost = (props: Props) => {
+  const router = useRouter()
   const [postTypes, setPostTypes] = useState(new Array())
   const [estateTypes, setEstateTypes] = useState(new Array())
   const [districts, setDistricts] = useState(new Array())
@@ -87,6 +90,42 @@ const UploadPost = (props: Props) => {
   const furnitures = ["Đầy đủ", "Không có"]
 
   const post_durations = ["7", "10", "14", "21"]
+
+  const getPostTypeId = (name: string) => {
+    var res = ""
+    for (let index = 0; index < postTypes.length; index++) {
+      const element = postTypes[index];
+      if (element.name = name) {
+        res = element._id
+        break
+      }
+    }
+    return res
+  }
+
+  const getPriceTypeId = (name: string) => {
+    var res = ""
+    for (let index = 0; index < priceUnits.length; index++) {
+      const element = priceUnits[index];
+      if (element.name = name) {
+        res = element._id
+        break
+      }
+    }
+    return res
+  }
+
+  const getEstateTypeId = (name: string) => {
+    var res = ""
+    for (let index = 0; index < estateTypes.length; index++) {
+      const element = estateTypes[index];
+      if (element.name = name) {
+        res = element._id
+        break
+      }
+    }
+    return res
+  }
 
   const getProjectName = (id: string) => {
     var res = ""
@@ -464,6 +503,42 @@ const UploadPost = (props: Props) => {
     fetchProjects()
   }, [])
 
+  useEffect(() => {
+    const fetchPostOnEdit = async () => {
+      if (router.query.id) {
+        const res = await fetch(`${server}/post/get?id=${router.query.id}`)
+        let data = await res.json()
+
+        data = data.data
+
+        // setPurpose(data.forSaleOrRent=="sale" ? purpose[0] : purpose[1])
+        setCategory(getEstateTypeId(data.estateType.name))
+        setDisplayAdress(data.address)
+        setCity(getProvinceId(data.location.CityName, props.provinces))
+        setDistrict(getDistrictId(data.location.DistrictName, districts))
+        setQuarter(data.location.WardName || "")
+        setStreet(data.location.StreetName || "")
+        setTitle(data.title)
+        setDescription(data.description)
+        setAreaSqr(data.area)
+        setPrice(data.price)
+        setPriceUnit(getPriceTypeId(data.priceType))
+        setDocument(data.legalDocuments)
+        setFloor(data.floorNumber)
+        setBathrooms(data.bathroomNumber)
+        setBedrooms(data.bedroomNumber)
+        setDepth(data.depth)
+        setWidth(data.width)
+        setRoadWidth(data.roadWidth)
+        setDirection(data.direction)
+        setFuniture(data.furniture || "")
+        setImages(data.images)
+      }
+    }
+
+    fetchPostOnEdit()
+  }, [])
+
   return (
     <>
       <Header/>
@@ -474,7 +549,7 @@ const UploadPost = (props: Props) => {
           className="max-w-2xl mx-auto py-16 px-4 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8"
           style={{ maxWidth: "1200" }}
         >
-          <h2 className="font-bold text-xl text-center mb-4">Đăng tin</h2>
+          <h2 className="font-bold text-xl text-center mb-4">{router.query.id ? 'Sửa tin' : 'Đăng tin'}</h2>
 
           <div className="flex flex-col lg:flex-row justify-center">
             {/* Form thông tin bài đăng */}
@@ -617,6 +692,7 @@ const UploadPost = (props: Props) => {
                     className="bg-white border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-cyan-700"
                     placeholder="Địa chỉ hiển thị"
                     required
+                    value={displayAddress}
                     onChange={(e) => setDisplayAdress(e.target.value)}
                   />
                 </div>
@@ -804,6 +880,7 @@ const UploadPost = (props: Props) => {
                     id="title"
                     cols={1}
                     rows={2}
+                    value={title}
                     className="bg-white h-16 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
                     placeholder="Tiêu đề hiển thị"
                     onChange={(e) => setTitle(e.target.value)}
@@ -829,6 +906,7 @@ const UploadPost = (props: Props) => {
                     id="title"
                     cols={1}
                     rows={2}
+                    value={description}
                     className="bg-white h-44 border border-gray-300 text-black text-sm rounded block w-full p-2.5 resize-none hover:border-black focus:border-blue-700"
                     placeholder="Nhập mô tả về bất động sản của bạn"
                     onChange={(e) => setDescription(e.target.value)}
@@ -1009,6 +1087,7 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
+                      value={floor}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setFloor(parseInt(e.target.value))
@@ -1029,6 +1108,7 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="(m)"
                       required
+                      value={width}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setWidth(parseInt(e.target.value))
@@ -1049,6 +1129,7 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
+                      value={bedrooms}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setBedrooms(parseInt(e.target.value))
@@ -1069,6 +1150,7 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="(m)"
                       required
+                      value={depth}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setDepth(parseInt(e.target.value))
@@ -1089,6 +1171,7 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
+                      value={bathrooms}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setBathrooms(parseInt(e.target.value))
@@ -1109,6 +1192,7 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="(m)"
                       required
+                      value={roadWidth}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setRoadWidth(parseInt(e.target.value))
@@ -1279,73 +1363,39 @@ const UploadPost = (props: Props) => {
 
             {/* Loại bài đăng */}
             <div className="w-full mt-8 lg:mt-0 lg:w-[27%] lg:ml-4 h-max flex flex-col">
-              <div className="post-type w-full flex flex-col py-4 px-4 border border-solid border-gray-300 rounded-lg">
-                <div className="mt-2 mb-2">
-                  <div className="flex flex-row">
-                    <label
-                      htmlFor="post-type"
-                      className="block mb-2 text-sm font-medium text-black"
-                    >
-                      Loại tin đăng
-                    </label>
-                    <span className="text-sm text-rose-800">&nbsp;(*)</span>
-                  </div>
-
-                  <FormControl style={{ width: "50%" }}>
-                    <Select
-                      displayEmpty
-                      value={postType}
-                      className="text-sm"
-                      style={{ height: 38, fontSize: 14 }}
-                      onChange={(e) => {
-                        handlePostTypeIndex(e)
-                        setPostType(e.target.value)
-                      }}
-                    >
-                      {postTypes.map((item, index) => {
-                        return (
-                          <MenuItem
-                            key={index}
-                            value={item._id}
-                            style={{ fontSize: 14 }}
-                          >
-                            {item.name}
-                          </MenuItem>
-                        )
-                      })}
-                    </Select>
-                  </FormControl>
-                </div>
-
-                <div className="flex flex-row justify-between">
-                  <div className="mt-2 mb-2 w-2/5">
+              {
+                !router.query.id ?
+                <div className="post-type w-full flex flex-col py-4 px-4 border border-solid border-gray-300 rounded-lg">
+                  <div className="mt-2 mb-2">
                     <div className="flex flex-row">
                       <label
                         htmlFor="post-type"
                         className="block mb-2 text-sm font-medium text-black"
                       >
-                        Số ngày đăng
+                        Loại tin đăng
                       </label>
                       <span className="text-sm text-rose-800">&nbsp;(*)</span>
                     </div>
 
-                    <FormControl fullWidth>
+                    <FormControl style={{ width: "50%" }}>
                       <Select
                         displayEmpty
-                        value={postDuration.toString()}
+                        value={postType}
+                        className="text-sm"
                         style={{ height: 38, fontSize: 14 }}
-                        onChange={(e) =>
-                          setPostDuration(parseInt(e.target.value))
-                        }
+                        onChange={(e) => {
+                          handlePostTypeIndex(e)
+                          setPostType(e.target.value)
+                        }}
                       >
-                        {post_durations.map((item, index) => {
+                        {postTypes.map((item, index) => {
                           return (
                             <MenuItem
                               key={index}
-                              value={item}
+                              value={item._id}
                               style={{ fontSize: 14 }}
                             >
-                              {item} ngày
+                              {item.name}
                             </MenuItem>
                           )
                         })}
@@ -1353,81 +1403,118 @@ const UploadPost = (props: Props) => {
                     </FormControl>
                   </div>
 
-                  <div className="mt-2 mb-2" style={{ width: "54%" }}>
-                    <div className="flex flex-row">
-                      <label
-                        htmlFor="post-type"
-                        className="block mb-2 text-sm font-medium text-black"
-                      >
-                        Ngày bắt đầu
-                      </label>
-                      <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                  <div className="flex flex-row justify-between">
+                    <div className="mt-2 mb-2 w-2/5">
+                      <div className="flex flex-row">
+                        <label
+                          htmlFor="post-type"
+                          className="block mb-2 text-sm font-medium text-black"
+                        >
+                          Số ngày đăng
+                        </label>
+                        <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                      </div>
+
+                      <FormControl fullWidth>
+                        <Select
+                          displayEmpty
+                          value={postDuration.toString()}
+                          style={{ height: 38, fontSize: 14 }}
+                          onChange={(e) =>
+                            setPostDuration(parseInt(e.target.value))
+                          }
+                        >
+                          {post_durations.map((item, index) => {
+                            return (
+                              <MenuItem
+                                key={index}
+                                value={item}
+                                style={{ fontSize: 14 }}
+                              >
+                                {item} ngày
+                              </MenuItem>
+                            )
+                          })}
+                        </Select>
+                      </FormControl>
                     </div>
-                    <input
-                      type="date"
-                      className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700"
-                      placeholder="Select date"
-                      style={{ width: "98%" }}
-                      onChange={(e) => {handleDateSelected(e)}}
-                    />
-                  </div>
-                </div>
 
-                {
-                  falseDate ?
-                      <p className="text-red-700 text-sm">* Ngày bắt đầu phải từ hôm nay trở đi</p>
-                  : null
-                }
-
-                <div className="bg-blue-200 w-full h-40 py-1 px-3 mt-4 rounded-lg">
-                  <div className="flex flex-row justify-between mt-2 mt-2 mb-3">
-                    <p className="text-black text-sm font-medium">
-                      Loại tin đăng
-                    </p>
-                    <p className="text-black text-sm">
-                      {postTypes.length > 0 ? postTypes[postTypeIndex].name : ""}
-                    </p>
+                    <div className="mt-2 mb-2" style={{ width: "54%" }}>
+                      <div className="flex flex-row">
+                        <label
+                          htmlFor="post-type"
+                          className="block mb-2 text-sm font-medium text-black"
+                        >
+                          Ngày bắt đầu
+                        </label>
+                        <span className="text-sm text-rose-800">&nbsp;(*)</span>
+                      </div>
+                      <input
+                        type="date"
+                        className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700"
+                        placeholder="Select date"
+                        style={{ width: "98%" }}
+                        onChange={(e) => {handleDateSelected(e)}}
+                      />
+                    </div>
                   </div>
 
-                  <div className="flex flex-row justify-between mt-2 mb-3">
-                    <p className="text-black text-sm font-medium">
-                      Đơn giá / ngày
-                    </p>
-                    <p className="text-black text-sm">
-                      {postTypes.length > 0
-                        ? MoneyFormat(postTypes[postTypeIndex].price)
-                        : ""}{" "}
-                      VNĐ
-                    </p>
+                  {
+                    falseDate ?
+                        <p className="text-red-700 text-sm">* Ngày bắt đầu phải từ hôm nay trở đi</p>
+                    : null
+                  }
+
+                  <div className="bg-blue-200 w-full h-40 py-1 px-3 mt-4 rounded-lg">
+                    <div className="flex flex-row justify-between mt-2 mt-2 mb-3">
+                      <p className="text-black text-sm font-medium">
+                        Loại tin đăng
+                      </p>
+                      <p className="text-black text-sm">
+                        {postTypes.length > 0 ? postTypes[postTypeIndex].name : ""}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-row justify-between mt-2 mb-3">
+                      <p className="text-black text-sm font-medium">
+                        Đơn giá / ngày
+                      </p>
+                      <p className="text-black text-sm">
+                        {postTypes.length > 0
+                          ? MoneyFormat(postTypes[postTypeIndex].price)
+                          : ""}{" "}
+                        VNĐ
+                      </p>
+                    </div>
+
+                    <div className="flex flex-row justify-between mt-2 mb-3">
+                      <p className="text-black text-sm font-medium">Số ngày đăng</p>
+                      <p className="text-black text-sm">
+                        {postDuration == 0 ? post_durations[0] : postDuration}
+                      </p>
+                    </div>
+
+                    <hr className="border-1 border-solid border-black" />
+
+                    <div className="flex flex-row justify-between mt-2 mb-3">
+                      <p className="text-black text-lg font-medium">Bạn trả</p>
+                      <p className="text-black text-lg font-medium">
+                        {postTypes.length > 0
+                          ? MoneyFormat(
+                              postDuration == 0 && postTypeIndex == 0
+                                ? postTypes[postTypeIndex].price *
+                                    parseInt(post_durations[0])
+                                : postDuration * postTypes[postTypeIndex].price
+                            )
+                          : ""}{" "}
+                        VNĐ
+                      </p>
+                    </div>
                   </div>
+                </div> : null
+              }
 
-                  <div className="flex flex-row justify-between mt-2 mb-3">
-                    <p className="text-black text-sm font-medium">Số ngày đăng</p>
-                    <p className="text-black text-sm">
-                      {postDuration == 0 ? post_durations[0] : postDuration}
-                    </p>
-                  </div>
-
-                  <hr className="border-1 border-solid border-black" />
-
-                  <div className="flex flex-row justify-between mt-2 mb-3">
-                    <p className="text-black text-lg font-medium">Bạn trả</p>
-                    <p className="text-black text-lg font-medium">
-                      {postTypes.length > 0
-                        ? MoneyFormat(
-                            postDuration == 0 && postTypeIndex == 0
-                              ? postTypes[postTypeIndex].price *
-                                  parseInt(post_durations[0])
-                              : postDuration * postTypes[postTypeIndex].price
-                          )
-                        : ""}{" "}
-                      VNĐ
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="hidden mt-4 w-full md:mt-20 md:w-[90%] md:mx-auto md:block">
+              <div className={`hidden mt-4 w-full md:mt-20 md:w-[90] md:mx-auto md:block`}>
                 <Image
                   height={200}
                   width={400}
@@ -1444,7 +1531,6 @@ const UploadPost = (props: Props) => {
                 />
               </div>
             </div>
-            
           </div>
 
           {/* Upload button */}
@@ -1456,7 +1542,7 @@ const UploadPost = (props: Props) => {
                   className="bg-blue-700 flex flex-row items-center justify-center w-full lg:w-[120px] mx-auto px-2 py-2 mt-6 rounded-md text-center cursor-pointer hover:bg-blue-800"
                   onClick={() => handleCreatePost()}
                 >
-                  <p className="text-white text-center">Đăng tin</p>
+                  <p className="text-white text-center">{router.query.id ? 'Cập nhật' : 'Đăng tin'}</p>
                   <SendIcon fontSize="small" style={{color: '#fff'}} className="ml-1"/>
                 </button>
               </div>

@@ -1,6 +1,6 @@
 import type { NextPage } from "next"
 import Link from "next/link";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import MoneyFormat from "../../util/MoneyFormat";
 
 type Props = {
@@ -23,7 +23,8 @@ type Props = {
 }
 
 const ProjectCard = (props : Props) => {
-    const [favourite, setFavourite] = useState(false);
+    const [isLogin, setIsLogin] = useState(false)
+    const [favourite, setFavourite] = useState(false)
 
     const projectSlug = props.projectType.slug
     const postSlug = props.slug
@@ -96,6 +97,12 @@ const ProjectCard = (props : Props) => {
 
         return price.toString() + " " + resUnit + "/m2"
     }
+
+    useEffect(() => {
+        if (sessionStorage.getItem("jwt")) {
+            setIsLogin(true)
+        }
+    }, [])
 
     return (
         <Link href={`/du-an/${postSlug}`}>
@@ -178,28 +185,33 @@ const ProjectCard = (props : Props) => {
                         </p>
                     </div>
                     <div className="group flex flex-col items-center lg:flex-row mt-3 mb-3 justify-between">
-                        <div className={`w-4/5 md:w-9/12 h-[34px] bg-[${getStatusDivBgColor()}] border-solid border border-gray-300 rounded-lg px-2 py-1 flex flex-row justify-center items-center`}>
+                        <div className={`w-4/5 md:w-full h-[34px] bg-[${getStatusDivBgColor()}] border-solid border border-gray-300 rounded-lg px-2 py-1 flex flex-row justify-center items-center`}>
                             <p className={`text-[${getStatusColor()}] text-sm font-medium`}>{getStatusLabel(props.statusCode)}</p>
                         </div>
-                        <div
-                            title={favourite ? 'Bỏ lưu' : 'Lưu'}
-                            className={
-                                !favourite ? 
-                                "mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-gray-300 rounded-lg px-2 py-1 flex items-center justify-center hover:bg-gray-100"
-                                : "mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-rose-500 rounded-lg px-2 py-1 flex items-center justify-center hover:bg-gray-100"
-                            }
-                            onClick={(e) => {
-                                handleFavouriteClick(e, props.id)
-                            }}
-                        >
-                            <span
+                        {
+                            isLogin ?
+                            <div
+                                title={favourite ? 'Bỏ lưu' : 'Lưu'}
                                 className={
-                                    !favourite ?
-                                    "material-icons"
-                                    : "material-icons text-rose-500"
+                                    !favourite ? 
+                                    "mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-gray-300 rounded-lg px-2 py-1 flex items-center justify-center hover:bg-gray-100"
+                                    : "mt-2 lg:mt-0 w-4/5 md:w-3/12 md:ml-2 border-solid border border-rose-500 rounded-lg px-2 py-1 flex items-center justify-center hover:bg-gray-100"
                                 }
-                            >favorite_border</span>
-                        </div>
+                                onClick={(e) => {
+                                    handleFavouriteClick(e, props.id)
+                                }}
+                            >
+                                <span
+                                    className={
+                                        !favourite ?
+                                        "material-icons"
+                                        : "material-icons text-rose-500"
+                                    }
+                                >favorite_border</span>
+                            </div>
+                            : null
+                        }
+                        
                     </div>
                 </div>
             </a>

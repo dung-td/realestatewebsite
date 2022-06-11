@@ -22,23 +22,119 @@ const ListPost = (props: Props) => {
     const [sort, setSort] = useState('Thông thường')
 
     const [posts, setPosts] = useState(new Array())
+    const [currentSearch, setCurrentSearch] = useState<Search>({
+        keyword: "",
+        province: "",
+        district: "",
+        ward: "",
+        street: "",
+        project: "",
+        price: {
+            min: "0",
+            max: "80000000000",
+        },
+        area: {
+            min: "0",
+            max: "1000000",
+        },
+        type: props.estateType,
+        bedroom: {
+            min: "0",
+            max: "100",
+        },
+        width: {
+            min: "0",
+            max: "200",
+        },
+        saleOrRent: "",
+        streetWidth: {
+            min: "0",
+            max: "200",
+        },
+        orientation: "",
+        projectStatus: "",
+    })
     const [pageCount, setPageCount] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
     const [currentPageIndex, setCurrentPageIndex] = useState(1)
     const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
 
-    const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        const firstPageIndex = (value - 1) * 8
-        const lastPageIndex = firstPageIndex + 8
-        setCurrentPageData(posts.slice(firstPageIndex, lastPageIndex))
+    const onPageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+        setIsLoading(true)
+        const res = await fetch(`${server}/post/search`, {
+            method: "POST",
+            body: JSON.stringify({
+                "province": currentSearch.province,
+                "district": currentSearch.district,
+                "ward": currentSearch.ward,
+                "street": currentSearch.street,
+                "type": currentSearch.type,
+                "project": currentSearch.project,
+                "price": {
+                    "min": parseInt(currentSearch.price?.min || '0'),
+                    "max": parseInt(currentSearch.price?.max || '100'),
+                },
+                "area": {
+                    "min": parseInt(currentSearch.area?.min || '0'),
+                    "max": parseInt(currentSearch.area?.max || '1000000'),
+                },
+                "bedroom": {
+                    "min": parseInt(currentSearch.bedroom?.min || '0'),
+                    "max": parseInt(currentSearch.bedroom?.max || '100'),
+                },
+                "width": {
+                    "min": parseInt(currentSearch.width?.min || '0'),
+                    "max": parseInt(currentSearch.width?.max || '100'),
+                },
+                "streetWidth": {
+                    "min": parseInt(currentSearch.streetWidth?.min || '0'),
+                    "max": parseInt(currentSearch.streetWidth?.max || '100'),
+                },
+                "saleOrRent": "",
+                "orientation": currentSearch.orientation,
+                "page": value
+            }), // string or object
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        let data = await res.json()
+        
+        data = data.data.data
+        let arr = new Array()
+
+        data.forEach((post: any) => {
+            let obj = {
+                _id: post._id,
+                title: post.title,
+                // address: post.address,
+                address: post.location.StreetName + ", " + post.location.WardName + ", " + post.location.DistrictName + ", " + post.location.CityName,
+                estateType: post.estateType,
+                thumbnail: post.images[0],
+                price: post.price,
+                priceType: post.priceType,
+                area: post.area,
+                bathroom: post.bathroomNumber,
+                bedroom: post.bedroomNumber,
+                ownerName: post.owner.name,
+                ownerPhone: post.owner.phone,
+                titleColor: post.postType.title_color,
+                slug: post.slug,
+                purpose: post.forSaleOrRent,
+            }
+            arr.push(obj)
+        })
+        setPosts(arr)
+        data.length > 0 ? setIsLoading(false) : null
+
+        setCurrentPageData(arr)
         setCurrentPageIndex(value)
         window.scroll(0, 0)
     }
 
     const onSearchCallback = async (search: Search) => {
-        console.log(search)
-        console.log(search)
         setIsLoading(true)
+        setCurrentSearch(search)
         const res = await fetch(`${server}/post/search`, {
             method: "POST",
             body: JSON.stringify({
@@ -70,14 +166,16 @@ const ListPost = (props: Props) => {
               },
               "saleOrRent": "",
               "orientation": search.orientation,
+              "page": 1
             }), // string or object
             headers: {
               "Content-Type": "application/json",
             },
         })
         let data = await res.json()
+        let total = data.data.count
         
-        data = data.data
+        data = data.data.data
         let arr = new Array()
 
         data.forEach((post: any) => {
@@ -102,14 +200,11 @@ const ListPost = (props: Props) => {
         })
         setPosts(arr)
 
-        let count = arr.length / 8
         setPageCount(
-        Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+            Math.round(total / 8) < (total / 8) ? Math.round(total / 8) + 1 : Math.round(total / 8)
         )
-        const firstPageIndex = 0
-        const lastPageIndex = firstPageIndex + 8
         setCurrentPageIndex(1)
-        setCurrentPageData(arr.slice(firstPageIndex, lastPageIndex))
+        setCurrentPageData(arr)
         setIsLoading(false)
     }
 
@@ -117,9 +212,47 @@ const ListPost = (props: Props) => {
         const fetchData = async () => {
             let arr = new Array()
             let data = undefined
-            const res = await fetch(`${server}/post/get?pp=${props.purpose}&et=${props.estateType}&stt=approved&limit=32`)
+            // const res = await fetch(`${server}/post/get?pp=${props.purpose}&et=${props.estateType}&stt=approved&limit=8`)
+            const res = await fetch(`${server}/post/search`, {
+                method: "POST",
+                body: JSON.stringify({
+                    "province": "",
+                    "district": "",
+                    "ward": "",
+                    "street": "",
+                    "type": props.estateType,
+                    "project": "",
+                    "price": {
+                        "min": 0,
+                        "max": 100000000000,
+                    },
+                    "area": {
+                        "min": 0,
+                        "max": 1000000,
+                    },
+                    "bedroom": {
+                        "min": 0,
+                        "max": 100,
+                    },
+                    "width": {
+                        "min": 0,
+                        "max": 100,
+                    },
+                    "streetWidth": {
+                        "min": 0,
+                        "max": 100,
+                    },
+                    "saleOrRent": "",
+                    "orientation": "",
+                    "page": 1
+                }), // string or object
+                headers: {
+                  "Content-Type": "application/json",
+                },
+            })
             data = await res.json()
-            data = data.data
+            let total = data.data.count
+            data = data.data.data
 
             data.forEach((post: any) => {
                 let obj = {
@@ -144,13 +277,10 @@ const ListPost = (props: Props) => {
             setPosts(arr)
             arr.length > 0 ? setIsLoading(false) : null
 
-            let count = arr.length / 8
             setPageCount(
-            Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+                Math.round(total / 8) < (total / 8) ? Math.round(total / 8) + 1 : Math.round(total / 8)
             )
-            const firstPageIndex = 0
-            const lastPageIndex = firstPageIndex + 8
-            setCurrentPageData(arr.slice(firstPageIndex, lastPageIndex))
+            setCurrentPageData(arr)
         }
 
         fetchData()
@@ -227,6 +357,7 @@ const ListPost = (props: Props) => {
                     {!isLoading ? (
                         <div className="flex justify-center mt-8">
                             <Pagination
+                                page={currentPageIndex}
                                 count={pageCount}
                                 onChange={onPageChange}
                                 showFirstButton

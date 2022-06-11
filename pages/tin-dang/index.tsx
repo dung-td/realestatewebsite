@@ -1,5 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next"
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import EstateCard from "../../components/Estate/EstateCard"
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -15,10 +16,11 @@ import server from "../../interfaces/server"
 import { Estate } from "../../interfaces/estate"
 
 // type Props = {
-//     posts: Estate[]
+//     homeSearch: Search
 // }
 
 const ListEstate = () => {
+    const router = useRouter()
     const [sort, setSort] = useState('Thông thường')
 
     const [posts, setPosts] = useState(new Array())
@@ -27,25 +29,203 @@ const ListEstate = () => {
     const [currentPageData, setCurrentPageData] = useState<Array<any>>([])
     const [province, setProvince] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [currentSearch, setCurrentSearch] = useState<Search>({
+        keyword: "",
+        province: "",
+        district: "",
+        ward: "",
+        street: "",
+        project: "",
+        price: {
+            min: "0",
+            max: "80000000000",
+        },
+        area: {
+            min: "0",
+            max: "1000000",
+        },
+        type: "",
+        bedroom: {
+            min: "0",
+            max: "100",
+        },
+        width: {
+            min: "0",
+            max: "200",
+        },
+        saleOrRent: "",
+        streetWidth: {
+            min: "0",
+            max: "200",
+        },
+        orientation: "",
+        projectStatus: "",
+    })
 
     const handleSortResults = (e: any) => {
 
     }
 
-    const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        const firstPageIndex = (value - 1) * 8
-        const lastPageIndex = firstPageIndex + 8
-        setCurrentPageData(posts.slice(firstPageIndex, lastPageIndex))
+    const onPageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+        setIsLoading(true)
+        const res = await fetch(`${server}/post/search`, {
+            method: "POST",
+            body: JSON.stringify({
+                "province": currentSearch.province,
+                "district": currentSearch.district,
+                "ward": currentSearch.ward,
+                "street": currentSearch.street,
+                "type": currentSearch.type,
+                "project": currentSearch.project,
+                "price": {
+                    "min": parseInt(currentSearch.price?.min || '0'),
+                    "max": parseInt(currentSearch.price?.max || '100'),
+                },
+                "area": {
+                    "min": parseInt(currentSearch.area?.min || '0'),
+                    "max": parseInt(currentSearch.area?.max || '1000000'),
+                },
+                "bedroom": {
+                    "min": parseInt(currentSearch.bedroom?.min || '0'),
+                    "max": parseInt(currentSearch.bedroom?.max || '100'),
+                },
+                "width": {
+                    "min": parseInt(currentSearch.width?.min || '0'),
+                    "max": parseInt(currentSearch.width?.max || '100'),
+                },
+                "streetWidth": {
+                    "min": parseInt(currentSearch.streetWidth?.min || '0'),
+                    "max": parseInt(currentSearch.streetWidth?.max || '100'),
+                },
+                "saleOrRent": "",
+                "orientation": currentSearch.orientation,
+                "page": value
+            }), // string or object
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        let data = await res.json()
+        
+        data = data.data.data
+        let arr = new Array()
+
+        data.forEach((post: any) => {
+            let obj = {
+                _id: post._id,
+                title: post.title,
+                // address: post.address,
+                address: post.location.StreetName + ", " + post.location.WardName + ", " + post.location.DistrictName + ", " + post.location.CityName,
+                estateType: post.estateType,
+                thumbnail: post.images[0],
+                price: post.price,
+                priceType: post.priceType,
+                area: post.area,
+                bathroom: post.bathroomNumber,
+                bedroom: post.bedroomNumber,
+                ownerName: post.owner.name,
+                ownerPhone: post.owner.phone,
+                titleColor: post.postType.title_color,
+                slug: post.slug,
+                purpose: post.forSaleOrRent,
+            }
+            arr.push(obj)
+        })
+        setPosts(arr)
+        data.length > 0 ? setIsLoading(false) : null
+
+        setCurrentPageData(arr)
         setCurrentPageIndex(value)
         window.scroll(0, 0)
     }
 
     useEffect(() => {
+        const receiveHomeQuery = () => {
+            if (router.query) {
+                setCurrentSearch({
+                    keyword: router.query.keyword?.toString(),
+                    province: router.query.province?.toString(),
+                    district: router.query.district?.toString(),
+                    ward: router.query.ward?.toString(),
+                    street: router.query.street?.toString(),
+                    project: router.query.project?.toString(),
+                    price: {
+                        min: router.query.priceMin?.toString() || "",
+                        max: router.query.priceMax?.toString() || "",
+                    },
+                    area: {
+                        min: router.query.areaMin?.toString() || "",
+                        max: router.query.areaMax?.toString() || "",
+                    },
+                    type: router.query.type?.toString(),
+                    bedroom: {
+                        min: router.query.bedroomMin?.toString() || "",
+                        max: router.query.bedroomMax?.toString() || "",
+                    },
+                    width: {
+                        min: router.query.widthMin?.toString() || "",
+                        max: router.query.widthMax?.toString() || "",
+                    },
+                    saleOrRent: router.query.saleOrRent?.toString(),
+                    streetWidth: {
+                        min: router.query.streetWidthMin?.toString() || "",
+                        max: router.query.streetWidthMax?.toString() || "",
+                    },
+                    orientation: router.query.orientation?.toString(),
+                    projectStatus: router.query.projectStatus?.toString(),
+                })
+            }
+        }
+
+        receiveHomeQuery()
+        // fetchData()
+    }, [])
+
+    useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch(`${server}/post/get?stt=approved&limit=32`)
+            // const res = await fetch(`${server}/post/get?stt=approved&limit=32`)
+            const res = await fetch(`${server}/post/search`, {
+                method: "POST",
+                body: JSON.stringify({
+                    "province": currentSearch.province,
+                    "district": currentSearch.district,
+                    "ward": currentSearch.ward,
+                    "street": currentSearch.street,
+                    "type": currentSearch.type,
+                    "project": currentSearch.project,
+                    "price": {
+                        "min": parseInt(currentSearch.price?.min || '0'),
+                        "max": parseInt(currentSearch.price?.max || '100000000000'),
+                    },
+                    "area": {
+                        "min": parseInt(currentSearch.area?.min || '0'),
+                        "max": parseInt(currentSearch.area?.max || '1000000'),
+                    },
+                    "bedroom": {
+                        "min": parseInt(currentSearch.bedroom?.min || '0'),
+                        "max": parseInt(currentSearch.bedroom?.max || '100'),
+                    },
+                    "width": {
+                        "min": parseInt(currentSearch.width?.min || '0'),
+                        "max": parseInt(currentSearch.width?.max || '100'),
+                    },
+                    "streetWidth": {
+                        "min": parseInt(currentSearch.streetWidth?.min || '0'),
+                        "max": parseInt(currentSearch.streetWidth?.max || '100'),
+                    },
+                    "saleOrRent": "",
+                    "orientation": currentSearch.orientation,
+                    "page": 1
+                }), // string or object
+                headers: {
+                  "Content-Type": "application/json",
+                },
+            })
+
             let data = await res.json()
+            let total = data.data.count
             
-            data = data.data
+            data = data.data.data
             let arr = new Array()
 
             data.forEach((post: any) => {
@@ -72,21 +252,18 @@ const ListEstate = () => {
             setPosts(arr)
             arr.length > 0 ? setIsLoading(false) : null
 
-            let count = arr.length / 8
             setPageCount(
-            Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+                Math.round(total / 8) < total / 8 ? Math.round(total / 8) + 1 : Math.round(total / 8)
             )
-            const firstPageIndex = 0
-            const lastPageIndex = firstPageIndex + 8
-            setCurrentPageData(arr.slice(firstPageIndex, lastPageIndex))
+            setCurrentPageData(arr)
         }
 
         fetchData()
-    }, [])
+    }, [currentSearch])
 
     const onSearchCallback = async (search: Search) => {
-        console.log(search)
         setIsLoading(true)
+        setCurrentSearch(search)
         const res = await fetch(`${server}/post/search`, {
             method: "POST",
             body: JSON.stringify({
@@ -118,14 +295,16 @@ const ListEstate = () => {
               },
               "saleOrRent": "",
               "orientation": search.orientation,
+              "page": 1
             }), // string or object
             headers: {
               "Content-Type": "application/json",
             },
         })
         let data = await res.json()
+        let total = data.data.count
         
-        data = data.data
+        data = data.data.data
         let arr = new Array()
 
         data.forEach((post: any) => {
@@ -150,14 +329,11 @@ const ListEstate = () => {
         })
         setPosts(arr)
 
-        let count = arr.length / 8
         setPageCount(
-        Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+            Math.round(total / 8) < (total / 8) ? Math.round(total / 8) + 1 : Math.round(total / 8)
         )
-        const firstPageIndex = 0
-        const lastPageIndex = firstPageIndex + 8
         setCurrentPageIndex(1)
-        setCurrentPageData(arr.slice(firstPageIndex, lastPageIndex))
+        setCurrentPageData(arr)
         setIsLoading(false)
     }
 
@@ -231,6 +407,7 @@ const ListEstate = () => {
                     {!isLoading ? (
                         <div className="flex justify-center mt-8">
                             <Pagination
+                                page={currentPageIndex}
                                 count={pageCount}
                                 onChange={onPageChange}
                                 showFirstButton
@@ -251,36 +428,11 @@ const ListEstate = () => {
     )
 }
 
-// export const getServerSideProps: GetServerSideProps = async () => {
-//     console.log("Getting post list from Server...")
-//     const res = await fetch(`${server}/post/get?stt=approved&limit=20`)
-//     let data = await res.json()
-    
-//     data = data.data
-//     let posts = new Array()
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     var homeSearch = context.query?.search
+//     console.log(homeSearch)
 
-//     data.forEach((post: any) => {
-//         let obj = {
-//             _id: post._id,
-//             title: post.title,
-//             address: post.address,
-//             estateType: post.estateType,
-//             thumbnail: post.images[0],
-//             price: post.price,
-//             priceType: post.priceType,
-//             area: post.area,
-//             bathroom: post.bathroomNumber,
-//             bedroom: post.bedroomNumber,
-//             ownerName: post.owner.name,
-//             ownerPhone: post.owner.phone,
-//             titleColor: post.postType.title_color,
-//             slug: post.slug,
-//             purpose: post.forSaleOrRent,
-//         }
-//         posts.push(obj)
-//     })
-
-//     return { props: { posts } }
+//     return { props: { homeSearch } }
 // }
 
 export default ListEstate

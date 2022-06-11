@@ -10,6 +10,18 @@ export const getProvinceName = (id: string, provinces: any) => {
     return result
 }
 
+export const getProvinceId = (name: string, provinces: any) => {
+    let result = '';
+
+    for (let i : number = 0; i < provinces.length; i++) {
+        if (provinces[i].label === name) {
+            result = provinces[i].value;
+            break;
+        }
+    }
+    return result
+}
+
 export const getDistrictName = (id: string, districts: any) => {
     let result = '';
 
