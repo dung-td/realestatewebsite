@@ -8,8 +8,13 @@ import Modal from "@mui/material/Modal"
 import MenuItem from "@mui/material/MenuItem"
 import Select from "@mui/material/Select"
 import FormControl from "@mui/material/FormControl"
+import Backdrop from "@mui/material/Backdrop"
+import CircularProgress from "@mui/material/CircularProgress"
 import PostContent from "../../components/EstateDetail/PostContent"
 import moment from "moment"
+
+import server from "../../interfaces/server"
+import MoneyFormat from "../../util/MoneyFormat"
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -23,6 +28,11 @@ const modalStyle = {
   p: 2,
 }
 
+type price = {
+  price: number
+  name: string
+}
+
 const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [expandDetail, setExpandDetail] = useState(false)
@@ -30,12 +40,28 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
 
   const [postDuration, setPostDuration] = useState(0)
   const post_durations = ["7", "10", "14", "21"]
-
-  const Swal = require("sweetalert2")
+  const [priceData, setPriceData] = useState<price>({
+    name: "Tin tường",
+    price: 1000,
+  })
+  const [isLoading, setIsLoading] = useState(false)
 
   const expand = () => {
     setExpandDetail(!expandDetail)
   }
+
+  useState(() => {
+    fetch(`${server}/a/post-type/get`)
+      .then((res) => res.json())
+      .then((d) => {
+        let prices = d.data
+        prices.forEach((price: price) => {
+          if (price.name == data.postType.name) {
+            setPriceData(price)
+          }
+        })
+      })
+  })
 
   const toggleDrawer =
     (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
@@ -70,6 +96,63 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
         callback(data._id, "draft")
       }
     })
+  }
+
+  const createTransaction = () => {
+    let balance = 0
+    setIsLoading(true)
+    setModalOpen(false)
+    fetch(`${server}/user/currentUser`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        balance = data.user.balance
+        if (data.user.balance >= postDuration * priceData?.price) {
+          fetch(`${server}/transaction/add`, {
+            method: "POST",
+            body: JSON.stringify({
+              status: "waiting",
+              user: sessionStorage.getItem("id"),
+              amount: postDuration * priceData?.price,
+              balance: 0,
+              detail: "Trừ tiền phí đăng bài",
+              type: "outcome",
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              fetch(`${server}/user/balance/update`, {
+                method: "POST",
+                body: JSON.stringify({
+                  userId: sessionStorage.getItem("id"),
+                  balance: balance - postDuration * priceData?.price,
+                }),
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+              }).then(() => {
+                setIsLoading(false)
+                Swal.fire(
+                  "Thành công",
+                  "Giao dịch sẽ được xác nhận trong thời gian sớm nhất",
+                  "success"
+                )
+              })
+            })
+        } else {
+          setIsLoading(false)
+          Swal.fire("Thất bại", "Số dư không đủ!!", "error")
+        }
+      })
   }
 
   return (
@@ -449,8 +532,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
                   <input
                     type="date"
                     className="bg-white px-1 pl-2 h-10 border border-gray-300 text-black sm:text-sm rounded hover:border-black focus:border-blue-700"
-                    placeholder="Select date"
-                    value={moment("22/12/2022", "DD-MM-YYYY").format(
+                    value={moment(data.expiredDate, "DD-MM-YYYY").format(
                       "YYYY-MM-DD"
                     )}
                     style={{ width: "98%" }}
@@ -463,9 +545,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
                   <p className="text-black text-sm font-medium">
                     Loại tin đăng
                   </p>
-                  <p className="text-black text-sm">
-                    {/* {postTypes.length > 0 ? postTypes[postTypeIndex].name : ""} */}
-                  </p>
+                  <p className="text-black text-sm">{priceData?.name}</p>
                 </div>
 
                 <div className="flex flex-row justify-between mt-2 mb-3">
@@ -473,17 +553,15 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
                     Đơn giá / ngày
                   </p>
                   <p className="text-black text-sm">
-                    {/* {postTypes.length > 0
-                      ? MoneyFormat(postTypes[postTypeIndex].price)
-                      : ""}{" "}
-                    VNĐ */}
+                    {priceData?.price ? MoneyFormat(priceData?.price | 0) : 0}{" "}
+                    VND
                   </p>
                 </div>
 
                 <div className="flex flex-row justify-between mt-2 mb-3">
                   <p className="text-black text-sm font-medium">Số ngày đăng</p>
                   <p className="text-black text-sm">
-                    {/* {postDuration == 0 ? post_durations[0] : postDuration} */}
+                    {postDuration == 0 ? post_durations[0] : postDuration}
                   </p>
                 </div>
 
@@ -492,15 +570,10 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
                 <div className="flex flex-row justify-between mt-2 mb-3">
                   <p className="text-black text-lg font-medium">Bạn trả</p>
                   <p className="text-black text-lg font-medium">
-                    {/* {postTypes.length > 0
-                      ? MoneyFormat(
-                          postDuration == 0 && postTypeIndex == 0
-                            ? postTypes[postTypeIndex].price *
-                                parseInt(post_durations[0])
-                            : postDuration * postTypes[postTypeIndex].price
-                        )
-                      : ""}{" "}
-                    VNĐ */}
+                    {priceData?.price
+                      ? MoneyFormat(postDuration * priceData?.price)
+                      : 0}{" "}
+                    VNĐ
                   </p>
                 </div>
               </div>
@@ -519,6 +592,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               <button
                 type="button"
                 className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+                onClick={createTransaction}
               >
                 Thanh toán
               </button>
@@ -526,6 +600,15 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
           </div>
         </Box>
       </Modal>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 50 }}
+        open={isLoading}
+        className="flex flex-col"
+      >
+        <p>Đang thực hiện giao dịch</p>
+        <CircularProgress className="mt-4" color="inherit" />
+      </Backdrop>
     </div>
   )
 }

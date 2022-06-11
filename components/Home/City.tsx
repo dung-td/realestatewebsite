@@ -37,6 +37,9 @@ const City = () => {
     },
   ])
 
+  const [smallProvines, setSmallProvines] = useState(new Array())
+
+  // Get count posts
   useEffect(() => {
     let isCancelled = false
     smallPopularCity[0].map((city) => {
@@ -52,7 +55,6 @@ const City = () => {
       isCancelled = true
     }
   }, [])
-
   useEffect(() => {
     let isCancelled = false
     fetch(`${server}/post/count?cityCode=SG`)
@@ -61,6 +63,30 @@ const City = () => {
         if (data) {
           setPostCountSG(data.data)
         }
+      })
+    return () => {
+      isCancelled = true
+    }
+  }, [])
+
+  // Get small provices
+  useEffect(() => {
+    let isCancelled = false
+    fetch(`${server}/a/province/get`)
+      .then((res) => res.json())
+      .then((data) => {
+        let provinces = data.data
+        let popular = ["SG", "HN", "DN", "DDN", "BD"]
+        let small = new Array()
+
+        provinces.forEach((p: any) => {
+          if (small.length < 6) {
+            if (!popular.includes(p._id)) {
+              small.push(p)
+            }
+          } else return
+        })
+        setSmallProvines(small)
       })
     return () => {
       isCancelled = true
@@ -120,15 +146,15 @@ const City = () => {
       </div>
 
       <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-6 gap-4 mt-4">
-        {/* {smallProvines.map((province) => (
+        {smallProvines.map((province) => (
           <a
             key={province.slug}
             href={province.slug}
             className="bg-slate-200 rounded-xl p-1"
           >
-            <p className="text-center">{province.label}</p>
+            <p className="text-center">{province.provinceName}</p>
           </a>
-        ))} */}
+        ))}
       </div>
     </div>
   )
