@@ -73,7 +73,6 @@ const EstateDetail: NextPage<IPost> = (props) => {
             ownerName: post.owner.name,
             ownerPhone: post.owner.phone,
             publishDate: post.publishedDate,
-            titleColor: post.postType.title_color,
             slug: post.slug,
           }
           if (randomEstates.length < 6) {
@@ -137,12 +136,20 @@ const EstateDetail: NextPage<IPost> = (props) => {
             autoPlay={true}
             interval={2000}
             infiniteLoop={true}
+            // renderArrowNext={(clickHandler: () => void, hasPrev: boolean, label: string) => {
+            //   return <>
+            //   <div><ChevronRightIcon className="w-8 h-8 text-red absolute right-0 z-100" onClick={clickHandler}/></div>
+            //   </>
+              
+            // }}
             // showThumbs={showThumbs}
             // onClickItem={onClick}
             // className={className}
             >
             {relatedPosts.map( val => {
-                return <EstateCard id={val?._id}
+                return <EstateCard 
+                key={val?._id}
+                id={val?._id}
                 title= {val?.name}
                 imageUrl = {val.thumbnail}
                 price = {val.price}
