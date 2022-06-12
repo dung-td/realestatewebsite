@@ -21,6 +21,7 @@ import { Estate } from "../../interfaces/estate"
 
 const ListEstate = () => {
     const router = useRouter()
+    const [hasQuery, setHasQuery] = useState(router.query ? true : false)
     const [sort, setSort] = useState('Thông thường')
 
     const [posts, setPosts] = useState(new Array())
@@ -68,6 +69,9 @@ const ListEstate = () => {
 
     const onPageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
         setIsLoading(true)
+        setCurrentPageData(new Array())
+        window.scroll(0, 0)
+
         const res = await fetch(`${server}/post/search`, {
             method: "POST",
             body: JSON.stringify({
@@ -136,19 +140,18 @@ const ListEstate = () => {
 
         setCurrentPageData(arr)
         setCurrentPageIndex(value)
-        window.scroll(0, 0)
     }
 
     useEffect(() => {
         const receiveHomeQuery = () => {
             if (router.query) {
                 setCurrentSearch({
-                    keyword: router.query.keyword?.toString(),
-                    province: router.query.province?.toString(),
-                    district: router.query.district?.toString(),
-                    ward: router.query.ward?.toString(),
-                    street: router.query.street?.toString(),
-                    project: router.query.project?.toString(),
+                    keyword: router.query.keyword?.toString() || "",
+                    province: router.query.province?.toString() || "",
+                    district: router.query.district?.toString() || "",
+                    ward: router.query.ward?.toString() || "",
+                    street: router.query.street?.toString() || "",
+                    project: router.query.project?.toString() || "",
                     price: {
                         min: router.query.priceMin?.toString() || "",
                         max: router.query.priceMax?.toString() || "",
@@ -157,7 +160,7 @@ const ListEstate = () => {
                         min: router.query.areaMin?.toString() || "",
                         max: router.query.areaMax?.toString() || "",
                     },
-                    type: router.query.type?.toString(),
+                    type: router.query.type?.toString() || "",
                     bedroom: {
                         min: router.query.bedroomMin?.toString() || "",
                         max: router.query.bedroomMax?.toString() || "",
@@ -166,14 +169,47 @@ const ListEstate = () => {
                         min: router.query.widthMin?.toString() || "",
                         max: router.query.widthMax?.toString() || "",
                     },
-                    saleOrRent: router.query.saleOrRent?.toString(),
+                    saleOrRent: router.query.saleOrRent?.toString() || "",
                     streetWidth: {
                         min: router.query.streetWidthMin?.toString() || "",
                         max: router.query.streetWidthMax?.toString() || "",
                     },
-                    orientation: router.query.orientation?.toString(),
-                    projectStatus: router.query.projectStatus?.toString(),
+                    orientation: router.query.orientation?.toString() || "",
+                    projectStatus: router.query.projectStatus?.toString() || "",
                 })
+                setHasQuery(false)
+                // let ob = new <Search>({
+                //     keyword: router.query.keyword?.toString() || "",
+                //     province: router.query.province?.toString() || "",
+                //     district: router.query.district?.toString() || "",
+                //     ward: router.query.ward?.toString() || "",
+                //     street: router.query.street?.toString() || "",
+                //     project: router.query.project?.toString() || "",
+                //     price: {
+                //         min: router.query.priceMin?.toString() || "",
+                //         max: router.query.priceMax?.toString() || "",
+                //     },
+                //     area: {
+                //         min: router.query.areaMin?.toString() || "",
+                //         max: router.query.areaMax?.toString() || "",
+                //     },
+                //     type: router.query.type?.toString() || "",
+                //     bedroom: {
+                //         min: router.query.bedroomMin?.toString() || "",
+                //         max: router.query.bedroomMax?.toString() || "",
+                //     },
+                //     width: {
+                //         min: router.query.widthMin?.toString() || "",
+                //         max: router.query.widthMax?.toString() || "",
+                //     },
+                //     saleOrRent: router.query.saleOrRent?.toString() || "",
+                //     streetWidth: {
+                //         min: router.query.streetWidthMin?.toString() || "",
+                //         max: router.query.streetWidthMax?.toString() || "",
+                //     },
+                //     orientation: router.query.orientation?.toString() || "",
+                //     projectStatus: router.query.projectStatus?.toString() || "",
+                // })
             }
         }
 
@@ -187,7 +223,7 @@ const ListEstate = () => {
             const res = await fetch(`${server}/post/search`, {
                 method: "POST",
                 body: JSON.stringify({
-                    "province": currentSearch.province,
+                    "province":  currentSearch.province,
                     "district": currentSearch.district,
                     "ward": currentSearch.ward,
                     "street": currentSearch.street,
@@ -218,7 +254,7 @@ const ListEstate = () => {
                     "page": 1
                 }), // string or object
                 headers: {
-                  "Content-Type": "application/json",
+                "Content-Type": "application/json",
                 },
             })
 
@@ -258,12 +294,14 @@ const ListEstate = () => {
             setCurrentPageData(arr)
         }
 
-        fetchData()
-    }, [currentSearch])
+        if (!hasQuery)
+            fetchData()
+    }, [hasQuery, currentSearch])
 
     const onSearchCallback = async (search: Search) => {
         setIsLoading(true)
         setCurrentSearch(search)
+        setCurrentPageData(new Array())
         const res = await fetch(`${server}/post/search`, {
             method: "POST",
             body: JSON.stringify({
