@@ -9,8 +9,8 @@ import Footer from "../../components/Footer"
 const Page = () => {
   return (
     <>
-      <Header></Header>
-      <div className="pl-36 space-y-5 h-screen bg-gray-100">
+      <Header />
+      <div className="pl-36 space-y-5 h-screen bg-gray-100 h-auto">
         <RouteBar></RouteBar>
         <div className="flex">
           <LinkList></LinkList>
@@ -23,31 +23,31 @@ const Page = () => {
   )
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [
-      "/page/tuyen-dung",
-      "/page/quy-che-hoat-dong",
-      "/page/ve-meeyland",
-      "/page/dieu-khoan-va-dieu-kien",
-      "/page/quy-dinh-dang-tin",
-      "/page/lien-he",
-      "/page/tro-giup",
-    ],
-    fallback: false,
-  }
-}
+// export async function getStaticPaths() {
+//   return {
+//     paths: [
+//       '/page/tuyen-dung',
+//       '/page/quy-che-hoat-dong',
+//       '/page/ve-meeyland',
+//       '/page/dieu-khoan-va-dieu-kien',
+//       '/page/quy-dinh-dang-tin',
+//       '/page/lien-he',
+//       '/page/tro-giup'
+//     ],
+//     fallback: false
+//   }
+// }
 
-export async function getStaticProps() {
-  const page = data
-  console.log(page)
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      page,
-    },
-  }
-}
+// export async function getStaticProps() {
+//   const page = data
+//   console.log(page)
+//   // By returning { props: { posts } }, the Blog component
+//   // will receive `posts` as a prop at build time
+//   return {
+//     props: {
+//       page,
+//     },
+//   }
+// }
 
 export default Page
