@@ -2,6 +2,7 @@ import { useState } from "react"
 import type { NextPage } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import Head from "next/head"
 import ImageCarousel from "../../components/EstateDetail/ImageCarousel"
 import DetailBox from "../../components/EstateDetail/DetailBox"
 import CollapseDescription from "../../components/EstateDetail/CollapseDescription"
@@ -50,9 +51,12 @@ interface IProject {
 }
 const EstateProject: NextPage<IProject> = (props) => {
   const { investor } = props.project
-
+  const project = props.project
   return (
     <>
+      <Head>
+        <title>{project.name}</title>
+      </Head>
       <Header />
       <div
         className={`${style.default} sm:w-[1200px] grid mx-auto my-3 sm:flex rounded-lg border-black overflow-clip`}
