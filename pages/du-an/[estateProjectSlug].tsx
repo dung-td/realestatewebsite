@@ -122,7 +122,7 @@ interface IPathParam {
 
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  let slugs = new Array<IPathParam>
+  let slugs = new Array<IPathParam>()
   try{
     const res = await fetch(
       "http://vn-real-estate-api.herokuapp.com/api/project/slug"
@@ -146,7 +146,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(pathParam: IPathParam) {
   const { params } = pathParam
-  let project = new Array<IProject>
+  let project = new Array<IProject>()
   try {
     const res = await fetch(
       `${server}/project/get?slug=${params.estateProjectSlug}`
