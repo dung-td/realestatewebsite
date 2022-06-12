@@ -4,19 +4,21 @@ import Image from "next/image"
 import Link from "next/link"
 import CollapseDescription from "../../components/EstateDetail/CollapseDescription"
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
-import { PhoneIcon } from "@heroicons/react/solid"
-import { Unit } from "../../Enum"
-import PostContent from "../../components/EstateDetail/PostContent"
-import PostDto from "../../interfaces/PostDTO"
+import { PhoneIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import {Unit} from '../../Enum'
+import PostContent from '../../components/EstateDetail/PostContent'
+import PostDto from '../../interfaces/PostDTO'
 import style from "../../public/css/Estate.module.css"
 import server from "../../interfaces/server"
 
-import Header from "../../components/Header"
-import Footer from "../../components/Footer"
-interface TitleSectionProps {
-  title: string
-  issuedDate?: string
-  address?: string
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+import EstateCard from "../../components/Estate/EstateCard"
+import { Carousel } from "react-responsive-carousel"
+interface TitleSectionProps{
+    title: string,
+    issuedDate?: string,
+    address?: string
 }
 
 const Separator: React.FC = () => {
@@ -47,7 +49,42 @@ interface IPost {
 }
 const EstateDetail: NextPage<IPost> = (props) => {
   const [wards, setWards] = useState([])
+  const [relatedPosts, setRelatedPosts] = useState<Array<any>>(new Array())
+  useEffect(()=>{
+    fetch(`${server}/post/get?purpose=${props.post.forSaleOrRent}&limit=3`)
+      .then((res) => res.json())
+      .then((data) => {
+        let posts = data.data
+        let randomEstates = new Array()
 
+        posts.forEach((post: any) => {
+          let obj = {
+            _id: post._id,
+            title: post.title,
+            address: post.address,
+            estateType: post.estateType,
+            thumbnail: post.images[0],
+            purpose: post.forSaleOrRent,
+            price: post.price,
+            priceType: post.priceType,
+            area: post.area,
+            bathroom: post.bathroomNumber,
+            bedroom: post.bedroomNumber,
+            ownerName: post.owner.name,
+            ownerPhone: post.owner.phone,
+            publishDate: post.publishedDate,
+            slug: post.slug,
+          }
+          if (randomEstates.length < 6) {
+            randomEstates.push(obj)
+          }
+        })
+
+
+        setRelatedPosts(randomEstates)
+      })
+    }
+    ,[])
   const { owner } = props.post
   return (
     <>
@@ -86,11 +123,51 @@ const EstateDetail: NextPage<IPost> = (props) => {
                 </p>
               </div>
             </div>
+            
           </div>
 
           <div>
-            <p className="text-base font-bold">Bất động sản dành cho bạn</p>
+            <p className="text-base font-bold my-2">Bất động sản dành cho bạn</p>
           </div>
+          <Carousel showArrows={true} 
+            showStatus={false}
+            swipeable={true}
+            emulateTouch={true}
+            autoPlay={true}
+            interval={2000}
+            infiniteLoop={true}
+            // renderArrowNext={(clickHandler: () => void, hasPrev: boolean, label: string) => {
+            //   return <>
+            //   <div><ChevronRightIcon className="w-8 h-8 text-red absolute right-0 z-100" onClick={clickHandler}/></div>
+            //   </>
+              
+            // }}
+            // showThumbs={showThumbs}
+            // onClickItem={onClick}
+            // className={className}
+            >
+            {relatedPosts.map( val => {
+                return <EstateCard 
+                key={val?._id}
+                id={val?._id}
+                title= {val?.name}
+                imageUrl = {val.thumbnail}
+                price = {val.price}
+                priceType = {val.priceType}
+                areaSqr = {val.area}
+                rooms = {val.bedroom + val.bathroom}
+                address = {val.address}
+                author = {val.ownerName}
+                slug = {val.slug}
+                estateType = {val.estateType}
+                purpose = {val.purpose}
+                titleColor = {val.titleColor}
+                author_phone_number = {val.ownerPhone}
+                style={''}
+                />
+                
+              })}
+        </Carousel>
         </div>
 
         <div className="md:border-gray-300 md:w-1/4 md:ml-1 relative">
