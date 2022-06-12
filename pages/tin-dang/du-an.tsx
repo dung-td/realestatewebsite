@@ -11,10 +11,6 @@ import MoneyFormat from "../../util/MoneyFormat"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 
-// type Props = {
-//     posts: any[]
-// }
-
 const ListProject = () => {
     const [sort, setSort] = useState('Thông thường')
 
@@ -48,7 +44,7 @@ const ListProject = () => {
                 let obj = {
                     _id: post._id,
                     name: post.name,
-                    address: post.address,
+                    address: post.location.DistrictPrefix + " " + post.location.DistrictName + ", " + post.location.CityName,
                     status: post.projectStatus,
                     projectType: post.projectType,
                     thumbnail: post.images[0],
@@ -63,11 +59,11 @@ const ListProject = () => {
                 posts.push(obj)
             })
             setPosts(posts)
-            data.length > 0 ? setIsLoading(false) : null
+            setIsLoading(false)
 
             let count = posts.length / 8
             setPageCount(
-            Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+                Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
             )
             const firstPageIndex = 0
             const lastPageIndex = firstPageIndex + 8
@@ -157,35 +153,5 @@ const ListProject = () => {
         </>
     )
 }
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-//     console.log("Getting post list from Server...")
-//     const res = await fetch(`${server}/project/get?limit=30`)
-//     let data = await res.json()
-    
-//     data = data.data
-//     let posts = new Array()
-
-//     data.forEach((post: any) => {
-//         let obj = {
-//             _id: post._id,
-//             name: post.name,
-//             address: post.address,
-//             status: post.projectStatus,
-//             projectType: post.projectType,
-//             thumbnail: post.images[0],
-//             price: post.price,
-//             area: post.area,
-//             apartments: post.aparmentNumber,
-//             buildings: post.buildingNumber,
-//             investorName: post.investor.name,
-//             titleColor: post.postType.title_color,
-//             slug: post.slug,
-//         }
-//         posts.push(obj)
-//     })
-
-//     return { props: { posts } }
-// }
 
 export default ListProject

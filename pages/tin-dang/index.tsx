@@ -83,7 +83,7 @@ const ListEstate = () => {
                 "project": currentSearch.project,
                 "price": {
                     "min": parseInt(currentSearch.price?.min || '0'),
-                    "max": parseInt(currentSearch.price?.max || '100'),
+                    "max": parseInt(currentSearch.price?.max || '100000000000000'),
                 },
                 "area": {
                     "min": parseInt(currentSearch.area?.min || '0'),
@@ -91,15 +91,15 @@ const ListEstate = () => {
                 },
                 "bedroom": {
                     "min": parseInt(currentSearch.bedroom?.min || '0'),
-                    "max": parseInt(currentSearch.bedroom?.max || '100'),
+                    "max": parseInt(currentSearch.bedroom?.max || '200'),
                 },
                 "width": {
                     "min": parseInt(currentSearch.width?.min || '0'),
-                    "max": parseInt(currentSearch.width?.max || '100'),
+                    "max": parseInt(currentSearch.width?.max || '1000'),
                 },
                 "streetWidth": {
                     "min": parseInt(currentSearch.streetWidth?.min || '0'),
-                    "max": parseInt(currentSearch.streetWidth?.max || '100'),
+                    "max": parseInt(currentSearch.streetWidth?.max || '1000'),
                 },
                 "saleOrRent": "",
                 "orientation": currentSearch.orientation,
@@ -110,16 +110,17 @@ const ListEstate = () => {
             },
         })
         let data = await res.json()
-        
         data = data.data.data
+
         let arr = new Array()
+        console.log("DATA: " + data)
 
         data.forEach((post: any) => {
             let obj = {
                 _id: post._id,
                 title: post.title,
                 // address: post.address,
-                address: post.location.StreetName + ", " + post.location.WardName + ", " + post.location.DistrictName + ", " + post.location.CityName,
+                address: post.location.DistrictPrefix + " " + post.location.DistrictName + ", " + post.location.CityName,
                 estateType: post.estateType,
                 thumbnail: post.images[0],
                 price: post.price,
@@ -136,7 +137,7 @@ const ListEstate = () => {
             arr.push(obj)
         })
         setPosts(arr)
-        data.length > 0 ? setIsLoading(false) : null
+        setIsLoading(false)
 
         setCurrentPageData(arr)
         setCurrentPageIndex(value)
@@ -269,7 +270,7 @@ const ListEstate = () => {
                     _id: post._id,
                     title: post.title,
                     // address: post.address,
-                    address: post.location.StreetName + ", " + post.location.WardName + ", " + post.location.DistrictName + ", " + post.location.CityName,
+                    address: post.location.DistrictPrefix + " " + post.location.DistrictName + ", " + post.location.CityName,
                     estateType: post.estateType,
                     thumbnail: post.images[0],
                     price: post.price,
@@ -286,7 +287,7 @@ const ListEstate = () => {
                 arr.push(obj)
             })
             setPosts(arr)
-            arr.length > 0 ? setIsLoading(false) : null
+            setIsLoading(false)
 
             setPageCount(
                 Math.round(total / 8) < total / 8 ? Math.round(total / 8) + 1 : Math.round(total / 8)
@@ -302,6 +303,8 @@ const ListEstate = () => {
         setIsLoading(true)
         setCurrentSearch(search)
         setCurrentPageData(new Array())
+        window.scroll(0, 0)
+
         const res = await fetch(`${server}/post/search`, {
             method: "POST",
             body: JSON.stringify({
@@ -349,7 +352,7 @@ const ListEstate = () => {
             let obj = {
                 _id: post._id,
                 title: post.title,
-                address: post.address,
+                address: post.location.DistrictPrefix + " " + post.location.DistrictName + ", " + post.location.CityName,
                 estateType: post.estateType,
                 thumbnail: post.images[0],
                 price: post.price,

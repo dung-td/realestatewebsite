@@ -505,7 +505,7 @@ const UploadProject = (props: Props) => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
       })
       .then((res) => res.json())

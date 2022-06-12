@@ -45,7 +45,7 @@ const ListPost = (props: Props) => {
                 let obj = {
                     _id: post._id,
                     name: post.name,
-                    address: post.address,
+                    address: post.location.DistrictPrefix + " " + post.location.DistrictName + ", " + post.location.CityName,
                     status: post.projectStatus,
                     projectType: post.projectType,
                     thumbnail: post.images[0],
@@ -60,11 +60,11 @@ const ListPost = (props: Props) => {
                 arr.push(obj)
             })
             setPosts(arr)
-            arr.length > 0 ? setIsLoading(false) : null
+            setIsLoading(false)
 
             let count = arr.length / 8
             setPageCount(
-            Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
+                Math.round(count) < count ? Math.round(count) + 1 : Math.round(count)
             )
             const firstPageIndex = 0
             const lastPageIndex = firstPageIndex + 8
