@@ -151,7 +151,7 @@ const ListPost = (props: Props) => {
               "project": search.project,
               "price": {
                 "min": parseInt(search.price?.min || '0'),
-                "max": parseInt(search.price?.max || '100'),
+                "max": parseInt(search.price?.max || '100000000000'),
               },
               "area": {
                 "min": parseInt(search.area?.min || '0'),
@@ -159,15 +159,15 @@ const ListPost = (props: Props) => {
               },
               "bedroom": {
                 "min": parseInt(search.bedroom?.min || '0'),
-                "max": parseInt(search.bedroom?.max || '100'),
+                "max": parseInt(search.bedroom?.max || '200'),
               },
               "width": {
                 "min": parseInt(search.width?.min || '0'),
-                "max": parseInt(search.width?.max || '100'),
+                "max": parseInt(search.width?.max || '200'),
               },
               "streetWidth": {
                 "min": parseInt(search.streetWidth?.min || '0'),
-                "max": parseInt(search.streetWidth?.max || '100'),
+                "max": parseInt(search.streetWidth?.max || '200'),
               },
               "saleOrRent": "",
               "orientation": search.orientation,

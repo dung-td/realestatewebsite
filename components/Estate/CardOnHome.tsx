@@ -32,7 +32,7 @@ const CardOnHome = (props : Props) => {
 
     const estateSlug = props.estateType.slug
     const postSlug = props.slug
-    const purpose = props.purpose == "sale" ? "ban" : "mua"
+    const purpose = props.purpose == "sale" ? "ban" : "thue"
 
     const convertPriceToString = (val: string) => {
         var resUnit = ""

@@ -386,6 +386,7 @@ const AdminUser = () => {
             })
               .then((res) => res.json())
               .then((data) => {
+                setRows([])
                 setIsChange(!isChange)
                 setSelected([])
               })

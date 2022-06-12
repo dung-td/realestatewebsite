@@ -316,7 +316,7 @@ const ListEstate = () => {
               "project": search.project,
               "price": {
                 "min": parseInt(search.price?.min || '0'),
-                "max": parseInt(search.price?.max || '100'),
+                "max": parseInt(search.price?.max || '100000000000000'),
               },
               "area": {
                 "min": parseInt(search.area?.min || '0'),
