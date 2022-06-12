@@ -1,8 +1,8 @@
+import Custom404 from "../404"
+
 const Page = () => {
     return (
-        <div>
-            <p>index page</p>
-        </div>
+        <><Custom404></Custom404></>
     )
 }
 
