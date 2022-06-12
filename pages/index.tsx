@@ -10,13 +10,14 @@ import City from "../components/Home/City"
 import NewsSection from "../components/News/Section"
 import ListEstateOnHome from "../components/Estate/ListEstateOnHome"
 import ListProjectOnHome from "../components/Estate/ListProjectOnHome"
+import Item from "../components/User/Transaction/Item"
+import ItemSkeleton from "../components/Home/Skeleton"
+import NewsSkeleton from "../components/Home/NewsSkeleton"
 
 import { Province } from "../interfaces/Province"
 import server from "../interfaces/server"
-import News from "../interfaces/news"
-
-import Item from "../components/User/Transaction/Item"
 import { Search } from "../interfaces/search"
+import News from "../interfaces/news"
 
 type Props = {
   estateOnHome: any[]
@@ -65,7 +66,7 @@ const Home = () => {
             titleColor: post.postType.title_color,
             slug: post.slug,
           }
-          if (estateOnHome.length < 6) {
+          if (estateOnHome.length < 9) {
             estateOnHome.push(obj)
           }
         })
@@ -74,7 +75,7 @@ const Home = () => {
       })
   }, [])
 
-  // Get project
+  // // Get project
   useEffect(() => {
     fetch(`${server}/project/get?limit=9`)
       .then((res) => res.json())
@@ -96,20 +97,12 @@ const Home = () => {
             titleColor: post.postType.title_color,
             slug: post.slug,
           }
-          if (projectOnHome.length < 6) {
+          if (projectOnHome.length < 9) {
             projectOnHome.push(obj)
           }
         })
 
         setProject(projectOnHome)
-      })
-  }, [])
-
-  useEffect(() => {
-    fetch(`${server}/news/popular?limit=6`)
-      .then((res) => res.json())
-      .then((data) => {
-        setNews(data.data)
       })
   }, [])
 
@@ -146,8 +139,8 @@ const Home = () => {
     <div className="relative">
       <Header />
 
-      {/* Search bar */}
       <div className="grid-full">
+        {/* Search bar */}
         <div className="relative mb-8">
           <div className="home-banner">
             <Image
@@ -164,15 +157,65 @@ const Home = () => {
 
         {/* Section */}
         <div className=" space-y-16">
+          {/* News */}
           {news.length > 0 ? (
             <NewsSection typeSlug="tin-noi-bat" news={news} />
-          ) : null}
+          ) : (
+            <div className="md:container md:mx-auto grid p-8 md:p-0">
+              <div className="md:w-9/12 border-b-2 border-red-700">
+                <h2 className="font-bold text-base">TIN TỨC NỔI BẬT</h2>
+              </div>
 
-          <City />
+              <NewsSkeleton />
+            </div>
+          )}
 
-          {estate.length > 0 ? <ListEstateOnHome posts={estate} /> : null}
+          {/* Estate on Home */}
+          <div className="bg-white w-full">
+            <div
+              className="mx-auto px-4 max-w-full"
+              style={{ maxWidth: "1200" }}
+            >
+              <div className="grid">
+                <h2 className="font-bold mb-4">BẤT ĐỘNG SẢN DÀNH CHO BẠN</h2>
+                <hr className="w-full ml:0 -mt-4 mb-2 border-black" />
+              </div>
 
-          {project.length > 0 ? <ListProjectOnHome posts={project} /> : null}
+              {estate.length > 0 ? (
+                <ListEstateOnHome posts={estate} />
+              ) : (
+                <>
+                  <ItemSkeleton />
+                  <ItemSkeleton />
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Project on home */}
+          <div className="bg-white w-full">
+            <div
+              className="mx-auto px-4 max-w-full"
+              style={{ maxWidth: "1200" }}
+            >
+              <div className="grid">
+                <h2 className="font-bold mb-4">DỰ ÁN NỔI BẬT</h2>
+                <hr className="w-full ml:0 -mt-3 mb-4 border-black" />
+              </div>
+
+              {project.length > 0 ? (
+                <ListProjectOnHome posts={project} />
+              ) : (
+                <>
+                  <ItemSkeleton />
+                  <ItemSkeleton />
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* City */}
+          <City callback={searchCallback} />
         </div>
       </div>
 

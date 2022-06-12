@@ -9,14 +9,10 @@ const ListProjectOnHome = (props: Props) => {
 
     return (
         <>
-            <div className="bg-white w-full">
-                <div className="mx-auto px-4 max-w-full" style={{maxWidth: '1200'}}>
-                    <div className="grid">
-                        <h2 className="font-bold mb-4">DỰ ÁN NỔI BẬT</h2>
-                        <hr className="w-1/3 ml:0 -mt-3 mb-4 border-black"/>
-                    </div>
-                
-                    <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-6">
+            
+
+
+            <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-6">
                         {
                             props.posts.map((item) => {
                                 return (
@@ -48,8 +44,6 @@ const ListProjectOnHome = (props: Props) => {
                             </button>
                         </Link>
                     </div>
-                </div>
-            </div>
         </>
     )
 }

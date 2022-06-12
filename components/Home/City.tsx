@@ -4,7 +4,11 @@ import Image from "next/image"
 import { Province } from "../../interfaces/Province"
 import server from "../../interfaces/server"
 
-const City = () => {
+interface Props {
+  callback: any
+}
+
+const City = ({ callback }: Props) => {
   const [postCountSG, setPostCountSG] = useState(0)
   const smallPopularCity = useState<Province[]>([
     {
@@ -99,10 +103,10 @@ const City = () => {
         <h3 className="font-bold text-sm sm:text-base">
           BẤT ĐỘNG SẢN Ở THÀNH PHỐ LỚN
         </h3>
-        <div className="border-b-2 border-indigo-500 w-1/4 mb-4"></div>
+        <div className="border-b-2 border-indigo-500 w-full mb-4"></div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <Link passHref href="/ho-chi-minh">
+        <Link passHref href={`/tin-dang?province=SG`}>
           <div className="cursor-pointer hovereffect xl:row-span-2 xl:col-span-2 aspect-w-16 aspect-h-9 pointer">
             <Image
               alt="Hồ Chí Minh"
@@ -123,7 +127,11 @@ const City = () => {
         </Link>
         {smallPopularCity[0].map((city) => {
           return (
-            <Link key={city.value} passHref href="/ho-chi-minh">
+            <Link
+              key={city.value}
+              passHref
+              href={`/tin-dang?province=${city.value}`}
+            >
               <div className="cursor-pointer hovereffect aspect-w-16 aspect-h-9 pointer">
                 <Image
                   alt={city.label}
@@ -148,13 +156,15 @@ const City = () => {
 
       <div className="grid px-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-6 gap-4 mt-4">
         {smallProvines.map((province) => (
-          <a
+          <Link
+            href={`/tin-dang?province=${province._id}`}
             key={province.slug}
-            href={province.slug}
-            className="bg-slate-200 rounded-xl p-1"
+            passHref
           >
-            <p className="text-center">{province.provinceName}</p>
-          </a>
+            <div className="bg-slate-200 rounded-xl p-1 cursor-pointer">
+              <p className="text-center">{province.provinceName}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
