@@ -123,19 +123,17 @@ interface IPathParam {
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
   let slugs = new Array<IPathParam>()
-  try{
+  // try{
     const res = await fetch(
       "http://vn-real-estate-api.herokuapp.com/api/project/slug"
     )
     const data = await res.json()
     slugs = data.data
-    console.log(slugs)
-
-  }
-  catch(err: any)
-  {
-    console.log(err)
-  }
+  // }
+  // catch(err: any)
+  // {
+  //   console.log('There is error', err)
+  // }
   // const slugs = posts.map( (el: { slug: any }) => { return { params: {
   //     estateProjectSlug: el.slug
   // }}})
@@ -156,7 +154,7 @@ export async function getStaticProps(pathParam: IPathParam) {
   }
   catch (err: any)
   {
-    console.log(err)
+    console.log('There is error',err)
   }
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
@@ -164,6 +162,6 @@ export async function getStaticProps(pathParam: IPathParam) {
     props: {
       project,
     },
-    revalidate: 900,
+    revalidate: 60,
   }
 }

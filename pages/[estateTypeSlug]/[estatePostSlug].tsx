@@ -246,21 +246,21 @@ export async function getStaticPaths() {
 export async function getStaticProps(pathParam: IPathParam) {
   const { params } = pathParam
   let post = new Array<IPost>()
-  try {
+  // try {
     const res = await fetch(`${server}/post/slug?slug=${params.estatePostSlug}`)
     const data = await res.json()
     post = data.post
-    console.log(post)
-  }
-  catch(err: any){
-    console.log(err)
-  }
+    // console.log(post)
+  // }
+  // catch(err: any){
+  //   console.log(err)
+  // }
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
       post,
     },
-    revalidate: 900,
+    revalidate: 60,
   }
 }
