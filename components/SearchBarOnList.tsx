@@ -367,8 +367,8 @@ const SearchBarOnList = ({ callback }: Props) => {
     <div className="md:sticky md:top-0 w-full mr-auto ml-auto md:grid md:bg-white drop-shadow-xl z-10">
       <Box className="mb-2 md:min-w-min text-white">
         <Tabs value={tabValue} onChange={handleTabChange}>
-          <Tab label="Nhà cho thuê" />
           <Tab label="Nhà bán/ sang nhượng" />
+          <Tab label="Nhà cho thuê" />
           {/* <Tab label="Dự án" /> */}
         </Tabs>
       </Box>

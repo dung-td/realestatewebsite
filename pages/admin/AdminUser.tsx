@@ -456,21 +456,38 @@ const AdminUser = () => {
       .then((data: any) => {
         let users = data.users
         let newRows = new Array<Data>()
-        users.forEach((user: any) => {
-          newRows.push(
+        users.forEach(async (user: any) => {
+          let postCount = 0
+
+          await fetch(`${server}/post/count?userId=${user._id}`)
+            .then((res) => res.json())
+            .then((data) => {
+              postCount = data.data
+            })
+
+          let city = ""
+          await fetch(`${server}/a/province/get?p=${user.cityId}`)
+            .then((res) => res.json())
+            .then((data) => {
+              city = data.data.provinceName
+            })
+
+          // newRows.push()
+          setRows((rows) => [
+            ...rows,
             createData(
               user.fullname,
               user.username,
               user.phone,
               user.email,
-              user.cityId,
+              city,
               user.accountStatus.status,
               user.accountStatus.date,
-              user.postCount
-            )
-          )
+              postCount
+            ),
+          ])
         })
-        setRows(newRows)
+        console.log(newRows)
         setIsLoading(false)
       })
     return () => {

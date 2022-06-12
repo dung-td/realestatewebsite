@@ -64,7 +64,7 @@ const UserTransaction = () => {
 
   useEffect(() => {
     let isCancelled = false
-    let userId = sessionStorage.getItem("id")
+    let userId = localStorage.getItem("id")
     fetch(`${server}/transaction?user=${userId}&type=${transactionType}`)
       .then((res) => res.json())
       .then((data) => {

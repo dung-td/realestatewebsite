@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 const Footer = () => {
   return (
     <footer className="bg-gray-800">
@@ -29,55 +31,50 @@ const Footer = () => {
         {/* Help */}
         <div>
           <h2 className="mb-6 text-sm font-semibold text-gray-400 uppercase">
-            Trợ giúp
+            Công ty
           </h2>
           <ul className="text-gray-300">
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Quy định đăng tin
-              </a>
+              <Link passHref href="/page/tuyen-dung">
+                <a className="hover:underline">Tuyển dụng</a>
+              </Link>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Liên hệ
-              </a>
+              <Link passHref href="/page/quy-che-hoat-dong">
+                <a className="hover:underline">Quy chế hoạt động</a>
+              </Link>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Báo giá
-              </a>
+              <Link passHref href="/page/ve-batdongsan88">
+                <a className="hover:underline">Vể batdongsan88</a>
+              </Link>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Trợ giúp
-              </a>
+              <Link passHref href="/page/dieu-khoan-va-dieu-kien">
+                <a className="hover:underline">Điều khoản và điều kiện</a>
+              </Link>
             </li>
           </ul>
         </div>
         <div>
           <h2 className="mb-6 text-sm font-semibold text-gray-400 uppercase">
-            Liên kết
+            Hỗ trợ
           </h2>
           <ul className="text-gray-300">
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Quy định đăng tin
-              </a>
+              <Link passHref href="/page/quy-dinh-dang-tin">
+                <a className="hover:underline">Quy định đăng tin</a>
+              </Link>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Liên hệ
-              </a>
+              <Link passHref href="/page/lien-he">
+                <a className="hover:underline">Liên hệ</a>
+              </Link>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Báo giá
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Trợ giúp
-              </a>
+            <Link passHref href="/page/tro-giup">
+                <a className="hover:underline">Trợ giúp</a>
+              </Link>
             </li>
           </ul>
         </div>

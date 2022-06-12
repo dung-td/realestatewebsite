@@ -61,6 +61,7 @@ const AdminWaitingTransaction = () => {
         finishTransaction(id)
         break
       case "error":
+        errorTransaction(id)
         break
       default:
         break
@@ -83,6 +84,28 @@ const AdminWaitingTransaction = () => {
       .then((data) => {
         setIsChange(!isChange)
         setIsLoading(false)
+        setAlertMessage("Giao dịch đã được duyệt!")
+        setAlertOpen(true)
+      })
+  }
+
+  const errorTransaction = (id: string) => {
+    fetch(`${server}/transaction/finish`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        status: "error",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsChange(!isChange)
+        setIsLoading(false)
+        setAlertMessage("Giao dịch đã bị hủy!")
         setAlertOpen(true)
       })
   }
