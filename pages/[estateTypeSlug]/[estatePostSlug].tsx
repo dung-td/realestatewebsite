@@ -225,12 +225,19 @@ interface IPathParam {
 
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
+  let slugs = new Array<IPathParam>()
   const res = await fetch(
     "http://vn-real-estate-api.herokuapp.com/api/post/slug"
   )
-  const data = await res.json()
-  const { slugs } = data
-  console.log(slugs)
+  try{
+    const data = await res.json()
+    slugs = data.slugs
+    console.log(slugs)
+  }
+  catch(err: any){
+    console.log(err)
+  }
+  
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths: slugs, fallback: false }
@@ -238,15 +245,22 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(pathParam: IPathParam) {
   const { params } = pathParam
-  const res = await fetch(`${server}/post/slug?slug=${params.estatePostSlug}`)
-  const data = await res.json()
-  const { post } = data
-  console.log(post)
+  let post = new Array<IPost>()
+  try {
+    const res = await fetch(`${server}/post/slug?slug=${params.estatePostSlug}`)
+    const data = await res.json()
+    post = data.post
+    console.log(post)
+  }
+  catch(err: any){
+    console.log(err)
+  }
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
       post,
     },
+    revalidate: 900,
   }
 }
