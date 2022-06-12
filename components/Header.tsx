@@ -188,9 +188,7 @@ const Header = () => {
                             href={`/${typeLink.slug}?pp=cho-thue`}
                             passHref={true}
                           >
-                            <a
-                              className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                            >
+                            <a className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300">
                               Cho thuê {typeLink.name}
                             </a>
                           </Link>
@@ -214,9 +212,7 @@ const Header = () => {
                             href={`/${typeLink.slug}?pp=ban`}
                             passHref={true}
                           >
-                            <a
-                              className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                            >
+                            <a className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300">
                               Bán {typeLink.name}
                             </a>
                           </Link>
@@ -235,10 +231,11 @@ const Header = () => {
                     <div className="z-10 nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
                       {projectLinks.map((typeLink: EstateType) => {
                         return (
-                          <Link key={typeLink._id} href={`/tin-dang/du-an/${typeLink.slug}`}>
-                            <a
-                              className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
-                            >
+                          <Link
+                            key={typeLink._id}
+                            href={`/tin-dang/du-an/${typeLink.slug}`}
+                          >
+                            <a className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300">
                               {typeLink.name}
                             </a>
                           </Link>
@@ -254,6 +251,12 @@ const Header = () => {
                       Tin tức
                     </a>
                     <div className="nav-link-item absolute top-12 w-80 py-2 bg-white bg-white-100 rounded-md shadow-xl">
+                      <a
+                        href={`/tin-tuc`}
+                        className="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300"
+                      >
+                        Tin nổi bật
+                      </a>
                       {newsLinks.map((newsLink: any) => {
                         return (
                           <a
@@ -370,7 +373,7 @@ const Header = () => {
                           <p>Quản lý giao dịch</p>
                         </a>
                         <a
-                          href="#"
+                          href={`/admin?s=projectList`}
                           className="justify-start inline-flex w-full block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-300 items-center"
                         >
                           <span className="material-icons mr-2">apartment</span>

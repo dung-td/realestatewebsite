@@ -16,7 +16,6 @@ interface IProject {
 }
 
 
-
 const ProjectContent = (props: IProject) => {
   const { project } = props
   const [ imageIndex, setImageIndex ] = useState(0)
@@ -27,7 +26,7 @@ const ProjectContent = (props: IProject) => {
     return (
       <div>
         <div className="mt-3 font-medium text-2xl">Tiện dụng</div>
-        <div className="border rounded-lg border-2xl border-gray-300 overflow-clip p-3 my-2">
+        <div className="overflow-clip p-3 my-2">
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 m-2 list-disc">
               {utilities.map((val, index) =>(
                   <li className="container pb-2 mb-2 list-inside"  key={index}>

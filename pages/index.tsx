@@ -23,9 +23,87 @@ type Props = {
   projectOnHome: any[]
 }
 
-const Home = ({ estateOnHome, projectOnHome }: Props) => {
+const Home = () => {
   const router = useRouter()
   const [news, setNews] = useState<Array<News>>(new Array())
+  const [estate, setEstate] = useState<Array<any>>(new Array())
+  const [project, setProject] = useState<Array<any>>(new Array())
+
+  // Get news
+  useEffect(() => {
+    fetch(`${server}/news/popular?limit=6`)
+      .then((res) => res.json())
+      .then((data) => {
+        setNews(data.data)
+      })
+  }, [])
+
+  // Get post
+  useEffect(() => {
+    fetch(`${server}/post/get?stt=approved&limit=9`)
+      .then((res) => res.json())
+      .then((data) => {
+        let posts = data.data
+        let estateOnHome = new Array()
+
+        posts.forEach((post: any) => {
+          let obj = {
+            _id: post._id,
+            title: post.title,
+            address: post.address,
+            estateType: post.estateType,
+            thumbnail: post.images[0],
+            purpose: post.forSaleOrRent,
+            price: post.price,
+            priceType: post.priceType,
+            area: post.area,
+            bathroom: post.bathroomNumber,
+            bedroom: post.bedroomNumber,
+            ownerName: post.owner.name,
+            ownerPhone: post.owner.phone,
+            publishDate: post.publishedDate,
+            titleColor: post.postType.title_color,
+            slug: post.slug,
+          }
+          if (estateOnHome.length < 6) {
+            estateOnHome.push(obj)
+          }
+        })
+
+        setEstate(estateOnHome)
+      })
+  }, [])
+
+  // Get project
+  useEffect(() => {
+    fetch(`${server}/project/get?limit=9`)
+      .then((res) => res.json())
+      .then((data) => {
+        let posts = data.data
+
+        let projectOnHome = new Array()
+
+        posts.forEach((post: any) => {
+          let obj = {
+            _id: post._id,
+            name: post.name,
+            address: post.location.DistrictName + ", " + post.location.CityName,
+            projectType: post.projectType,
+            projectStatus: post.projectStatus,
+            thumbnail: post.images[0],
+            price: post.price,
+            area: post.area,
+            titleColor: post.postType.title_color,
+            slug: post.slug,
+          }
+          if (projectOnHome.length < 6) {
+            projectOnHome.push(obj)
+          }
+        })
+
+        setProject(projectOnHome)
+      })
+  }, [])
 
   useEffect(() => {
     fetch(`${server}/news/popular?limit=6`)
@@ -40,26 +118,26 @@ const Home = ({ estateOnHome, projectOnHome }: Props) => {
     router.push({
       pathname: "/tin-dang",
       query: {
-        "keyword": "",
-        "province": search.province,
-        "district": search.district,
-        "ward": search.ward,
-        "street": search.street,
-        "project": search.project,
-        "priceMin": search.price?.min,
-        "priceMax": search.price?.max,
-        "areaMin": search.area?.min,
-        "areaMax": search.area?.max,
-        "type": search.type,
-        "bedroomMin": search.bedroom?.min,
-        "bedroomMax": search.bedroom?.max,
-        "widthMin": search.width?.min,
-        "widthMax": search.width?.max,
-        "saleOrRent": search.saleOrRent,
-        "streetWidthMin": search.streetWidth?.min,
-        "streetWidthMax": search.streetWidth?.max,
-        "orientation": search.orientation,
-        "projectStatus": search.projectStatus,
+        keyword: "",
+        province: search.province,
+        district: search.district,
+        ward: search.ward,
+        street: search.street,
+        project: search.project,
+        priceMin: search.price?.min,
+        priceMax: search.price?.max,
+        areaMin: search.area?.min,
+        areaMax: search.area?.max,
+        type: search.type,
+        bedroomMin: search.bedroom?.min,
+        bedroomMax: search.bedroom?.max,
+        widthMin: search.width?.min,
+        widthMax: search.width?.max,
+        saleOrRent: search.saleOrRent,
+        streetWidthMin: search.streetWidth?.min,
+        streetWidthMax: search.streetWidth?.max,
+        orientation: search.orientation,
+        projectStatus: search.projectStatus,
       },
     })
   }
@@ -92,87 +170,88 @@ const Home = ({ estateOnHome, projectOnHome }: Props) => {
 
           <City />
 
-          <ListEstateOnHome posts={estateOnHome} />
-          <ListProjectOnHome posts={projectOnHome} />
+          {estate.length > 0 ? <ListEstateOnHome posts={estate} /> : null}
+
+          {project.length > 0 ? <ListProjectOnHome posts={project} /> : null}
         </div>
       </div>
 
-      <div className="h-96"></div>
+      <div className="h-48"></div>
 
       <Footer />
     </div>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { estateOnHome } = await getPost()
-  const { projectOnHome } = await getProject()
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const { estateOnHome } = await getPost()
+//   const { projectOnHome } = await getProject()
 
-  return {
-    props: { estateOnHome, projectOnHome },
-  }
-}
+//   return {
+//     props: { estateOnHome, projectOnHome },
+//   }
+// }
 
-const getPost = async () => {
-  const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=3`)
-  let posts = await fetchPost.json()
+// const getPost = async () => {
+//   const fetchPost = await fetch(`${server}/post/get?stt=approved&limit=3`)
+//   let posts = await fetchPost.json()
 
-  posts = posts.data
-  let estateOnHome = new Array()
+//   posts = posts.data
+//   let estateOnHome = new Array()
 
-  posts.forEach((post: any) => {
-    let obj = {
-      _id: post._id,
-      title: post.title,
-      address: post.address,
-      estateType: post.estateType,
-      thumbnail: post.images[0],
-      purpose: post.forSaleOrRent,
-      price: post.price,
-      priceType: post.priceType,
-      area: post.area,
-      bathroom: post.bathroomNumber,
-      bedroom: post.bedroomNumber,
-      ownerName: post.owner.name,
-      ownerPhone: post.owner.phone,
-      publishDate: post.publishedDate,
-      titleColor: post.postType.title_color,
-      slug: post.slug,
-    }
-    if (estateOnHome.length < 6) {
-      estateOnHome.push(obj)
-    }
-  })
+//   posts.forEach((post: any) => {
+//     let obj = {
+//       _id: post._id,
+//       title: post.title,
+//       address: post.address,
+//       estateType: post.estateType,
+//       thumbnail: post.images[0],
+//       purpose: post.forSaleOrRent,
+//       price: post.price,
+//       priceType: post.priceType,
+//       area: post.area,
+//       bathroom: post.bathroomNumber,
+//       bedroom: post.bedroomNumber,
+//       ownerName: post.owner.name,
+//       ownerPhone: post.owner.phone,
+//       publishDate: post.publishedDate,
+//       titleColor: post.postType.title_color,
+//       slug: post.slug,
+//     }
+//     if (estateOnHome.length < 6) {
+//       estateOnHome.push(obj)
+//     }
+//   })
 
-  return { estateOnHome }
-}
+//   return { estateOnHome }
+// }
 
-const getProject = async () => {
-  const fetchPrj = await fetch(`${server}/project/get?limit=3`)
-  let posts = await fetchPrj.json()
+// const getProject = async () => {
+//   const fetchPrj = await fetch(`${server}/project/get?limit=3`)
+//   let posts = await fetchPrj.json()
 
-  posts = posts.data
-  let projectOnHome = new Array()
+//   posts = posts.data
+//   let projectOnHome = new Array()
 
-  posts.forEach((post: any) => {
-    let obj = {
-      _id: post._id,
-      name: post.name,
-      address: post.location.DistrictName + ", " + post.location.CityName,
-      projectType: post.projectType,
-      projectStatus: post.projectStatus,
-      thumbnail: post.images[0],
-      price: post.price,
-      area: post.area,
-      titleColor: post.postType.title_color,
-      slug: post.slug,
-    }
-    if (projectOnHome.length < 6) {
-      projectOnHome.push(obj)
-    }
-  })
+//   posts.forEach((post: any) => {
+//     let obj = {
+//       _id: post._id,
+//       name: post.name,
+//       address: post.location.DistrictName + ", " + post.location.CityName,
+//       projectType: post.projectType,
+//       projectStatus: post.projectStatus,
+//       thumbnail: post.images[0],
+//       price: post.price,
+//       area: post.area,
+//       titleColor: post.postType.title_color,
+//       slug: post.slug,
+//     }
+//     if (projectOnHome.length < 6) {
+//       projectOnHome.push(obj)
+//     }
+//   })
 
-  return { projectOnHome }
-}
+//   return { projectOnHome }
+// }
 
 export default Home

@@ -2,6 +2,7 @@ import type { NextPage, GetServerSideProps } from "next"
 import Image from "next/image"
 import styles from "../styles/Home.module.css"
 import Header from "../../components/Header"
+import Footer from "../../components/Footer"
 import NewsSection from "../../components/News/Section"
 import ListNews from "../../components/News/List"
 import server from "../../interfaces/server"
@@ -18,11 +19,12 @@ const NewsHome = ({ popularNews }: Props) => {
 
       <div className="space-y-16 mt-8">
         {popularNews.length > 0 ? (
-          <NewsSection typeSlug="tin-noi-bat" news={popularNews} />
+          // <NewsSection typeSlug="tin-noi-bat" news={popularNews} />
+          <ListNews news={popularNews} title="Tin nổi bật" />
         ) : null}
-
-        {/* <ListNews news={news} title="Tin nổi bật" /> */}
       </div>
+
+      <Footer />
     </>
   )
 }

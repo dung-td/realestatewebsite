@@ -19,7 +19,7 @@ const ListNews = ({ title, news }: Props) => {
       </div>
       <div className="flex space-x-4 relative">
         <div className="md:w-9/12 pt-4">
-          <div className="columns-3">
+          {/* <div className="columns-3">
             <div className="break-afer-column">
               <Image
                 height={200}
@@ -56,8 +56,8 @@ const ListNews = ({ title, news }: Props) => {
                 TIÊU ĐIỂM THỊ TRƯỜNG BẤT ĐỘNG SẢN THÁNG 01-2022
               </p>
             </div>
-          </div>
-          <div className="space-y-4 pt-6">
+          </div> */}
+          <div className="space-y-4 pt-2">
             {news.map((n) => {
               return (
                 <div key={n._id} className="md:flex space-x-4">

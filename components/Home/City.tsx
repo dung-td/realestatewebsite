@@ -103,42 +103,43 @@ const City = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <Link passHref href="/ho-chi-minh">
-          <div className="img-hover-zoom city-container relative xl:row-span-2 xl:col-span-2 aspect-w-16 aspect-h-9">
-            <div className="absolute todiv-0 left-0 p-2 city-title z-10">
-              <p className="text-base font-semibold hover:underline uppercase">
-                TP. Hồ Chí Minh
-              </p>
-              <p className="text-s hover:underline">{postCountSG} tin đăng</p>
-            </div>
+          <div className="cursor-pointer hovereffect xl:row-span-2 xl:col-span-2 aspect-w-16 aspect-h-9 pointer">
             <Image
               alt="Hồ Chí Minh"
-              height="410"
+              height="420"
               width="600"
               className="w-full  rounded-lg"
               src="https://file4.batdongsan.com.vn/images/newhome/cities1/HCM-web-2.jpg"
             />
+            <div className="overlay">
+              <h2 className="text-base font-semibold">TP. Hồ Chí Minh</h2>
+              <p>
+                <a className="mt-4" href="#">
+                  {postCountSG} tin đăng
+                </a>
+              </p>
+            </div>
           </div>
         </Link>
         {smallPopularCity[0].map((city) => {
           return (
             <Link key={city.value} passHref href="/ho-chi-minh">
-              <div className="img-hover-zoom city-container relative aspect-w-16 aspect-h-9">
-                <div className="absolute todiv-0 left-0 p-2 city-title z-10">
-                  <p className="text-sm font-semibold hover:underline uppercase">
-                    {city.label}
-                  </p>
-                  <p className="text-xs hover:underline">
-                    {city.postCount} tin đăng
-                  </p>
-                </div>
+              <div className="cursor-pointer hovereffect aspect-w-16 aspect-h-9 pointer">
                 <Image
+                  alt={city.label}
                   height="410"
                   width="600"
-                  alt={city.label}
-                  className="w-full object-cover rounded-lg"
+                  className="w-full  rounded-lg"
                   src={city.img}
                 />
-                <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+                <div className="overlay">
+                  <h2 className="text-base font-semibold">{city.label}</h2>
+                  <p>
+                    <a className="mt-4" href="#">
+                      {city.postCount} tin đăng
+                    </a>
+                  </p>
+                </div>
               </div>
             </Link>
           )
