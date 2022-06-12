@@ -17,7 +17,7 @@ const NewsSection = ({ typeSlug, news }: Props) => {
 
   return (
     <div className="md:container md:mx-auto grid p-8 md:p-0">
-      <div className="md:w-5/12 border-b-2 border-red-700">
+      <div className="md:w-9/12 border-b-2 border-red-700">
         <h2 className="font-bold text-base">TIN TỨC NỔI BẬT</h2>
       </div>
       <div className="md:flex pt-4 md:space-x-6">
@@ -72,15 +72,8 @@ const NewsSection = ({ typeSlug, news }: Props) => {
             })}
           </div>
         </div>
-        
+
         <div className="mt-4 w-full md:mt-0 md:w-4/12 ">
-          <Image
-            height={200}
-            width={400}
-            alt="ad_banner"
-            className="cursor-pointer"
-            src="https://res.cloudinary.com/dpc0elrwr/image/upload/v1653552234/real-estate/banner-bat-dong-san-21_hhu8dh.jpg"
-          />
           <Image
             height={800}
             width={400}

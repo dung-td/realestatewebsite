@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import type { NextPage } from "next"
 import Image from "next/image"
+import Link from "next/link"
 import CollapseDescription from "../../components/EstateDetail/CollapseDescription"
 import { HeartIcon, ClockIcon, HomeIcon } from "@heroicons/react/outline"
 import { PhoneIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
@@ -90,7 +91,9 @@ const EstateDetail: NextPage<IPost> = (props) => {
     <>
       <Header />
 
-      <div className={`${style.default} sm:w-[1200px] grid mx-auto my-3 sm:flex rounded-lg border-black overflow-clip`}>
+      <div
+        className={`${style.default} sm:w-[1200px] grid grid-full mx-auto my-3 sm:flex rounded-lg border-black overflow-clip`}
+      >
         <div className="container sm:w-3/4 sn:flex-initial" id="mainContent">
           <PostContent post={props.post} />
 
@@ -103,13 +106,22 @@ const EstateDetail: NextPage<IPost> = (props) => {
                 <p>Bất động sản {props.post.location.CityName}</p>
               </div>
               <div className="bg-gray-200 px-4 py-1 rounded-xl w-fit">
-                <p>Bất động sản {props.post.location.DistrictName}</p>
+                <p>
+                  Bất động sản {props.post.location.DistrictPrefix}{" "}
+                  {props.post.location.DistrictName}
+                </p>
               </div>
               <div className="bg-gray-200 px-4 py-1 rounded-xl w-fit">
-                <p>Bất động sản {props.post.location.WardName}</p>
+                <p>
+                  Bất động sản {props.post.location.WardPrefix}{" "}
+                  {props.post.location.WardName}
+                </p>
               </div>
               <div className="bg-gray-200 px-4 py-1 rounded-xl w-fit">
-                <p>Bất động sản đường {props.post.location.StreetName}</p>
+                <p>
+                  Bất động sản {props.post.location.StreetPrefix}{" "}
+                  {props.post.location.StreetName}
+                </p>
               </div>
             </div>
             
@@ -217,17 +229,17 @@ export async function getStaticPaths() {
   return { paths: slugs, fallback: false }
 }
 
-export async function getStaticProps (pathParam: IPathParam) {
-    const { params } = pathParam
-    const res = await fetch(`${server}/post/slug?slug=${params.estatePostSlug}`)
-    const data = await res.json()
-    const {post} =data
-    console.log(post)
-    // By returning { props: { posts } }, the Blog component
-    // will receive `posts` as a prop at build time
-    return {
-      props: {
-        post,
-      },
-    }
+export async function getStaticProps(pathParam: IPathParam) {
+  const { params } = pathParam
+  const res = await fetch(`${server}/post/slug?slug=${params.estatePostSlug}`)
+  const data = await res.json()
+  const { post } = data
+  console.log(post)
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return {
+    props: {
+      post,
+    },
+  }
 }

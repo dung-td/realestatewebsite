@@ -30,7 +30,7 @@ const Home = () => {
   const [fullname, setFullname] = useState("")
 
   useEffect(() => {
-    if (sessionStorage.getItem("isAdmin")) {
+    if (localStorage.getItem("isAdmin")) {
       setIsLogin(true)
     }
   }, [isLogin])

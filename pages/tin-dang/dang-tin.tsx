@@ -91,18 +91,6 @@ const UploadPost = (props: Props) => {
 
   const post_durations = ["7", "10", "14", "21"]
 
-  const getPostTypeId = (name: string) => {
-    var res = ""
-    for (let index = 0; index < postTypes.length; index++) {
-      const element = postTypes[index];
-      if (element.name = name) {
-        res = element._id
-        break
-      }
-    }
-    return res
-  }
-
   const getPriceTypeId = (name: string) => {
     var res = ""
     for (let index = 0; index < priceUnits.length; index++) {
@@ -124,6 +112,7 @@ const UploadPost = (props: Props) => {
         break
       }
     }
+    console.log(res + ": OK")
     return res
   }
 
@@ -537,7 +526,7 @@ const UploadPost = (props: Props) => {
     }
 
     fetchPostOnEdit()
-  }, [])
+  }, [estateTypes])
 
   return (
     <>

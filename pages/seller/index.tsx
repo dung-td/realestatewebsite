@@ -48,7 +48,7 @@ const SellerHome = () => {
   const [showModal2, setShowModal2] = useState(false)
 
   useEffect(() => {
-    if (sessionStorage.getItem("jwt")) {
+    if (localStorage.getItem("jwt")) {
       setIsLogin(true)
     }
   }, [isLogin])
@@ -59,7 +59,7 @@ const SellerHome = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
       })
         .then((res) => res.json())
@@ -93,7 +93,7 @@ const SellerHome = () => {
       method: "POST",
       body: JSON.stringify({
         status: "waiting",
-        user: sessionStorage.getItem("id"),
+        user: localStorage.getItem("id"),
         amount: amount,
         balance: 0,
         detail: "Nạp tiền vào tài khoản",

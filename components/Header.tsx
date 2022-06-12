@@ -63,17 +63,17 @@ const Header = () => {
     }
 
   const logout = () => {
-    sessionStorage.clear()
+    localStorage.clear()
     setIsLogin(false)
     window.location.href = "/"
   }
 
   // Check session
   useEffect(() => {
-    if (sessionStorage.getItem("jwt")) {
+    if (localStorage.getItem("jwt")) {
       setIsLogin(true)
     }
-    if (sessionStorage.getItem("isAdmin")) {
+    if (localStorage.getItem("isAdmin")) {
       setIsLogin(true)
       setIsAdmin(true)
     }
@@ -109,7 +109,7 @@ const Header = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
       })
         .then((res) => res.json())

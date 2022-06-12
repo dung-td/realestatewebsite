@@ -75,8 +75,8 @@ export default function Login(props: ModalProps) {
         .then((data) => {
           setIsLoading(false)
           if (data.userDto) {
-            sessionStorage.setItem("jwt", data.userDto.token)
-            sessionStorage.setItem("id", data.userDto._id)
+            localStorage.setItem("jwt", data.userDto.token)
+            localStorage.setItem("id", data.userDto._id)
 
             window.location.reload()
           } else {
@@ -88,7 +88,7 @@ export default function Login(props: ModalProps) {
 
   const adminLogin = () => {
     if (password == "123456") {
-      sessionStorage.setItem("isAdmin", "true")
+      localStorage.setItem("isAdmin", "true")
 
       window.location.reload()
     } else {
