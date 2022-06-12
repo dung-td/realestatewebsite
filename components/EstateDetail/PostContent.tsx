@@ -22,10 +22,12 @@ const PostContent = (props: IPost) => {
   const [ fullscreenImageModal, setFullscreenImageModal ] = useState(false)
   const { post } = props
   const PriceComponent = () => {
+    const BILLION = Math.pow(10,9)
+    const MILLION = Math.pow(10,9)
     const price =
-      post.price > 1000
-        ? (Math.round((post.price / 1000) * 100) / 100).toString() + " tỷ"
-        : post.price.toString() + " triệu"
+      post.price > BILLION
+        ? (Math.round((post.price / BILLION) * 100) / 100).toString() + " tỷ"
+        : (Math.round((post.price / MILLION) * 100) / 100).toString() + " triệu"
     switch (post.priceType) {
       case "VNĐ":
         return <span>{`${price} đồng`}</span>

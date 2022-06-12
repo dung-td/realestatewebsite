@@ -2,6 +2,7 @@ import { useState } from "react"
 import type { NextPage } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import Head from "next/head"
 import ImageCarousel from "../../components/EstateDetail/ImageCarousel"
 import DetailBox from "../../components/EstateDetail/DetailBox"
 import CollapseDescription from "../../components/EstateDetail/CollapseDescription"
@@ -50,9 +51,12 @@ interface IProject {
 }
 const EstateProject: NextPage<IProject> = (props) => {
   const { investor } = props.project
-
+  const project = props.project
   return (
     <>
+      <Head>
+        <title>{project.name}</title>
+      </Head>
       <Header />
       <div
         className={`${style.default} sm:w-[1200px] grid mx-auto my-3 sm:flex rounded-lg border-black overflow-clip`}
@@ -118,15 +122,23 @@ interface IPathParam {
 
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  const res = await fetch(
-    "http://vn-real-estate-api.herokuapp.com/api/project/slug"
-  )
-  const data = await res.json()
-  const slugs = data.data
+  let slugs = new Array<IPathParam>()
+  try{
+    const res = await fetch(
+      "http://vn-real-estate-api.herokuapp.com/api/project/slug"
+    )
+    const data = await res.json()
+    slugs = data.data
+    console.log(slugs)
+
+  }
+  catch(err: any)
+  {
+    console.log(err)
+  }
   // const slugs = posts.map( (el: { slug: any }) => { return { params: {
   //     estateProjectSlug: el.slug
   // }}})
-  console.log(slugs)
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths: slugs, fallback: false }
@@ -134,16 +146,24 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(pathParam: IPathParam) {
   const { params } = pathParam
-  const res = await fetch(
-    `${server}/project/get?slug=${params.estateProjectSlug}`
-  )
-  const data = await res.json()
-  const project = data.data
+  let project = new Array<IProject>()
+  try {
+    const res = await fetch(
+      `${server}/project/get?slug=${params.estateProjectSlug}`
+    )
+    const data = await res.json()
+    project = data.data
+  }
+  catch (err: any)
+  {
+    console.log(err)
+  }
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
       project,
     },
+    revalidate: 900,
   }
 }
