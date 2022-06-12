@@ -60,7 +60,7 @@ const EstateCard = (props : Props) => {
     }
 
     useEffect(() => {
-        if (sessionStorage.getItem("jwt")) {
+        if (localStorage.getItem("jwt")) {
             setIsLogin(true)
         }
     }, [])
