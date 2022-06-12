@@ -156,7 +156,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
   }
 
   return (
-    <div className="mb-4 p-4 grid grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
+    <div className="mb-4 p-4 grid grid-full grid-cols-12 bg-white rounded-lg border border-gray-200 shadow-md gap-4">
       <div className="col-span-12 md:col-span-3 lg:col-span-3">
         <Image
           alt={data.title}

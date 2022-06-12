@@ -14,7 +14,7 @@ type Props = {
 
 const Item = ({ transaction, callback }: Props) => {
   moment.locale("vi")
-  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("isAdmin"))
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin"))
   const [expandDetail, setExpandDetail] = useState(false)
 
   const confirmTransaction = () => {}

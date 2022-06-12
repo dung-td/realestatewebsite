@@ -135,7 +135,7 @@ const UserPost = ({ type }: any) => {
     setIsLoading(true)
     let isCancelled = false
     fetch(
-      `${server}/post/get?oid=${sessionStorage.getItem(
+      `${server}/post/get?oid=${localStorage.getItem(
         "id"
       )}&s=${type}&pt=${postType}`
     )
@@ -259,7 +259,9 @@ const UserPost = ({ type }: any) => {
     <div className="ml-72 p-8 min-h-screen">
       <div className="grid grid-full">
         <div className="mb-4">
-          <p className="font-bold text-xl">Tin đang chờ duyệt</p>
+          <p className="font-bold text-xl">
+            {type == "waiting" ? "Tin đang chờ duyệt" : "Tin đã duyệt"}
+          </p>
           <div className="mt-2 border border-2 border-t border-[#E21717]"></div>
         </div>
 
@@ -275,10 +277,11 @@ const UserPost = ({ type }: any) => {
               onChange={handleTabChange}
               aria-label="basic tabs example"
             >
-              <Tab label={`VIP3`} {...a11yProps(0)} />
-              <Tab label={`VIP2`} {...a11yProps(1)} />
-              <Tab label={`VIP1`} {...a11yProps(2)} />
-              <Tab label={`Tin thường`} {...a11yProps(3)} />
+              <Tab label={`Tất cả`} {...a11yProps(0)} />
+              <Tab label={`VIP3`} {...a11yProps(1)} />
+              <Tab label={`VIP2`} {...a11yProps(2)} />
+              <Tab label={`VIP1`} {...a11yProps(3)} />
+              <Tab label={`Tin thường`} {...a11yProps(4)} />
             </Tabs>
           </Box>
 

@@ -114,14 +114,7 @@ const Item: React.FC<{ data: any; callback: any; postType: string }> = ({
         </div>
       </div>
 
-      <div className="col-span-12 md:col-span-6 mt-4">
-        {data.status == "waiting" ? (
-          <>
-            <p>Hạn duyệt bài</p>
-            <p className="font-bold">20/02/2022</p>
-          </>
-        ) : null}
-      </div>
+      <div className="col-span-12 md:col-span-6 mt-4"></div>
       <div className="w-full col-span-12 md:col-span-6 mt-4 grid grid-cols-4 gap-1">
         {data.status == "approved" ? (
           <>
@@ -226,7 +219,8 @@ const Item: React.FC<{ data: any; callback: any; postType: string }> = ({
                 type="button"
                 className="w-full text-white bg-red-700 hover:bg-red-800 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 onClick={() => {
-                  callback(data._id, "ban")
+                  callback(data.owner._id, "ban")
+                  callback(data._id, "delete")
                 }}
               >
                 Cấm đăng

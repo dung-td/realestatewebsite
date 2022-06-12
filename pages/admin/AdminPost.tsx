@@ -141,11 +141,9 @@ const AdminPost = ({ type }: any) => {
       case "delete":
         _delete(id)
         break
-      case "remove":
-        decline(id)
-        break
       case "ban":
         ban(id)
+        _delete(id)
       default:
         break
     }
@@ -191,28 +189,32 @@ const AdminPost = ({ type }: any) => {
     setIsLoading(false)
   }
 
-  const _delete = (id: string) => {
-    let body = { id: id }
-    console.log(body)
-    fetch(`${server}/admin/user/ban`, {
-      method: "POST",
-      body: JSON.stringify({
-        _id: id,
-        period: moment(new Date().setDate(new Date().getDate() + 7)).format(
-          "DD/MM/YYYY"
-        ),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const ban = (id: string) => {
+    fetch(`${server}/user?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
-        setIsChange(!isChange)
+        console.log(data)
+        let username = data.user.username
+        fetch(`${server}/admin/user/ban`, {
+          method: "POST",
+          body: JSON.stringify({
+            _id: username,
+            period: moment(new Date().setDate(new Date().getDate() + 7)).format(
+              "DD/MM/YYYY"
+            ),
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setIsChange(!isChange)
+            setAlertMessage("Người dùng đã bị cấm đăng 7 ngày!")
+            setAlertOpen(true)
+            setIsLoading(false)
+          })
       })
-    setAlertMessage("Người dùng đã bị cấm đăng 7 ngày!")
-    setAlertOpen(true)
-    setIsLoading(false)
   }
 
   const terminate = (id: string) => {
@@ -235,10 +237,10 @@ const AdminPost = ({ type }: any) => {
     setIsLoading(false)
   }
 
-  const ban = (id: string) => {
+  const _delete = (id: string) => {
     let body = { id: id }
     console.log(body)
-    fetch(`${server}/admin/post/terminate`, {
+    fetch(`${server}/admin/post/delete`, {
       method: "POST",
       headers: {
         Accept: "application/json",
