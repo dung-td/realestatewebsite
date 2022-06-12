@@ -135,7 +135,7 @@ const UserPost = ({ type }: any) => {
     setIsLoading(true)
     let isCancelled = false
     fetch(
-      `${server}/post/get?oid=${sessionStorage.getItem(
+      `${server}/post/get?oid=${localStorage.getItem(
         "id"
       )}&s=${type}&pt=${postType}`
     )

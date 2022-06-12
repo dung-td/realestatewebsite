@@ -106,7 +106,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
     })
       .then((res) => res.json())
@@ -117,7 +117,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
             method: "POST",
             body: JSON.stringify({
               status: "waiting",
-              user: sessionStorage.getItem("id"),
+              user: localStorage.getItem("id"),
               amount: postDuration * priceData?.price,
               balance: 0,
               detail: "Trừ tiền phí đăng bài",
@@ -132,7 +132,7 @@ const Item: React.FC<{ data: any; callback: any }> = ({ data, callback }) => {
               fetch(`${server}/user/balance/update`, {
                 method: "POST",
                 body: JSON.stringify({
-                  userId: sessionStorage.getItem("id"),
+                  userId: localStorage.getItem("id"),
                   balance: balance - postDuration * priceData?.price,
                 }),
                 headers: {

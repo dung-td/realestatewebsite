@@ -1076,7 +1076,6 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
-                      value={floor}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setFloor(parseInt(e.target.value))
@@ -1097,7 +1096,6 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="(m)"
                       required
-                      value={width}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setWidth(parseInt(e.target.value))
@@ -1118,7 +1116,6 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
-                      value={bedrooms}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setBedrooms(parseInt(e.target.value))
@@ -1139,7 +1136,6 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="(m)"
                       required
-                      value={depth}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setDepth(parseInt(e.target.value))
@@ -1160,7 +1156,6 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="0"
                       required
-                      value={bathrooms}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setBathrooms(parseInt(e.target.value))
@@ -1181,7 +1176,6 @@ const UploadPost = (props: Props) => {
                       className="bg-white w-2/5 text-center border border-gray-300 text-black text-sm rounded block w-full p-2.5 hover:border-black focus:border-blue-700"
                       placeholder="(m)"
                       required
-                      value={roadWidth}
                       onKeyDown={(e) => preventCharInput(e)}
                       onChange={(e) => {
                         setRoadWidth(parseInt(e.target.value))

@@ -51,7 +51,7 @@ const Home = () => {
           let obj = {
             _id: post._id,
             title: post.title,
-            address: post.address,
+            address: post.location.DistrictPrefix + " " + post.location.DistrictName + ", " + post.location.CityName,
             estateType: post.estateType,
             thumbnail: post.images[0],
             purpose: post.forSaleOrRent,
